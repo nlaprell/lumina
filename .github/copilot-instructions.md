@@ -125,6 +125,15 @@ Tasks must have sequential IDs when created:
 - Include Source field citing email/document where task originated
 - Completed task IDs can remain in Related/Blocks fields for audit trail
 
+### Task Dependency Detection
+
+Use the automated dependency detection script to find task relationships:
+- Run: `python3 aiScripts/detectTaskDependencies/detectTaskDependencies.py aiDocs/TASKS.md`
+- Reviews generated report in `aiDocs/TASK_DEPENDENCY_REPORT.md`
+- Updates task Blocks/Related fields based on high-confidence detections
+- Resolves circular dependencies before proceeding
+- Uses dependency graph visualization for planning
+
 ### Discovery Question Format
 
 ```markdown
@@ -189,6 +198,8 @@ Before completing work, verify:
 - [ ] Quick Context meets character limits (What: 100, Who: 150, Status: 50)
 - [ ] All risks include 8 required fields
 - [ ] "Last Updated" dates are current
+- [ ] Run dependency detection and review for circular dependencies
+- [ ] Verify task dependency graph reflects project structure
 
 ---
 
