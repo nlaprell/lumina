@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vscode": {
+      "command": "npx",
+      "args": ["-y", "mcp-vscode"]
+    }
+  }
+}

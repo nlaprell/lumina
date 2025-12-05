@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "terraform": {
+      "command": "npx",
+      "args": ["-y", "terraform-cloud-mcp"],
+      "env": {
+        "TERRAFORM_CLOUD_TOKEN": "<your_terraform_token>"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vegalite": {
+      "command": "npx",
+      "args": ["-y", "mcp-vegalite-server"]
+    }
+  }
+}

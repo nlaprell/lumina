@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tailwind": {
+      "command": "npx",
+      "args": ["-y", "mcp-tailwind"]
+    }
+  }
+}

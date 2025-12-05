@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "kubernetes": {
+      "command": "npx",
+      "args": ["-y", "mcp-k8s-go"],
+      "env": {
+        "KUBECONFIG": "<path_to_your_kubeconfig>"
+      }
+    }
+  }
+}
