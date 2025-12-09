@@ -17,7 +17,7 @@ All project communication and context from email should follow this workflow:
 
 ### Email Converter Tool
 
-Located in `aiScripts/emailToMd/`, this tool converts `.eml` email files to Markdown format.
+Located at `aiScripts/emailToMd/eml_to_md_converter.py`, this tool converts `.eml` email files to Markdown format.
 
 **Usage**:
 ```bash
@@ -235,6 +235,14 @@ This copies templates to working files, clearing all project-specific content.
 - **Cite sources**: Use format "(Source: "Email Subject" - Date)" when adding facts
 - **Deduplication**: Check email domains to identify related organizations; merge duplicate contacts
 - **Verify moves**: After conversion, confirm `.eml` files moved to `email/processed/`
+
+### MarkLogic Ecosystem Organizations
+
+When processing contacts and organizations in MarkLogic-related projects:
+- **Progress Software** is the parent company of MarkLogic
+- **Progress Federal** is the MarkLogic support and consulting division for government clients
+- These should be treated as the same organizational entity in documentation, with Progress Federal being the service delivery arm
+- Merge duplicate contacts across Progress/Progress Federal/MarkLogic divisions as appropriate
 
 ---
 

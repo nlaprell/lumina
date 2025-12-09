@@ -22,11 +22,11 @@ Check if there are any `.eml` files in the `email/raw/` directory:
 - If NO `.eml` files exist, inform the user:
 
 ```
-No email files found in email/raw/
+No email files found in `email/raw/`
 
 To add project context from emails:
 1. Export email threads to .eml format from your email client
-2. Place them in the email/raw/ directory
+2. Place them in the `email/raw/` directory
 3. Re-run /quickStartProject or run /discoverEmail
 
 For now, I'll skip email processing and continue with available context.
@@ -47,16 +47,20 @@ The script will:
 2. Save converted files to `email/ai/`
 3. Move processed `.eml` files to `email/processed/`
 
-**Verify**: Check that `.eml` files were moved to `email/processed/`. If not, report the error.
+**Verify the move**: After running the script, check that:
+- `.eml` files have been moved from `email/raw/` to `email/processed/`
+- Corresponding `.md` files exist in `email/ai/`
+- If files were not moved, report the error and check file permissions
 
 Then:
 - Read all converted Markdown files in `email/ai/`
 - Extract relevant information (contacts, tasks, technical details, etc.)
 - Update all files in `aiDocs/` based on email content:
-  - `aiDocs/SUMMARY.md` - Quick Context, contacts, background, technical details, Decision Log (Note: Progress Federal is MarkLogic's support/consulting division)
-  - `aiDocs/TASKS.md` - tasks with IDs (TASK-001), statuses, cross-references, priorities
+  - `aiDocs/SUMMARY.md` - Quick Context, contacts, background, technical details, Decision Log
+  - `aiDocs/TASKS.md` - tasks with IDs (`TASK-001`), statuses, cross-references, priorities
   - `aiDocs/DISCOVERY.md` - discovery questions with metadata (Ask/Check/Status/Priority)
   - `aiDocs/AI.md` - workflows, procedures, AI Agent Notes with project-specific guidance
+- Update "Last Updated" dates to current date in all modified `aiDocs/` files
 
 ## Step 4: Generate Project Summary
 
@@ -74,7 +78,28 @@ Run the `/updateSummary` workflow:
   - Outstanding questions and next steps
   - Decision log highlights
 
-## Step 5: Provide Summary Report
+**Optional: Run Task Dependency Detection**
+
+If tasks were created or updated during email processing:
+- Run: `python3 aiScripts/detectTaskDependencies/detectTaskDependencies.py aiDocs/TASKS.md`
+- Review generated `TASK_DEPENDENCY_REPORT.md` for suggested relationships
+- Update task Blocks/Related fields based on high-confidence detections
+- Resolve any circular dependencies identified
+
+## Step 5: Validate and Provide Summary Report
+
+Before providing your final report, verify:
+- [ ] All email addresses are correctly formatted and complete
+- [ ] Phone numbers include country/area codes if provided
+- [ ] All task IDs are sequential (gaps allowed for completed tasks)
+- [ ] Every task has an Owner or "TBD" (never blank)
+- [ ] All discovery questions have required metadata (Ask, Check, Status, Priority)
+- [ ] Cross-references (Blocks, Related) use valid task IDs that exist
+- [ ] Dates are in consistent format throughout
+- [ ] Organization names are consistent throughout
+- [ ] No template placeholders remain (`[DATE]`, `[CUSTOMER]`, etc.)
+- [ ] Quick Context meets character limits (What: 100, Who: 150, Status: 50)
+- [ ] "Last Updated" dates are current in all `aiDocs/` files
 
 After completing all steps, provide a comprehensive report:
 
@@ -109,11 +134,11 @@ After completing all steps, provide a comprehensive report:
 
 **Next Steps:**
 1. **📄 Review SUMMARY.md at project root for complete project overview**
-2. Check aiDocs/TASKS.md for outstanding work
-3. Review aiDocs/DISCOVERY.md for unanswered questions
+2. Check `aiDocs/TASKS.md` for outstanding work
+3. Review `aiDocs/DISCOVERY.md` for unanswered questions
 
 **To add more email context later:**
-- Export emails to email/raw/
+- Export emails to `email/raw/`
 - Run `/discoverEmail` to process them
 - Run `/updateSummary` to regenerate the summary
 

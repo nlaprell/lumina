@@ -70,7 +70,7 @@ When emails contain contradictions:
 
 **MANDATORY**: You MUST update ALL relevant `aiDocs/` files based on email content. Do not skip this step.
 
-**Note on Templates**: If `aiDocs/` files are in their default template state (containing placeholders like `[DATE]`, `[CUSTOMER NAME]`, etc.), the templates are located at:
+**Note on Templates**: If `aiDocs/` files are in their default template state (containing placeholders like `[DATE]`, `[CUSTOMER]`, `[PROJECT]`, etc.), the templates are located at:
 - `aiDocs/templates/SUMMARY.template.md`
 - `aiDocs/templates/TASKS.template.md`
 - `aiDocs/templates/DISCOVERY.template.md`
@@ -92,7 +92,7 @@ The working files in `aiDocs/` (without the `.template` extension) are the ones 
   - Full name
   - Email address (verify format is complete and correct)
   - Role/title
-  - Organization (Note: Progress Federal is the MarkLogic support/consulting division - treat as same entity)
+  - Organization
   - Phone numbers (include country/area codes if provided)
   - Group contacts by organization, with subheadings for different divisions/roles within large organizations
   - **Deduplication**: Check email domains to identify related organizations; merge duplicates; if person has multiple emails, list all under one entry
@@ -205,7 +205,7 @@ When updating files:
 - **Be thorough**: Include ALL relevant information from emails
 - **Be specific**: Use exact names, dates, technologies, and details
 - **Update dates**: Change "Last Updated" fields to current date
-- **Replace placeholders**: Replace `[DATE]`, `[CUSTOMER NAME]`, `[BACKGROUND INFO]`, etc. with actual content
+- **Replace placeholders**: Replace `[DATE]`, `[CUSTOMER]`, `[PROJECT]`, etc. with actual content
 - **Preserve structure**: Keep existing formatting and section organization
 - **Be factual**: Only include information directly from emails
 - **Cross-reference**: When documenting facts, note which email they came from
@@ -228,7 +228,7 @@ Before providing your summary, verify:
 
 ## 6. Mandatory Summary Report
 
-After completing ALL updates to aiDocs files, provide a comprehensive summary:
+After completing ALL updates to `aiDocs/` files, provide a comprehensive summary:
 
 **Email Processing Summary:**
 - Total emails processed: [number]
@@ -281,12 +281,13 @@ After completing ALL updates to aiDocs files, provide a comprehensive summary:
 
 ## Critical Reminders
 
-- **DO NOT skip updates**: You MUST update aiDocs files based on email content
+- **DO NOT skip updates**: You MUST update `aiDocs/` files based on email content
 - **DO NOT ask for confirmation**: This is an automated process
-- **DO NOT leave placeholders**: Replace ALL `[DATE]`, `[CUSTOMER NAME]`, etc. with actual content
-- **DO read ALL emails**: Every .md file in email/ai/ must be read completely
+- **DO NOT leave placeholders**: Replace ALL `[DATE]`, `[CUSTOMER]`, `[PROJECT]`, etc. with actual content
+- **DO read ALL emails**: Every `.md` file in `email/ai/` must be read completely
 - **DO be thorough**: Extract ALL relevant information from emails
 - **DO update dates**: Set "Last Updated" fields to today's date
 - **DO provide complete summary**: Include all metrics for contacts, tasks, risks, blockers
 - Always run the email converter from the project root directory
 - If email content conflicts with existing documentation, update with the latest information from emails and note the conflict in your summary
+- **Optional**: After creating/updating tasks, run dependency detection: `python3 aiScripts/detectTaskDependencies/detectTaskDependencies.py aiDocs/TASKS.md`

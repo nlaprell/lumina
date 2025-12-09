@@ -137,7 +137,7 @@ After syncing user changes from root `SUMMARY.md`, thoroughly review all documen
 
 ## 3. Cross-Reference Email Content
 
-Review all processed emails in `email/ai/` to:
+Review all processed emails in `email/ai/` (if any exist) to:
 - Identify any new information not yet reflected in `aiDocs/`
 - Verify that documented information matches email sources
 - Extract any updates on project status, decisions, or changes
@@ -259,7 +259,9 @@ The summary should include:
 - Important email threads
   - External resources
 
-## 7. Formatting GuidelinesWhen creating the summary:
+## 7. Formatting Guidelines
+
+When creating the summary:
 - **Be concise**: Focus on high-level information for human readers
 - **Be specific**: Include concrete details, dates, names, and numbers
 - **Be current**: Only include relevant, up-to-date information
@@ -268,7 +270,7 @@ The summary should include:
 - **Avoid technical jargon**: Write for a non-technical audience where possible
 - **Include dates**: Add "Last Updated" at the top of the document
 - **Use bullet points**: Make information scannable
-- Provide context**: Don't assume the reader knows the project history
+- **Provide context**: Don't assume the reader knows the project history
 
 ## 8. Summary Content Guidelines
 
@@ -277,7 +279,7 @@ The summary should include:
 - **Synthesize, don't copy**: Summarize and consolidate information
 - **Prioritize relevance**: Focus on what stakeholders need to know now
 - **Be factual**: Only include verified, documented information
-- Update regularly**: Reflect the absolute current state of the project
+- **Update regularly**: Reflect the absolute current state of the project
 
 ## 9. Report Your Work
 
@@ -286,14 +288,14 @@ After completing the review and summary update, provide:
 **User Changes Sync Summary:**
 - Root SUMMARY.md exists: [Yes/No]
 - User changes detected: [Yes/No - if yes, list types of changes]
-- Tasks synced to aiDocs/TASKS.md: [number of task updates]
-- Discovery questions synced to aiDocs/DISCOVERY.md: [number of updates]
-- Risks synced to aiDocs/SUMMARY.md: [number of updates]
-- Contacts synced to aiDocs/SUMMARY.md: [number of updates]
-- Decisions synced to aiDocs/SUMMARY.md: [number of updates]
+- Tasks synced to `aiDocs/TASKS.md`: [number of task updates]
+- Discovery questions synced to `aiDocs/DISCOVERY.md`: [number of updates]
+- Risks synced to `aiDocs/SUMMARY.md`: [number of updates]
+- Contacts synced to `aiDocs/SUMMARY.md`: [number of updates]
+- Decisions synced to `aiDocs/SUMMARY.md`: [number of updates]
 
 **Documentation Review Summary:**
-- Files reviewed: [list aiDocs files]
+- Files reviewed: [list `aiDocs/` files]
 - Inconsistencies found and resolved: [number and description]
 
 **Updates Made:**
