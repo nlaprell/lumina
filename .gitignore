@@ -42,4 +42,4 @@ tmp/
 temp/
 *.tmp
 
-.template/testData/.*
+.template/testData/*
