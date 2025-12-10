@@ -571,22 +571,22 @@ Converted Markdown lists all attachments that were present but not converted.
 
 ## Medium Priority Fixes (🟡 Should Fix)
 
-### TASK-012: Update FUTURE.md Item #2 Status
+### TASK-012: Update .template/FUTURE.md Item #2 Status
 
 **Priority**: Medium  
 **Category**: Documentation  
-**Component**: FUTURE.md  
+**Component**: .template/FUTURE.md  
 **Effort**: Low (< 1 hour)  
 **Impact**: Low  
 
 **Problem**:
-FUTURE.md lists "Smart Task Dependency Detection" as improvement #2, but it's already implemented in detectTaskDependencies.py. Confusing to have completed feature listed as future work.
+.template/FUTURE.md lists "Smart Task Dependency Detection" as improvement #2, but it's already implemented in detectTaskDependencies.py. Confusing to have completed feature listed as future work.
 
 **Current Behavior**:
-Item #2 in FUTURE.md describes feature that already exists.
+Item #2 in .template/FUTURE.md describes feature that already exists.
 
 **Expected Behavior**:
-FUTURE.md reflects actual status - completed items marked or moved.
+.template/FUTURE.md reflects actual status - completed items marked or moved.
 
 **Proposed Solution**:
 Either:
@@ -595,7 +595,7 @@ Either:
 3. Update description to reflect current state and note remaining work (like --apply flag from TASK-007)
 
 **Location**:
-- File: `FUTURE.md`
+- File: `.template/FUTURE.md`
 - Lines: 47-87
 
 **Dependencies**:
@@ -607,7 +607,7 @@ Either:
 - [ ] Item #2 marked as completed or moved to implemented section
 - [ ] Reference to detectTaskDependencies.py added
 - [ ] Remaining work (--apply flag) noted if applicable
-- [ ] FUTURE.md structure updated if new section added
+- [ ] .template/FUTURE.md structure updated if new section added
 
 **References**:
 - Sanity Check Issue: ISSUE-012
@@ -1168,7 +1168,7 @@ Tasks must have sequential IDs when created:
 ## Notes
 
 - This file tracks fixes for the template itself
-- For improvements to projects created from template, see root `FUTURE.md`
+- For improvements to projects created from template, see root `.template/FUTURE.md`
 - For enhancement ideas, see `.template/IMPROVEMENTS.md`
 - Critical issues (TASK-001 through TASK-003) should be addressed immediately
 - High priority issues should be completed within 1-2 weeks

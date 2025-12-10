@@ -38,7 +38,7 @@ In GitHub Copilot chat, run:
 ```
 
 **That's it!** The workflow will automatically:
-- ✓ Process all emails and extract project information
+- ✓ Process all emails and extract project information (including attachments)
 - ✓ Update AI documentation with contacts, tasks, and technical details
 - ✓ Generate a comprehensive project summary
 
@@ -186,10 +186,7 @@ copilot_template/
 │   ├── discoverEmail.prompt.md
 │   ├── updateSummary.prompt.md
 │   └── quickStartProject.prompt.md
-├── scripts/             # User maintenance scripts
-│   └── clean-reset.sh  # Reset project to clean state
 ├── SUMMARY.md           # Human-readable project summary
-├── FUTURE.md            # Project improvement tracking
 └── README.md            # This file
 ```
 

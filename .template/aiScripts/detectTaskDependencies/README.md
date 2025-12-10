@@ -173,7 +173,7 @@ The script performs validation:
 
 ## Future Enhancements
 
-Potential improvements (see FUTURE.md #2):
+Potential improvements:
 - Machine learning for better contextual detection
 - Natural language understanding for complex dependency descriptions
 - Automatic suggestion of task splits for complex dependencies

@@ -10,8 +10,8 @@ The Quality Assurance Architect has completed a comprehensive health check and c
 
 ## Important Distinction
 
-- **`FUTURE.md`** at project root = Improvements for projects CREATED FROM this template
-- **`.template/IMPROVEMENTS.md`** = Improvements for the template ITSELF (this project)
+- **`.template/FUTURE.md`** = Future improvements for the template ITSELF (this bootstrap project)
+- **`.template/IMPROVEMENTS.md`** = Active improvements for the template ITSELF (this project)
 - **`.template/FIXES.md`** = Critical bugs and fixes for the template
 
 ## Your Mission
@@ -152,7 +152,7 @@ Critical bugs and issues that need to be fixed in the copilot_template bootstrap
 ## Notes
 
 - This file tracks fixes for the template itself
-- For improvements to projects created from template, see root `FUTURE.md`
+- For future template enhancements, see `.template/FUTURE.md`
 - For enhancement ideas, see `.template/IMPROVEMENTS.md`
 ```
 
@@ -213,7 +213,7 @@ These are polish and optimization improvements.
 ## Notes
 
 - This file tracks improvements to the template itself
-- For improvements to projects created from template, see root `FUTURE.md`
+- For future template enhancements, see `.template/FUTURE.md`
 - For critical bugs, see `.template/FIXES.md`
 ```
 
@@ -223,7 +223,7 @@ Before creating tasks, review existing files:
 - Check if issue already documented elsewhere
 - Look for similar issues that could be consolidated
 - Ensure task IDs are sequential and unique
-- Verify no overlap with root `FUTURE.md` (which is for bootstrapped projects)
+- Verify no overlap with `.template/FUTURE.md` (template future improvements)
 
 ## Step 7: Add Metadata & Dependencies
 

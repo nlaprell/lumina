@@ -486,7 +486,7 @@ Add section to README before conclusion:
 ## Notes
 
 - This file tracks improvements to the bootstrap template itself
-- For improvements to bootstrapped projects, see root `FUTURE.md`
+- Template-related future improvements are in `.template/FUTURE.md`
 - For critical bugs, see `.template/FIXES.md`
 - High impact improvements should be prioritized even if effort is higher
 - Many of these can be done in parallel (no blocking dependencies)

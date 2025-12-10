@@ -90,7 +90,7 @@ This directory contains the infrastructure used to initialize and maintain the c
 **Contains**:
 - User workflows (`prompts/`)
 - Project data (`aiDocs/`, `email/`)
-- Project tracking (`FUTURE.md`, `SUMMARY.md`)
+- Project tracking (`SUMMARY.md`)
 
 ---
 
@@ -204,9 +204,10 @@ When updating template files in `.template/templates/`:
 
 ---
 
-## Questions?
+## References
 
-- **For bootstrap issues**: See `FIXES.md` and `IMPROVEMENTS.md`
+- **For template fixes**: See `.template/FIXES.md`
+- **For template improvements**: See `.template/IMPROVEMENTS.md`
+- **For future template enhancements**: See `.template/FUTURE.md`
 - **For template usage**: See root `README.md`
 - **For AI workflows**: See `.github/copilot-instructions.md`
-- **For project improvements**: See root `FUTURE.md`

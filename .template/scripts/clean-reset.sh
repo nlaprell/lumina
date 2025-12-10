@@ -25,7 +25,7 @@ NC='\033[0m' # No Color
 
 # Get script directory and project root
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+PROJECT_ROOT="$( cd "$SCRIPT_DIR/../.." && pwd )"
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}Copilot Template Clean Reset${NC}"
@@ -169,18 +169,21 @@ if [ ! -f "$PROJECT_ROOT/aiDocs/AI.md" ]; then
     AIDOCS_OK=false
 fi
 
-# Check email directories are empty
+# Check email directories are empty (excluding .gitkeep)
 EMAIL_OK=true
-if [ -n "$(ls -A "$PROJECT_ROOT/email/raw" 2>/dev/null)" ]; then
-    echo -e "  ${RED}✗ email/raw/ is not empty${NC}"
+RAW_FILES=$(find "$PROJECT_ROOT/email/raw" -type f ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')
+if [ "$RAW_FILES" -gt 0 ]; then
+    echo -e "  ${RED}✗ email/raw/ is not empty (found $RAW_FILES file(s))${NC}"
     EMAIL_OK=false
 fi
-if [ -n "$(ls -A "$PROJECT_ROOT/email/ai" 2>/dev/null)" ]; then
-    echo -e "  ${RED}✗ email/ai/ is not empty${NC}"
+AI_FILES=$(find "$PROJECT_ROOT/email/ai" -type f ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')
+if [ "$AI_FILES" -gt 0 ]; then
+    echo -e "  ${RED}✗ email/ai/ is not empty (found $AI_FILES file(s))${NC}"
     EMAIL_OK=false
 fi
-if [ -n "$(ls -A "$PROJECT_ROOT/email/processed" 2>/dev/null)" ]; then
-    echo -e "  ${RED}✗ email/processed/ is not empty${NC}"
+PROCESSED_FILES=$(find "$PROJECT_ROOT/email/processed" -type f ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')
+if [ "$PROCESSED_FILES" -gt 0 ]; then
+    echo -e "  ${RED}✗ email/processed/ is not empty (found $PROCESSED_FILES file(s))${NC}"
     EMAIL_OK=false
 fi
 

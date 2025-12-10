@@ -8,9 +8,9 @@ import base64
 import re
 import os
 import subprocess
+from pathlib import Path
 import sys
 from email.header import decode_header
-from pathlib import Path
 
 # Check and install dependencies
 def check_dependencies():
@@ -117,7 +117,118 @@ def clean_email_body(body_text):
     
     return body_text
 
-def convert_eml_to_md(eml_file_path, output_dir):
+def sanitize_filename(filename):
+    """Sanitize filename to be safe for filesystem"""
+    if not filename:
+        return "unnamed_attachment"
+    
+    # Remove path separators and other dangerous characters
+    filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
+    
+    # Remove leading/trailing dots and spaces
+    filename = filename.strip('. ')
+    
+    # Limit length to 200 characters
+    if len(filename) > 200:
+        name, ext = os.path.splitext(filename)
+        filename = name[:200-len(ext)] + ext
+    
+    return filename if filename else "unnamed_attachment"
+
+def extract_attachments(msg, attachments_dir, email_name):
+    """Extract attachments from email and save to disk
+    
+    Returns list of attachment metadata dicts with keys:
+    - original_name: Original filename from email
+    - saved_name: Sanitized filename saved to disk
+    - saved_path: Relative path to attachment
+    - size: Size in bytes
+    - content_type: MIME type
+    """
+    attachments = []
+    
+    # Create email-specific subdirectory
+    email_attachments_dir = attachments_dir / email_name
+    email_attachments_dir.mkdir(parents=True, exist_ok=True)
+    
+    for part in msg.walk():
+        content_disposition = str(part.get('Content-Disposition', ''))
+        
+        # Check if this part is an attachment
+        if 'attachment' in content_disposition:
+            # Get filename
+            filename = part.get_filename()
+            if filename:
+                filename = decode_email_header(filename)
+            else:
+                # Generate filename from content type
+                ext = part.get_content_type().split('/')[-1]
+                filename = f"attachment_{len(attachments) + 1}.{ext}"
+            
+            # Sanitize filename
+            safe_filename = sanitize_filename(filename)
+            
+            # Get attachment data
+            try:
+                payload = part.get_payload(decode=True)
+                if payload:
+                    # Save to disk
+                    attachment_path = email_attachments_dir / safe_filename
+                    
+                    # Handle duplicate filenames
+                    counter = 1
+                    while attachment_path.exists():
+                        name, ext = os.path.splitext(safe_filename)
+                        safe_filename = f"{name}_{counter}{ext}"
+                        attachment_path = email_attachments_dir / safe_filename
+                        counter += 1
+                    
+                    with open(attachment_path, 'wb') as f:
+                        f.write(payload)
+                    
+                    # Store metadata
+                    attachments.append({
+                        'original_name': filename,
+                        'saved_name': safe_filename,
+                        'saved_path': f"email/attachments/{email_name}/{safe_filename}",
+                        'size': len(payload),
+                        'content_type': part.get_content_type()
+                    })
+                    
+                    print(f"  Extracted attachment: {filename} ({len(payload)} bytes)")
+                    
+            except Exception as e:
+                print(f"  Warning: Could not extract attachment {filename}: {str(e)}")
+    
+    return attachments
+
+def format_attachment_section(attachments):
+    """Format attachments metadata for Markdown output"""
+    if not attachments:
+        return ""
+    
+    section = "\n\n---\n\n## Attachments\n\n"
+    
+    for att in attachments:
+        # Format size
+        size_bytes = att['size']
+        if size_bytes < 1024:
+            size_str = f"{size_bytes} B"
+        elif size_bytes < 1024 * 1024:
+            size_str = f"{size_bytes / 1024:.1f} KB"
+        else:
+            size_str = f"{size_bytes / (1024 * 1024):.1f} MB"
+        
+        # Add attachment entry
+        section += f"- **{att['original_name']}**\n"
+        section += f"  - Type: `{att['content_type']}`\n"
+        section += f"  - Size: {size_str}\n"
+        section += f"  - Location: `{att['saved_path']}`\n\n"
+    
+    return section
+
+
+def convert_eml_to_md(eml_file_path, output_dir, attachments_dir=None):
     """Convert a single .eml file to Markdown"""
     try:
         # Read the .eml file
@@ -137,6 +248,12 @@ def convert_eml_to_md(eml_file_path, output_dir):
         # Extract body
         body_text = extract_email_content(msg)
         body_text = clean_email_body(body_text)
+        
+        # Extract attachments if directory provided
+        attachments = []
+        if attachments_dir:
+            eml_filename = Path(eml_file_path).stem
+            attachments = extract_attachments(msg, attachments_dir, eml_filename)
 
         # Create Markdown content
         md_content = f"""# {subject}
@@ -152,6 +269,10 @@ def convert_eml_to_md(eml_file_path, output_dir):
         
         md_content += "---\n\n"
         md_content += body_text
+        
+        # Add attachments section if any
+        if attachments:
+            md_content += format_attachment_section(attachments)
 
         # Create output filename
         eml_filename = Path(eml_file_path).stem
@@ -173,21 +294,25 @@ def main():
     """Main function to convert all .eml files from email/raw to email/ai"""
     # Get the script directory and project root
     script_dir = Path(__file__).parent.resolve()
-    project_root = script_dir.parent.parent
+    # Script is in .template/aiScripts/emailToMd/, so go up 3 levels to project root
+    project_root = script_dir.parent.parent.parent
     
     # Define directory structure relative to project root
     raw_dir = project_root / "email" / "raw"
     ai_dir = project_root / "email" / "ai"
     processed_dir = project_root / "email" / "processed"
+    attachments_dir = project_root / "email" / "attachments"
     
     # Create directories if they don't exist
     raw_dir.mkdir(parents=True, exist_ok=True)
     ai_dir.mkdir(parents=True, exist_ok=True)
     processed_dir.mkdir(parents=True, exist_ok=True)
+    attachments_dir.mkdir(parents=True, exist_ok=True)
     print(f"Directory structure ready:")
     print(f"  Raw: {raw_dir}")
     print(f"  AI: {ai_dir}")
     print(f"  Processed: {processed_dir}")
+    print(f"  Attachments: {attachments_dir}")
     
     # Find all .eml files in raw directory
     eml_files = list(raw_dir.glob("*.eml"))
@@ -201,7 +326,7 @@ def main():
     # Convert each file
     converted_count = 0
     for eml_file in eml_files:
-        if convert_eml_to_md(str(eml_file), str(ai_dir)):
+        if convert_eml_to_md(str(eml_file), str(ai_dir), attachments_dir):
             # Move processed .eml file to processed directory
             processed_path = processed_dir / eml_file.name
             try:
