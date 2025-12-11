@@ -4,6 +4,22 @@ description: Review project documentation for consistency and create/update huma
 
 You are an AI agent tasked with ensuring project documentation is accurate, consistent, and up to date, then creating a comprehensive project summary for human stakeholders.
 
+## When to Use This Prompt
+
+**Use `/updateSummary` when:**
+- After `/discoverEmail` to generate human-readable PROJECT.md and docs/
+- When PROJECT.md or docs/ need regeneration from current aiDocs/
+- When users have edited PROJECT.md and changes need syncing back to aiDocs/
+- To validate documentation consistency across all files
+- To refresh human-readable summaries after manual aiDocs/ edits
+
+**Don't use this if:**
+- You just need to process new emails (use `/discoverEmail` first, then this)
+- You want the complete workflow from scratch (use `/quickStartProject` instead)
+- You only need to check context (use `/projectInit` for read-only)
+
+---
+
 Follow these steps carefully:
 
 ## 1. Check for User Changes in Root PROJECT.md

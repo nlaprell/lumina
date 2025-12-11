@@ -247,6 +247,237 @@ Copilot prompts to invoke with `/promptName` in chat:
 - **`/projectInit`**: Initialize AI agent with full project context
 - **`/discoverEmail`**: Process raw emails and update documentation
 - **`/updateSummary`**: Review docs for consistency and generate summary
+- **`/validateTasks`**: Validate task structure and dependencies
+- **`/syncFromProject`**: Sync user edits from PROJECT.md back to aiDocs/
+- **`/cleanupTasks`**: Archive old tasks and optimize organization
+- **`/generateReport`**: Create executive status report
+
+---
+
+## Prompt Reference Guide
+
+Complete guide to all available prompts and when to use them.
+
+### Primary Workflows
+
+#### `/quickStartProject` - Complete Project Initialization
+**Use for:** First-time setup, complete workflow from start to finish
+
+**What it does:**
+- Initializes AI agent context
+- Processes all emails in `email/raw/`
+- Updates `aiDocs/` with extracted information
+- Generates `PROJECT.md` and `docs/` folder
+- Provides comprehensive initialization report
+
+**When to run:**
+- Setting up a new project for the first time
+- After cloning template for a new project
+- Want complete end-to-end processing
+
+**Time:** 2-5 minutes (depending on email volume)
+
+---
+
+#### `/projectInit` - Context Initialization (Read-Only)
+**Use for:** Refreshing AI agent understanding without making changes
+
+**What it does:**
+- Reads all `aiDocs/` files
+- Loads universal instructions from `.github/copilot-instructions.md`
+- Establishes working context
+- **Does NOT modify any files**
+
+**When to run:**
+- Starting a new Copilot chat session
+- AI seems to have lost project context
+- Before asking questions about project
+- Periodically to refresh understanding
+
+**Time:** 30 seconds
+
+---
+
+#### `/discoverEmail` - Email Processing
+**Use for:** Processing new email files and updating documentation
+
+**What it does:**
+- Converts `.eml` files to Markdown
+- Reads and analyzes ALL emails
+- Updates `aiDocs/SUMMARY.md` with contacts, background, decisions, risks
+- Updates `aiDocs/TASKS.md` with extracted tasks
+- Updates `aiDocs/DISCOVERY.md` with questions
+- Updates `aiDocs/AI.md` with project-specific notes
+- **Does NOT generate PROJECT.md or docs/** (use `/updateSummary` after)
+
+**When to run:**
+- New emails added to `email/raw/`
+- Batch processing multiple email threads
+- Want to update aiDocs/ before generating summary
+
+**Time:** 2-10 minutes (depending on email volume)
+
+**Follow with:** `/updateSummary` to generate PROJECT.md and docs/
+
+---
+
+#### `/updateSummary` - Documentation Review & Generation
+**Use for:** Generating PROJECT.md and docs/ from current aiDocs/
+
+**What it does:**
+- Reviews all `aiDocs/` files for consistency
+- Checks if user edited `PROJECT.md` and syncs changes back to `aiDocs/`
+- Cross-references with email content
+- Identifies and resolves inconsistencies
+- Generates/updates `PROJECT.md` with human-readable summary
+- Generates/updates `docs/` folder (CONTACTS, TASKS, DECISIONS, QUESTIONS)
+- Validates documentation health
+
+**When to run:**
+- After `/discoverEmail` to generate human-readable docs
+- User has edited PROJECT.md directly
+- Regular status updates (weekly/bi-weekly)
+- Preparing for stakeholder review
+- After manual edits to aiDocs/
+
+**Time:** 1-3 minutes
+
+---
+
+### Maintenance & Utilities
+
+#### `/validateTasks` - Task Integrity Check
+**Use for:** Quick validation of task structure without full documentation review
+
+**What it does:**
+- Validates task ID sequencing
+- Checks metadata completeness (Owner, Status, Source)
+- Verifies cross-references (Blocks, Related)
+- Detects circular dependencies
+- Runs dependency detection tool
+- Identifies orphaned tasks
+- **Does NOT modify files** (validation only)
+
+**When to run:**
+- After manually editing `aiDocs/TASKS.md`
+- Before major planning sessions
+- Suspecting task structure issues
+- Quarterly maintenance
+
+**Time:** 1-2 minutes
+
+---
+
+#### `/syncFromProject` - Reverse Sync
+**Use for:** Syncing user edits from PROJECT.md back to aiDocs/
+
+**What it does:**
+- Reads `PROJECT.md` for user changes
+- Extracts task completions, new tasks, updates
+- Extracts answered questions, new questions
+- Extracts risk updates, contact changes, decisions
+- Updates appropriate `aiDocs/` files
+- **Does NOT regenerate PROJECT.md or docs/** (use `/updateSummary` after)
+
+**When to run:**
+- User has edited PROJECT.md directly
+- Want to preserve user changes before processing new emails
+- Need to capture manual status updates
+
+**Time:** 30-60 seconds
+
+**Follow with:** `/updateSummary` to regenerate docs with synced changes
+
+---
+
+#### `/cleanupTasks` - Task Maintenance
+**Use for:** Organizing and optimizing task list as project matures
+
+**What it does:**
+- Archives completed tasks >30 days old
+- Runs dependency detection and applies suggestions
+- Groups related tasks
+- Optimizes priority categories
+- Improves task metadata quality
+- Identifies orphaned tasks
+- Resolves circular dependencies
+- Updates `aiDocs/TASKS.md` with improvements
+
+**When to run:**
+- Task list has grown large (>20 tasks)
+- Many old completed tasks cluttering list
+- Quarterly maintenance
+- Before major project phase
+- Task dependencies unclear
+
+**Time:** 2-5 minutes
+
+---
+
+#### `/generateReport` - Executive Status Report
+**Use for:** Creating concise status reports for stakeholders
+
+**What it does:**
+- Gathers current state from `aiDocs/` and `PROJECT.md`
+- Analyzes recent progress (last 7-14 days)
+- Identifies blockers and risks
+- Highlights decisions needed
+- Generates executive summary (2-3 sentences)
+- Creates formatted report in `reports/status-YYYY-MM-DD.md`
+- Appropriate detail level for management
+
+**When to run:**
+- Weekly status updates
+- Monthly reporting
+- Management reviews
+- Client briefings
+- Milestone reports
+
+**Time:** 1-2 minutes
+
+---
+
+### When to Use What?
+
+**New project?**
+→ `/quickStartProject` (complete initialization)
+
+**New Copilot session?**
+→ `/projectInit` (load context)
+
+**New emails arrived?**
+→ `/discoverEmail` then `/updateSummary`
+
+**User edited PROJECT.md?**
+→ `/syncFromProject` then `/updateSummary`
+
+**Need status update?**
+→ `/generateReport`
+
+**Task list messy?**
+→ `/cleanupTasks` then `/validateTasks`
+
+**Just want to verify tasks?**
+→ `/validateTasks`
+
+**Weekly routine?**
+→ `/discoverEmail` (if emails) → `/updateSummary` → `/generateReport`
+
+---
+
+### Bootstrap Maintenance (Template Only)
+
+These prompts are in `.template/prompts/` and are **only for maintaining the template itself**, not for projects using the template:
+
+- **`/sanityCheck`**: Fast pre-commit validation (critical issues only)
+- **`/healthCheck`**: Comprehensive template analysis
+- **`/generateTasks`**: Convert health check findings to tasks
+
+**When to run:** Before committing changes to the template repository
+
+---
+
+## Using Email-Based Context
 
 ### Scripts (`.template/aiScripts/`)
 

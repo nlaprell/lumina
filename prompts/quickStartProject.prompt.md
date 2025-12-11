@@ -149,6 +149,14 @@ After completing all steps, provide a comprehensive report:
 - Run `/discoverEmail` to process them
 - Run `/updateSummary` to regenerate the summary
 
+**Optional: Run Task Dependency Detection**
+
+If tasks were created during email processing:
+- Run: `python3 .template/aiScripts/detectTaskDependencies/detectTaskDependencies.py aiDocs/TASKS.md`
+- Review generated `aiDocs/TASK_DEPENDENCY_REPORT.md` for suggested relationships
+- Update task Blocks/Related fields based on high-confidence detections
+- Resolve any circular dependencies identified
+
 ---
 
 ## Important Notes

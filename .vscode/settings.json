@@ -14,6 +14,18 @@
             "file": "prompts/quickStartProject.prompt.md"
         },
         {
+            "file": "prompts/validateTasks.prompt.md"
+        },
+        {
+            "file": "prompts/syncFromProject.prompt.md"
+        },
+        {
+            "file": "prompts/cleanupTasks.prompt.md"
+        },
+        {
+            "file": "prompts/generateReport.prompt.md"
+        },
+        {
             "file": ".template/prompts/sanityCheck.prompt.md"
         },
         {
