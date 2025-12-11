@@ -136,9 +136,10 @@ Perform a deep, comprehensive analysis of the entire bootstrap system to identif
 - Are server configurations complete?
 - Do they follow MCP spec correctly?
 
-**Validate `.template/FUTURE.md`:**
-- Contains future enhancements for the template itself
-- Are improvement ideas well-defined?
+**Validate `.template/IMPROVEMENTS.md`:**
+- Contains all improvements (active tasks + future enhancements)
+- Are active tasks properly formatted with TASK-IDs?
+- Are future enhancements clearly separated?
 - Is it properly structured?
 
 ### 5. User Experience & Journey Analysis
@@ -201,9 +202,9 @@ Walk through the experience of a MarkLogic consultant using this template:
 - Are there features mentioned but not implemented?
 - Are there validation checks that should exist but don't?
 
-**Compare against `.template/FUTURE.md`:**
+**Compare against `.template/IMPROVEMENTS.md`:**
 - Which improvements have already been implemented?
-- Should those be removed from `.template/FUTURE.md` or marked complete?
+- Should those be moved to "Completed Improvements" section?
 
 ## Output Format
 
@@ -356,16 +357,16 @@ Create a comprehensive report saved to `.template/HEALTH_CHECK_REPORT.md` with t
 
 ---
 
-## Comparison with .template/FUTURE.md
+## Comparison with .template/IMPROVEMENTS.md
 
 **Items Already Implemented:**
-- [List items from .template/FUTURE.md that are done]
+- [List items from .template/IMPROVEMENTS.md that are done]
 
 **Items Still Relevant:**
-- [List items that are still future work]
+- [List active tasks and future enhancements still applicable]
 
 **New Opportunities Discovered:**
-- [Items not in .template/FUTURE.md but should be considered]
+- [Items not in .template/IMPROVEMENTS.md but should be added]
 
 ---
 

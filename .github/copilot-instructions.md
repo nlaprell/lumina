@@ -22,7 +22,7 @@ Located at `.template/aiScripts/emailToMd/eml_to_md_converter.py`, this tool con
 **Usage**:
 ```bash
 # Run from project root
-python3 "aiScripts/emailToMd/eml_to_md_converter.py"
+python3 ".template/aiScripts/emailToMd/eml_to_md_converter.py"
 ```
 
 The converter automatically:

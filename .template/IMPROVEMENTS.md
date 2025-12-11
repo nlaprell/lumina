@@ -8,10 +8,11 @@ Enhancement ideas and improvements for the copilot_template bootstrap project.
 
 ## Summary
 
-- Total Improvements: 6
+- Total Improvements: 16
 - High Impact: 2
 - Medium Impact: 3
 - Low Impact: 1
+- Future Enhancements: 10
 
 ---
 
@@ -475,6 +476,141 @@ Add section to README before conclusion:
 
 ---
 
+## Future Enhancements
+
+These are aspirational features that would significantly enhance the template system but are not yet scoped as actionable tasks. When ready to implement, convert to proper tasks with TASK-IDs.
+
+### Change Detection and Diff Reports
+**Category:** Audit & Tracking  
+**Effort:** Medium  
+**Impact:** Medium
+
+Generate automated change reports:
+- Track changes between workflow runs
+- Generate human-readable diff reports
+- Highlight critical changes (new blockers, completed tasks, answered questions)
+- Email notification for significant changes
+- Change log with attribution
+
+**Implementation approach:**
+- Add change tracking to workflow prompts
+- Create `.template/aiScripts/generateChangeReport.py`
+- Store snapshots for comparison
+- Generate Markdown change reports
+
+---
+
+### Risk Scoring System
+**Effort:** Low  
+**Impact:** Medium
+
+Calculate and track risk metrics:
+- Calculate risk scores (Severity × Likelihood)
+- Auto-prioritize risk mitigation
+- Track risk trends over time
+- Flag risks exceeding threshold
+
+---
+
+### Validation Scripts Suite
+**Effort:** Low  
+**Impact:** High
+
+Complete validation tooling:
+- `./.template/scripts/validate-all.sh` - Run all quality checks
+- `./.template/scripts/check-references.sh` - Verify all cross-references
+- `./.template/scripts/lint-tasks.sh` - Task ID and metadata validation
+- Exit codes for CI/CD integration
+
+---
+
+### CSV Export Capability
+**Effort:** Low  
+**Impact:** Medium
+
+Export documentation to standard formats:
+- Export tasks to CSV for project management tools
+- Export contacts to CSV for CRM import
+- Export risks to CSV for risk registers
+- Command: `./scripts/export-to-csv.sh [tasks|contacts|risks]`
+
+---
+
+### Meeting Notes Template
+**Effort:** Low  
+**Impact:** Low
+
+Structured meeting capture:
+- Add `aiDocs/templates/MEETING_NOTES.template.md`
+- Include: Date, Attendees, Decisions, Action Items, Next Meeting
+- Auto-extract tasks from meeting notes
+- Link meeting notes to decision log
+
+---
+
+### Integration with Project Management Tools
+**Effort:** High  
+**Impact:** Medium
+
+Two-way sync with PM tools:
+- Two-way sync with Jira, Asana, Trello
+- Export tasks to PM tools
+- Import status updates back to TASKS.md
+- Maintain task ID mapping
+
+---
+
+### Multi-Project Support
+**Effort:** High  
+**Impact:** Medium
+
+Manage multiple projects in one workspace:
+- Support multiple projects in one workspace
+- Separate aiDocs/ per project
+- Consolidated cross-project view
+- Shared contact database
+
+---
+
+### Timeline Visualization
+**Effort:** Medium  
+**Impact:** Low
+
+Visual project timeline:
+- Generate Gantt charts from tasks
+- Timeline view of Historical Context
+- Milestone tracking
+- Export to PNG/SVG
+
+---
+
+### AI Agent Learning System
+**Effort:** High  
+**Impact:** Medium
+
+Adaptive AI assistance:
+- Track which AI suggestions are accepted/rejected
+- Learn from user corrections
+- Improve extraction accuracy over time
+- Personalized workflows per user
+
+---
+
+### Interactive Dashboard
+**Effort:** High  
+**Impact:** Medium
+
+Web-based project dashboard:
+- Project health metrics
+- Task completion trends
+- Risk heat maps
+- Contact network graphs
+- Discovery question status
+- Real-time updates as files change
+- Export dashboard to PDF
+
+---
+
 ## Completed Improvements
 
 ### December 9, 2025
@@ -485,8 +621,22 @@ Add section to README before conclusion:
 
 ## Notes
 
-- This file tracks improvements to the bootstrap template itself
-- Template-related future improvements are in `.template/FUTURE.md`
-- For critical bugs, see `.template/FIXES.md`
+- This file tracks all improvements to the bootstrap template itself
+- For critical bugs and fixes, see `.template/FIXES.md`
+- **Active Tasks** have TASK-IDs and are ready to implement
+- **Future Enhancements** are aspirational ideas without TASK-IDs yet
 - High impact improvements should be prioritized even if effort is higher
-- Many of these can be done in parallel (no blocking dependencies)
+- Many active tasks can be done in parallel (no blocking dependencies)
+
+## How to Add New Ideas
+
+**For actionable improvements from health checks:**
+1. Add to appropriate priority section (High/Medium/Low Impact)
+2. Use full task format with TASK-ID, acceptance criteria, etc.
+3. Assign sequential TASK-ID
+
+**For aspirational future ideas:**
+1. Add to "Future Enhancements" section
+2. Include brief description, effort, impact
+3. No TASK-ID needed yet
+4. Convert to proper task when ready to implement

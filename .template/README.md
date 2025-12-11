@@ -208,6 +208,6 @@ When updating template files in `.template/templates/`:
 
 - **For template fixes**: See `.template/FIXES.md`
 - **For template improvements**: See `.template/IMPROVEMENTS.md`
-- **For future template enhancements**: See `.template/FUTURE.md`
+- **For template improvements and enhancements**: See `.template/IMPROVEMENTS.md`
 - **For template usage**: See root `README.md`
 - **For AI workflows**: See `.github/copilot-instructions.md`
