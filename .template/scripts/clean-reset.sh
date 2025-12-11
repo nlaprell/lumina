@@ -104,8 +104,8 @@ fi
 
 echo ""
 
-# Step 3: Remove root PROJECT.md and docs/ folder
-echo -e "${BLUE}[3/5] Removing root PROJECT.md and docs/ folder...${NC}"
+# Step 3: Remove root PROJECT.md and reset docs/ folder from templates
+echo -e "${BLUE}[3/5] Removing root PROJECT.md and resetting docs/ folder...${NC}"
 
 if [ -f "$PROJECT_ROOT/PROJECT.md" ]; then
     rm -f "$PROJECT_ROOT/PROJECT.md"
@@ -114,11 +114,43 @@ else
     echo "  ℹ PROJECT.md does not exist (nothing to remove)"
 fi
 
+# Remove existing docs/ folder
 if [ -d "$PROJECT_ROOT/docs" ]; then
     rm -rf "$PROJECT_ROOT/docs"
-    echo "  ✓ Removed docs/ folder (will be regenerated on first /quickStartProject run)"
+    echo "  ✓ Removed existing docs/ folder"
+fi
+
+# Recreate docs/ folder from templates
+mkdir -p "$PROJECT_ROOT/docs"
+echo "  ✓ Created docs/ folder"
+
+# Copy docs templates
+if [ -f "$PROJECT_ROOT/.template/templates/CONTACTS.template.md" ]; then
+    cp "$PROJECT_ROOT/.template/templates/CONTACTS.template.md" "$PROJECT_ROOT/docs/CONTACTS.md"
+    echo "  ✓ Reset docs/CONTACTS.md"
 else
-    echo "  ℹ docs/ folder does not exist (nothing to remove)"
+    echo -e "  ${RED}✗ Template not found: .template/templates/CONTACTS.template.md${NC}"
+fi
+
+if [ -f "$PROJECT_ROOT/.template/templates/docs_TASKS.template.md" ]; then
+    cp "$PROJECT_ROOT/.template/templates/docs_TASKS.template.md" "$PROJECT_ROOT/docs/TASKS.md"
+    echo "  ✓ Reset docs/TASKS.md"
+else
+    echo -e "  ${RED}✗ Template not found: .template/templates/docs_TASKS.template.md${NC}"
+fi
+
+if [ -f "$PROJECT_ROOT/.template/templates/DECISIONS.template.md" ]; then
+    cp "$PROJECT_ROOT/.template/templates/DECISIONS.template.md" "$PROJECT_ROOT/docs/DECISIONS.md"
+    echo "  ✓ Reset docs/DECISIONS.md"
+else
+    echo -e "  ${RED}✗ Template not found: .template/templates/DECISIONS.template.md${NC}"
+fi
+
+if [ -f "$PROJECT_ROOT/.template/templates/QUESTIONS.template.md" ]; then
+    cp "$PROJECT_ROOT/.template/templates/QUESTIONS.template.md" "$PROJECT_ROOT/docs/QUESTIONS.md"
+    echo "  ✓ Reset docs/QUESTIONS.md"
+else
+    echo -e "  ${RED}✗ Template not found: .template/templates/QUESTIONS.template.md${NC}"
 fi
 
 echo ""
