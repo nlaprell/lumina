@@ -221,7 +221,7 @@ Always update working files in `aiDocs/` (without `.template` extension), NOT th
 
 To reset project to clean state:
 ```bash
-./.template/scripts/clean-reset.sh
+./go.sh
 ```
 
 This copies templates to working files, clearing all project-specific content.

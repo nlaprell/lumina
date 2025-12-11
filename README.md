@@ -19,11 +19,11 @@ A project template designed to help AI agents (GitHub Copilot) quickly understan
 
 ## 🚀 Quick Start (3 Steps)
 
-### Step 1: Run Setup Script
+### Step 1: Run Project Manager
 ```bash
-./.template/scripts/init.sh
+./go.sh
 ```
-This will prompt you for your name, project name, and customer name, then let you select MCP servers.
+Select "Initialize Project" to configure your project name, customer name, and MCP servers.
 
 ### Step 2: Add Email Context
 Export project-related emails to `.eml` format and place them in:
@@ -69,13 +69,13 @@ Or simply copy/fork this repository to start your new project.
 
 ### 2. Run Initial Setup
 
-Execute the initialization script to configure your project:
+Execute the project manager to configure your project:
 
 ```bash
-./.template/scripts/init.sh
+./go.sh
 ```
 
-This interactive script will:
+Select "Initialize Project" from the menu. This will:
 - Prompt you to enter your name (for task tracking)
 - Prompt you to enter your project name
 - Prompt you to enter your customer/client name
@@ -199,7 +199,7 @@ copilot_template/
   - `TASKS.template.md`: Template for task tracking
   - `DISCOVERY.template.md`: Template for discovery questions
   - `AI.template.md`: Template for AI agent instructions
-  - Use `./.template/scripts/clean-reset.sh` to reset all aiDocs files to templates
+  - Use `./go.sh` and select "Reset Project" to reset all aiDocs files to templates
 
 - **`AI.md`**: Master instructions for AI agents working on the project
   - Project structure and organization
@@ -252,7 +252,7 @@ Copilot prompts to invoke with `/promptName` in chat:
 ### Typical Project Flow
 
 1. **Start new project**: Copy this template
-2. **Configure MCP servers**: Run `./.template/scripts/init.sh`
+2. **Configure MCP servers**: Run `./go.sh` and select "Initialize Project"
 3. **Initialize AI agent**: Use `/projectInit` in Copilot
 4. **Add email context**: Export emails to `email/raw/`
 5. **Process emails**: Use `/discoverEmail` in Copilot
@@ -298,13 +298,13 @@ The template includes configurations for several MCP servers in `.template/mcpSe
 - **awsCore.json**: AWS Labs core MCP server
 - **context7.json**: Context7 MCP server
 
-Run `./.template/scripts/init.sh` to select which servers to enable in your workspace.
+Run `./go.sh` and select "Initialize Project" to choose which servers to enable in your workspace.
 
 ### Adding New MCP Servers
 
 1. Create a new `.json` file in `.template/mcpServers/`
 2. Follow the MCP server configuration format
-3. Run `./.template/scripts/init.sh` to regenerate `.vscode/mcp.json`
+3. Run `./go.sh` and select "Initialize Project" to regenerate `.vscode/mcp.json`
 
 ## Customizing for Your Project
 
