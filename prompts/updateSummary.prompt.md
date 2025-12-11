@@ -6,15 +6,15 @@ You are an AI agent tasked with ensuring project documentation is accurate, cons
 
 Follow these steps carefully:
 
-## 1. Check for User Changes in Root SUMMARY.md
+## 1. Check for User Changes in Root PROJECT.md
 
-**CRITICAL FIRST STEP**: Before reviewing `aiDocs/`, check if the root `SUMMARY.md` exists and contains user-made changes that need to be synced back to `aiDocs/`.
+**CRITICAL FIRST STEP**: Before reviewing `aiDocs/`, check if the root `PROJECT.md` exists and contains user-made changes that need to be synced back to `aiDocs/`.
 
-If root `SUMMARY.md` exists:
+If root `PROJECT.md` exists:
 
-### Extract User Changes from Root SUMMARY.md
+### Extract User Changes from Root PROJECT.md
 
-Look for changes that users may have made directly to the root summary:
+Look for changes that users may have made directly to the root project summary:
 
 **Task Status Changes:**
 - Tasks marked as completed (✅ or checked boxes)
@@ -49,12 +49,12 @@ Look for changes that users may have made directly to the root summary:
 
 ### Sync User Changes to aiDocs/
 
-After identifying user changes in root `SUMMARY.md`, update the corresponding `aiDocs/` files:
+After identifying user changes in root `PROJECT.md`, update the corresponding `aiDocs/` files:
 
 **Update `aiDocs/TASKS.md`:**
-- Move tasks marked complete in root SUMMARY.md to Completed Tasks section
+- Move tasks marked complete in root PROJECT.md to Completed Tasks section
 - Update task statuses, deadlines, owners based on user edits
-- Add any new tasks user created in root SUMMARY.md
+- Add any new tasks user created in root PROJECT.md
 - Preserve task ID sequencing (assign next sequential ID to new tasks)
 
 **Update `aiDocs/DISCOVERY.md`:**
@@ -71,14 +71,14 @@ After identifying user changes in root `SUMMARY.md`, update the corresponding `a
 - Update contact information if user corrected it
 
 **Important Notes:**
-- Treat root `SUMMARY.md` user edits as authoritative
+- Treat root `PROJECT.md` user edits as authoritative
 - Don't overwrite user changes - preserve and sync them to `aiDocs/`
 - If user changes conflict with `aiDocs/` content, user changes win
 - Document sync in your final report
 
 ## 2. Review AI Documentation Files
 
-After syncing user changes from root `SUMMARY.md`, thoroughly review all documentation in `aiDocs/` to ensure consistency and accuracy:
+After syncing user changes from root `PROJECT.md`, thoroughly review all documentation in `aiDocs/` to ensure consistency and accuracy:
 
 ### Review `aiDocs/SUMMARY.md`
 - Verify **Quick Context** section is current (What, Who, Status)
@@ -182,9 +182,11 @@ Update `aiDocs/` files as needed to ensure:
 - "Last Updated" dates are current
 - Placeholder text is replaced with actual content
 
-## 6. Create/Update Project Summary
+## 6. Create/Update Project Summary and Documentation Extracts
 
-Create or update `SUMMARY.md` at the **project root** (not in `aiDocs/`) with a human-readable summary.
+### Create/Update PROJECT.md
+
+Create or update `PROJECT.md` at the **project root** (not in `aiDocs/`) with a human-readable summary.
 
 **IMPORTANT**: When creating the file for the first time, add this tagline immediately after the title:
 
@@ -257,7 +259,38 @@ The summary should include:
 #### References
 - Links to key documentation
 - Important email threads
-  - External resources
+- External resources
+
+### Create/Update docs/ Human-Readable Files
+
+After updating `PROJECT.md`, generate simplified, human-readable extracts in the `docs/` directory:
+
+**docs/CONTACTS.md:**
+- Extract key contacts from `aiDocs/SUMMARY.md`
+- Group by organization
+- Include: Name, Email, Role, Organization
+- Add "Last Updated" date
+- Note: "*For complete contact details, see [aiDocs/SUMMARY.md](aiDocs/SUMMARY.md)*"
+
+**docs/TASKS.md:**
+- Extract high-priority tasks from `aiDocs/TASKS.md`
+- Include: Task ID, Description, Owner, Status
+- Separate sections: High Priority, Current Blockers, Recently Completed
+- Add "Last Updated" date
+- Note: "*For complete task list with all metadata, see [aiDocs/TASKS.md](aiDocs/TASKS.md)*"
+
+**docs/DECISIONS.md:**
+- Extract decision log from `aiDocs/SUMMARY.md`
+- Table format: Date, Decision, Made By, Rationale
+- Add "Last Updated" date
+- Note: "*For complete decision log, see [aiDocs/SUMMARY.md](aiDocs/SUMMARY.md)*"
+
+**docs/QUESTIONS.md:**
+- Extract high-priority unanswered questions from `aiDocs/DISCOVERY.md`
+- Group by category (High Priority, Technical)
+- List questions concisely without full metadata
+- Add "Last Updated" date
+- Note: "*For complete question details including who to ask and where to check, see [aiDocs/DISCOVERY.md](aiDocs/DISCOVERY.md)*"
 
 ## 7. Formatting Guidelines
 
@@ -286,7 +319,7 @@ When creating the summary:
 After completing the review and summary update, provide:
 
 **User Changes Sync Summary:**
-- Root SUMMARY.md exists: [Yes/No]
+- Root PROJECT.md exists: [Yes/No]
 - User changes detected: [Yes/No - if yes, list types of changes]
 - Tasks synced to `aiDocs/TASKS.md`: [number of task updates]
 - Discovery questions synced to `aiDocs/DISCOVERY.md`: [number of updates]
@@ -303,7 +336,11 @@ After completing the review and summary update, provide:
 - `aiDocs/TASKS.md`: [specific changes]
 - `aiDocs/DISCOVERY.md`: [specific changes]
 - `aiDocs/AI.md`: [specific changes]
-- `SUMMARY.md` (root): [specific changes]
+- `PROJECT.md` (root): [specific changes]
+- `docs/CONTACTS.md`: [created/updated with X contacts]
+- `docs/TASKS.md`: [created/updated with X tasks]
+- `docs/DECISIONS.md`: [created/updated with X decisions]
+- `docs/QUESTIONS.md`: [created/updated with X questions]
 
 **Documentation Health Check:**
 - Contact completeness: [X%] have complete email, role, and organization
@@ -331,9 +368,10 @@ After completing the review and summary update, provide:
 
 ## Important Notes
 
-- The `SUMMARY.md` at project root is for **human stakeholders**
-- The `aiDocs/SUMMARY.md` is for **AI agent context**
-- These files serve different purposes and should both be maintained
-- Ensure both files are consistent but appropriately formatted for their audiences
-- Focus the human summary on actionable information and clear status
-- If critical blockers or risks exist, highlight them prominently
+- The `PROJECT.md` at project root is for **human stakeholders** (main project summary)
+- The `docs/` directory contains **human-readable extracts** for quick reference
+- The `aiDocs/` directory is for **AI agent context** (full metadata and details)
+- These files serve different purposes and should all be maintained
+- Ensure all files are consistent but appropriately formatted for their audiences
+- Focus the human summary and docs/ extracts on actionable information and clear status
+- If critical blockers or risks exist, highlight them prominently in PROJECT.md

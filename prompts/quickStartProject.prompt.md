@@ -62,14 +62,14 @@ Then:
   - `aiDocs/AI.md` - workflows, procedures, AI Agent Notes with project-specific guidance
 - Update "Last Updated" dates to current date in all modified `aiDocs/` files
 
-## Step 4: Generate Project Summary
+## Step 4: Generate Project Summary and Documentation
 
 Run the `/updateSummary` workflow:
 
 - Review all `aiDocs/` files for consistency and accuracy
 - Verify Quick Context, Decision Log, Task IDs, and Discovery metadata
 - Cross-reference with email content in `email/ai/`
-- Create or update `SUMMARY.md` at the project root with:
+- Create or update `PROJECT.md` at the project root with:
   - **AI model tagline** (if creating for first time): *This document was originally created by an AI agent using the Claude Sonnet 4.5 model.*
   - Project overview and current status
   - Key contacts
@@ -77,6 +77,11 @@ Run the `/updateSummary` workflow:
   - Blockers and risks
   - Outstanding questions and next steps
   - Decision log highlights
+- Generate human-readable extracts in `docs/` directory:
+  - `docs/CONTACTS.md` - Key stakeholder contact information
+  - `docs/TASKS.md` - High-priority tasks and blockers
+  - `docs/DECISIONS.md` - Decision log table
+  - `docs/QUESTIONS.md` - Unanswered questions
 
 **Optional: Run Task Dependency Detection**
 
@@ -109,7 +114,8 @@ After completing all steps, provide a comprehensive report:
 - ✓ AI agent initialized with project context
 - ✓ Email processing: [X emails processed / No emails found]
 - ✓ Documentation updated: [list files updated]
-- ✓ Project summary generated: SUMMARY.md
+- ✓ Project summary generated: PROJECT.md
+- ✓ Human-readable docs created: docs/ folder
 
 **Key Findings:**
 - **Contacts**: [number added] new contacts added, [number removed] removed
@@ -133,9 +139,10 @@ After completing all steps, provide a comprehensive report:
 - Quick Context compliance: [Yes/No] meets character limits
 
 **Next Steps:**
-1. **📄 Review SUMMARY.md at project root for complete project overview**
-2. Check `aiDocs/TASKS.md` for outstanding work
-3. Review `aiDocs/DISCOVERY.md` for unanswered questions
+1. **📄 Review PROJECT.md at project root for complete project overview**
+2. **📁 Check docs/ folder for quick reference (contacts, tasks, decisions, questions)**
+3. Check `aiDocs/TASKS.md` for complete task details
+4. Review `aiDocs/DISCOVERY.md` for unanswered questions
 
 **To add more email context later:**
 - Export emails to `email/raw/`
@@ -151,6 +158,7 @@ After completing all steps, provide a comprehensive report:
 - Ensure all documentation is consistent across files
 - Highlight any critical issues or urgent items discovered
 - If email processing fails, continue with remaining steps and report the error
-- **Direct user to SUMMARY.md at project root for complete project status**
+- **Direct user to PROJECT.md at project root for complete project status**
+- **Direct user to docs/ folder for quick reference materials**
 - Template files are preserved in `.template/templates/` directory
 - To reset project to clean state, use `./go.sh` and select "Reset Project"

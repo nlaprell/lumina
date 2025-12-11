@@ -55,10 +55,11 @@ When starting work on any project in this workspace:
    - Update `DISCOVERY.md` with new questions and answers
    - Update `AI.md` with project-specific learnings
 
-4. **Maintain human summary**: Update root `SUMMARY.md` for stakeholders when significant changes occur
-   - **Bidirectional sync**: If users edit root `SUMMARY.md`, sync changes back to `aiDocs/` files first
+4. **Maintain human summary**: Update root `PROJECT.md` and `docs/` for stakeholders when significant changes occur
+   - **Bidirectional sync**: If users edit root `PROJECT.md`, sync changes back to `aiDocs/` files first
    - User edits to root summary are authoritative and should be preserved
-   - Then regenerate root `SUMMARY.md` from updated `aiDocs/` to maintain consistency
+   - Then regenerate root `PROJECT.md` and `docs/` extracts from updated `aiDocs/` to maintain consistency
+   - Generate simplified views in `docs/` (CONTACTS.md, TASKS.md, DECISIONS.md, QUESTIONS.md)
 
 ---
 
@@ -97,10 +98,16 @@ AI agents MUST maintain these files:
   - Quick References (THIS project's links and resources)
   - Lessons Learned (THIS project's experiences)
 
-- **`SUMMARY.md`** (root): Human-readable project summary
+- **`PROJECT.md`** (root): Human-readable project summary
   - Executive summary with visual indicators
   - Condensed information for busy stakeholders
   - Links to detailed documentation in `aiDocs/`
+
+- **`docs/`** (directory): Human-readable quick reference extracts
+  - `CONTACTS.md` - Key stakeholder contact information
+  - `TASKS.md` - High-priority tasks and current blockers
+  - `DECISIONS.md` - Decision log in table format
+  - `QUESTIONS.md` - Outstanding discovery questions
 
 ### Quick Context Format
 
@@ -256,7 +263,7 @@ Update `aiDocs/` files when:
 - Discovery questions are answered
 - Project status changes
 
-Update root `SUMMARY.md` when:
+Update root `PROJECT.md` and `docs/` when:
 - Major milestones reached
 - Critical decisions made
 - Significant status changes

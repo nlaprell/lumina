@@ -8,7 +8,7 @@
 # What it does:
 # 1. Clears all email directories (raw, ai, processed)
 # 2. Resets aiDocs files to template defaults
-# 3. Clears project-specific data from root SUMMARY.md
+# 3. Removes root PROJECT.md and docs/ folder
 # 4. Preserves configuration and scripts
 #
 # Usage: ./.template/scripts/clean-reset.sh
@@ -36,7 +36,7 @@ echo ""
 echo "This script will:"
 echo "  - Clear all email directories (raw, ai, processed)"
 echo "  - Reset aiDocs files to template defaults"
-echo "  - Clear project-specific data from root SUMMARY.md"
+echo "  - Remove root PROJECT.md and docs/ folder"
 echo "  - Reset .vscode/mcp.json to default state"
 echo "  - Preserve all other configuration files and scripts"
 echo ""
@@ -104,14 +104,21 @@ fi
 
 echo ""
 
-# Step 3: Clear root SUMMARY.md if it exists
-echo -e "${BLUE}[3/5] Clearing root SUMMARY.md...${NC}"
+# Step 3: Remove root PROJECT.md and docs/ folder
+echo -e "${BLUE}[3/5] Removing root PROJECT.md and docs/ folder...${NC}"
 
-if [ -f "$PROJECT_ROOT/SUMMARY.md" ]; then
-    rm -f "$PROJECT_ROOT/SUMMARY.md"
-    echo "  ✓ Removed SUMMARY.md (will be regenerated on first /quickStartProject run)"
+if [ -f "$PROJECT_ROOT/PROJECT.md" ]; then
+    rm -f "$PROJECT_ROOT/PROJECT.md"
+    echo "  ✓ Removed PROJECT.md (will be regenerated on first /quickStartProject run)"
 else
-    echo "  ℹ SUMMARY.md does not exist (nothing to clear)"
+    echo "  ℹ PROJECT.md does not exist (nothing to remove)"
+fi
+
+if [ -d "$PROJECT_ROOT/docs" ]; then
+    rm -rf "$PROJECT_ROOT/docs"
+    echo "  ✓ Removed docs/ folder (will be regenerated on first /quickStartProject run)"
+else
+    echo "  ℹ docs/ folder does not exist (nothing to remove)"
 fi
 
 echo ""
