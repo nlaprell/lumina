@@ -16,54 +16,21 @@ Production-ready MVP for MarkLogic consultants with critical stability fixes, lo
 
 - [x] ~~#4 - Add Basic Smoke Tests~~ (closed as duplicate of #9)
 - [x] ~~#5 - Create Centralized Logging System~~ (closed as duplicate of #7)
-- [ ] **#1** - 🔴 Fix MCP Configuration Format (servers vs mcpServers)
-  - **Priority:** CRITICAL
-  - **Impact:** Template currently broken for MCP server usage
-  - **Effort:** Low (~30 minutes)
-
-- [ ] **#8** - 🔴 Add error handling and recovery to email converter
-  - **Priority:** CRITICAL
-  - **Impact:** Prevents data loss from failed email conversions
-  - **Effort:** Medium (1-2 hours)
-
-- [ ] **#10** - 🔴 Add requirements.txt and remove runtime auto-install
-  - **Priority:** CRITICAL
-  - **Impact:** Fixes dependency management anti-pattern
-  - **Effort:** Low (~1 hour)
+- [ ] [#1 - Fix MCP Configuration Format](https://github.com/nlaprell/lumina/issues/1) (servers vs mcpServers) - *Low (30 min)*
+- [ ] [#8 - Add error handling to email converter](https://github.com/nlaprell/lumina/issues/8) - *Medium (1-2 hrs)*
+- [ ] [#10 - Add requirements.txt](https://github.com/nlaprell/lumina/issues/10) - *Low (1 hr)*
 
 ### Essential Features (Should Have)
 
-- [ ] **#7** - Add centralized logging module
-  - **Priority:** HIGH
-  - **Impact:** Enables debugging when failures occur
-  - **Effort:** Low (~1 hour)
-
-- [ ] **#6** - Add health check to go.sh menu
-  - **Priority:** HIGH
-  - **Impact:** Catches problems early, prevents runtime failures
-  - **Effort:** Low (~1 hour)
-
-- [ ] **#12** - Add decision tree / quick reference cheat sheet
-  - **Priority:** HIGH
-  - **Impact:** Dramatically improves onboarding UX
-  - **Effort:** Low (<1 hour)
-
-- [ ] **#13** - Add success validation checklist after workflows
-  - **Priority:** HIGH
-  - **Impact:** Builds consultant confidence in output
-  - **Effort:** Low (<1 hour)
+- [ ] [#7 - Add centralized logging module](https://github.com/nlaprell/lumina/issues/7) - *Low (1 hr)*
+- [ ] [#6 - Add health check to go.sh menu](https://github.com/nlaprell/lumina/issues/6) - *Low (1 hr)*
+- [ ] [#12 - Add decision tree / quick reference cheat sheet](https://github.com/nlaprell/lumina/issues/12) - *Low (<1 hr)*
+- [ ] [#13 - Add success validation checklist](https://github.com/nlaprell/lumina/issues/13) - *Low (<1 hr)*
 
 ### Quality Improvements (Could Have)
 
-- [ ] **#2** - Add MCP Configuration Validation to init.sh
-  - **Priority:** MEDIUM
-  - **Impact:** Validates MCP config before writing
-  - **Effort:** Low (~30 minutes)
-
-- [ ] **#3** - Improve Error Handling in Bash Scripts
-  - **Priority:** MEDIUM
-  - **Impact:** Better error messages and graceful failures
-  - **Effort:** Medium (1-2 hours)
+- [ ] [#2 - Add MCP Configuration Validation](https://github.com/nlaprell/lumina/issues/2) - *Low (30 min)*
+- [ ] [#3 - Improve Error Handling in Bash Scripts](https://github.com/nlaprell/lumina/issues/3) - *Medium (1-2 hrs)*
 
 ### Estimated Total Effort
 
@@ -81,24 +48,15 @@ Enhancements to improve onboarding experience, maintainability, and advanced fea
 
 ### Documentation & Examples
 
-- [ ] **#14** - Add sample project documentation for reference
-  - **Priority:** MEDIUM
-  - **Impact:** Provides learning reference and quick demo
-  - **Effort:** Medium (2-3 hours)
+- [ ] [#14 - Add sample project documentation](https://github.com/nlaprell/lumina/issues/14) - *Medium (2-3 hrs)*
 
 ### Testing & Quality
 
-- [ ] **#9** - Add smoke tests for critical code paths
-  - **Priority:** MEDIUM
-  - **Impact:** Improves maintainability and regression protection
-  - **Effort:** Medium (1-2 hours)
+- [ ] [#9 - Add smoke tests for critical code paths](https://github.com/nlaprell/lumina/issues/9) - *Medium (1-2 hrs)*
 
 ### Advanced Features
 
-- [ ] **#11** - Add state tracking for project initialization
-  - **Priority:** LOW
-  - **Impact:** Enhanced UX with better error messages
-  - **Effort:** Medium (1-2 hours)
+- [ ] [#11 - Add state tracking for project initialization](https://github.com/nlaprell/lumina/issues/11) - *Medium (1-2 hrs)*
 
 ### Estimated Total Effort
 

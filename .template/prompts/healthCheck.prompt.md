@@ -136,12 +136,6 @@ Perform a deep, comprehensive analysis of the entire bootstrap system to identif
 - Are server configurations complete?
 - Do they follow MCP spec correctly?
 
-**Validate `.template/IMPROVEMENTS.md`:**
-- Contains all improvements (active tasks + future enhancements)
-- Are active tasks properly formatted with TASK-IDs?
-- Are future enhancements clearly separated?
-- Is it properly structured?
-
 ### 5. User Experience & Journey Analysis
 
 **Complete User Journey Simulation:**
@@ -201,10 +195,6 @@ Walk through the experience of a MarkLogic consultant using this template:
 - Are there incomplete sections in docs?
 - Are there features mentioned but not implemented?
 - Are there validation checks that should exist but don't?
-
-**Compare against `.template/IMPROVEMENTS.md`:**
-- Which improvements have already been implemented?
-- Should those be moved to "Completed Improvements" section?
 
 ## Output Format
 
@@ -357,16 +347,16 @@ Create a comprehensive report saved to `.template/HEALTH_CHECK_REPORT.md` with t
 
 ---
 
-## Comparison with .template/IMPROVEMENTS.md
+## GitHub Issue Mapping
 
 **Items Already Implemented:**
-- [List items from .template/IMPROVEMENTS.md that are done]
+- [List issues closed during health check]
 
 **Items Still Relevant:**
-- [List active tasks and future enhancements still applicable]
+- [List open issues still applicable]
 
 **New Opportunities Discovered:**
-- [Items not in .template/IMPROVEMENTS.md but should be added]
+- [Issues to create in GitHub]
 
 ---
 
@@ -415,3 +405,29 @@ Save your complete report to `.template/HEALTH_CHECK_REPORT.md` and provide a br
 - High priority improvements: X
 - Overall health assessment: [1-2 sentences]
 - Top 3 recommendations: [Brief list]
+
+---
+
+## ⭐ Important: Next Step - Use GitHub for Issue Tracking
+
+**DO NOT** create `.template/FIXES.md` or `.template/IMPROVEMENTS.md` markdown files (they have been removed; use GitHub issues only).
+
+**Instead, use GitHub for all issue tracking:**
+
+After health check completes, run `/reportToGitHub` to convert findings to GitHub issues:
+
+```
+/reportToGitHub
+```
+
+This workflow:
+1. Reads `.template/HEALTH_CHECK_REPORT.md`
+2. Creates GitHub issues with proper labels and milestones
+3. Stores all template work in GitHub (single source of truth)
+4. Avoids duplication and maintenance burden of markdown task files
+
+**Preferred Workflow:**
+1. Run `/healthCheck` → generates HEALTH_CHECK_REPORT.md
+2. Run `/reportToGitHub` → creates GitHub issues
+3. Work from GitHub issues (legacy FIXES/IMPROVEMENTS files removed)
+````

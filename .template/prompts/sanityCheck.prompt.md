@@ -1,162 +1,294 @@
 ---
-description: Quick pre-commit sanity check focusing on critical issues only
+description: Quick pre-commit sanity check of recent changes (staged/unstaged or last commit)
 ---
 
 You are a **Quality Assurance Specialist** conducting a fast pre-commit sanity check of the Lumina bootstrap project.
 
-## Context
+## Purpose
 
-This is a **quick validation check** designed to run before commits. It focuses ONLY on critical issues that would break functionality or cause immediate problems.
+This is a **quick focused validation** designed to run before commits. It analyzes **only recent changes** (staged/unstaged files or last commit) to ensure nothing is broken.
 
-For comprehensive analysis including documentation completeness, UX improvements, and enhancement opportunities, use `/healthCheck` instead.
-
-## Scope Selection
-
-**IMPORTANT**: Check git status first to determine scope:
-
-1. **If there are uncommitted changes**: Analyze ONLY the modified files
-2. **If git is clean**: Analyze the entire codebase
-
-This ensures fast feedback for active development while still providing full validation when needed.
-
-```bash
-# Check for uncommitted changes
-git status --short
-```
-
-## Critical Checks Only
-
-Focus on these critical issues ONLY:
-
-### 1. Syntax Validation
-
-**Check ALL scripts for syntax errors:**
-
-**Bash scripts:**
-- `bash -n .template/scripts/init.sh`
-- `bash -n .template/scripts/clean-reset.sh`
-
-**Python scripts:**
-- Check `.template/aiScripts/emailToMd/eml_to_md_converter.py`
-- Check `.template/aiScripts/detectTaskDependencies/detectTaskDependencies.py`
-
-**Severity**: 🔴 Critical - Syntax errors prevent execution
-
-### 2. Broken References
-
-**Validate critical file path references:**
-
-**In prompts (`prompts/*.prompt.md`):**
-- References to `.template/templates/` files
-- References to scripts in `.template/aiScripts/`
-- References to `.template/scripts/init.sh`
-
-**In scripts:**
-- File copy operations in `clean-reset.sh`
-- File paths in `init.sh`
-- Import statements in Python scripts
-
-**In documentation:**
-- README.md Quick Start commands
-- .github/copilot-instructions.md file paths
-
-**Severity**: 🔴 Critical - Broken paths cause workflow failures
-
-### 3. Security Issues
-
-**Check for dangerous operations:**
-- Unquoted variables in bash (e.g., `rm $VAR` instead of `rm "$VAR"`)
-- Unsafe file operations without validation
-- Missing error handling on destructive operations
-- Hardcoded credentials or API keys (should never exist)
-
-**Severity**: 🔴 Critical - Security risks or potential data loss
-
-### 4. Critical Functionality Gaps
-
-**Verify essential features work:**
-- init.sh creates required directories
-- Email converter moves files correctly
-- clean-reset.sh doesn't delete user work
-- Prompts reference correct output locations
-
-**Severity**: 🔴 Critical - Core functionality broken
-
-## Output Format
-
-Create a BRIEF report saved to `.template/SANITY_CHECK_REPORT.md`:
-
-```markdown
-# Pre-Commit Sanity Check
-
-*Generated: [Current Date]*
-*Scope: [Uncommitted files only | Full codebase]*
-
-## Status: [✅ PASS | ❌ FAIL]
-
-**Files Analyzed**: X
-**Critical Issues Found**: X
+For comprehensive analysis of the entire codebase including documentation, UX, and enhancements, use `/healthCheck` instead.
 
 ---
 
-## Critical Issues
+## Workflow Overview
 
-[If none found, state "No critical issues found. ✅"]
+1. **Determine scope** - Check git status for staged/unstaged changes or last commit
+2. **Validate syntax** - Quick syntax check on modified files only
+3. **Check critical references** - Ensure no broken file paths in changes
+4. **Report findings** - Create SANITY_CHECK_REPORT.md
+5. **Create GitHub issues** - Run `/reportToGitHub` if critical issues found
+
+---
+
+## Step 1: Determine Scope
+
+Check git status to decide what files to analyze:
+
+```bash
+# See what changed
+git status --short
+
+# If there are uncommitted changes:
+git diff --name-only        # unstaged changes
+git diff --cached --name-only  # staged changes
+
+# If git is clean (no uncommitted changes):
+git log -1 --name-only      # files in last commit
+```
+
+**Scope Decision:**
+- **If unstaged changes exist**: Analyze ONLY those files (from `git diff --name-only`)
+- **If only staged changes exist**: Analyze ONLY those files (from `git diff --cached --name-only`)  
+- **If git is clean**: Analyze the last commit files (from `git log -1 --name-only`)
+
+---
+
+## Step 2: Syntax Validation
+
+For each modified file, validate syntax immediately:
+
+### Bash Scripts (.sh)
+
+```bash
+bash -n path/to/script.sh
+```
+
+**Check for:**
+- Bash syntax errors (report immediately)
+- Unquoted variables in dangerous operations (e.g., `rm $VAR` → `rm "$VAR"`)
+- Missing error handling on critical operations
+
+**Severity**: 🔴 Critical - Syntax errors prevent execution
+
+### Python Scripts (.py)
+
+```bash
+python3 -m py_compile path/to/script.py
+```
+
+**Check for:**
+- Python syntax errors (report immediately)
+- Import statements for modules that must exist
+- Hardcoded credentials or API keys (should never exist)
+
+**Severity**: 🔴 Critical - Syntax errors prevent execution
+
+### Prompt Files (.prompt.md)
+
+**Check for:**
+- All referenced files exist (`.template/templates/`, `.template/scripts/`, `.template/aiScripts/`)
+- Script invocations match actual script locations
+- No broken links to other prompts
+- Proper markdown formatting
+
+**Severity**: 🔴 Critical - Broken references cause workflow failures
+
+### Documentation Files (README.md, CONTRIBUTING.md, etc.)
+
+**Check for:**
+- Commands shown actually exist (verify file paths)
+- File path references point to real files
+- No outdated or incorrect instructions
+- Links to templates and scripts still valid
+
+**Severity**: 🔴 Critical - Misleading documentation wastes time
+
+---
+
+## Step 3: Critical References Check
+
+For each modified file, verify file path references are correct:
+
+**In changed scripts:**
+- Do file copy/move operations reference existing files?
+- Are relative paths correct from script location?
+- Do imports reference available modules?
+
+**In changed prompts:**
+- Do `.template/templates/` references exist?
+- Do script invocations exist in `.template/scripts/` or `.template/aiScripts/`?
+- Are prompt cross-references correct?
+
+**In changed documentation:**
+- Do README commands reference existing files?
+- Are Quick Start instructions still accurate?
+- Do file paths exist?
+
+---
+
+## Step 4: Create Report
+
+Create `.template/SANITY_CHECK_REPORT.md`:
+
+```markdown
+# Pre-Commit Sanity Check Report
+
+**Date**: [Current Date]
+**Scope**: [Modified files | Last commit]
+**Files Analyzed**: [Number of files]
+
+## Status: [✅ PASS | ❌ FAIL]
+
+**Critical Issues Found**: [Number]
+
+---
+
+## Issues Found
+
+[If no issues, state: "No critical issues found. ✅"]
 
 [If issues found, list each with:]
 
 **[ISSUE-001]: [Title]**
-- **File**: [path]
+- **File**: [path/to/file]
 - **Line**: [number if applicable]
+- **Severity**: 🔴 Critical
 - **Problem**: [What's wrong]
 - **Fix**: [How to fix]
 
 ---
 
-## Validation Results
+## Validation Summary
 
-### ✅ Syntax Validation
-- init.sh: [PASS | FAIL]
-- clean-reset.sh: [PASS | FAIL]
-- eml_to_md_converter.py: [PASS | FAIL]
-- detectTaskDependencies.py: [PASS | FAIL]
+**Syntax Checks:**
+- [file1.sh]: ✅ PASS
+- [file2.py]: ✅ PASS
+- [file3.prompt.md]: ✅ PASS
 
-### ✅ Path References
-- Prompts → Templates: [PASS | FAIL]
-- Prompts → Scripts: [PASS | FAIL]
-- Scripts → Templates: [PASS | FAIL]
+**Reference Checks:**
+- File paths: ✅ PASS
+- Script invocations: ✅ PASS
+- Import statements: ✅ PASS
 
-### ✅ Security Check
-- Quoted variables: [PASS | FAIL]
-- Safe file operations: [PASS | FAIL]
-- No hardcoded secrets: [PASS | FAIL]
-
-### ✅ Core Functionality
-- init.sh workflow: [PASS | FAIL]
-- Email converter: [PASS | FAIL]
-- Template reset: [PASS | FAIL]
+**Security Checks:**
+- Credentials: ✅ No hardcoded secrets
+- File operations: ✅ Properly quoted
 
 ---
 
-## Summary
+## Recommendation
 
-[1-2 sentence overall assessment]
+[✅ PASS - Safe to commit | ❌ FAIL - Fix issues before committing]
 
-**Recommendation**: [Commit safe | Fix issues before committing | Run /healthCheck for full analysis]
+---
 
+## Next Steps
+
+[If issues found: "Create GitHub issue with `/reportToGitHub` to track fix"]
+
+[If all pass: "Proceed with commit"]
 ```
+
+---
+
+## Step 5: Create GitHub Issues (If Critical Issues Found)
+
+If critical issues were found in the sanity check:
+
+**Option A: Manual GitHub Issue (Recommended)**
+
+1. Open GitHub: https://github.com/nlaprell/lumina/issues/new
+2. Use this template:
+
+```markdown
+**Title**: [Component] - Critical Sanity Check Failure
+
+**Description**:
+Files affected: [List files]
+
+## Problem
+[What's broken from sanity check]
+
+## Location
+- File: [path]
+- Line: [number if applicable]
+
+## Steps to Fix
+1. [Fix step 1]
+2. [Fix step 2]
+
+## Validation
+- [ ] Syntax passes
+- [ ] File paths verified
+- [ ] References correct
+```
+
+3. Add labels: `bug`, `critical`
+4. Assign to appropriate milestone:
+   - **Blocks commit**: v1.0.0 (MVP - December 31, 2025)
+   - **Post-MVP**: v1.1.0 (Q1 2026)
+
+**Option B: Automated Creation**
+
+Once `.template/SANITY_CHECK_REPORT.md` is created:
+
+1. Run `/reportToGitHub`
+2. It will:
+   - Read SANITY_CHECK_REPORT.md
+   - Create GitHub issues with proper labels
+   - Assign to correct milestone
+   - Link to affected files
+
+---
 
 ## Important Guidelines
 
-1. **Speed is essential**: This should complete in seconds, not minutes
-2. **Critical only**: Don't report Medium/Low/Recommended issues
-3. **Git-aware**: Analyze only changed files when possible
-4. **Actionable**: Every issue must have a clear fix
-5. **No false positives**: Only report real problems
-6. **Brief output**: Keep report concise and scannable
+1. **Speed is essential**: Complete in seconds, not minutes
+2. **Modified files only**: Don't check entire codebase (that's `/healthCheck`)
+3. **Critical issues only**: Don't report Medium/Low/Recommended issues
+4. **Git-aware**: Check staged/unstaged changes or last commit (not everything)
+5. **Actionable fixes**: Every issue must have a clear, specific fix
+6. **No false positives**: Report only real problems that block commits
+7. **Brief reports**: Keep output scannable and concise
 
-## After Completion
+---
 
-Provide a one-line summary:
+## Typical Workflow
 
-**Quick Check**: [✅ PASS - No critical issues | ❌ FAIL - X critical issues found]
+```bash
+# Make changes to code
+vim .template/scripts/init.sh
+
+# Run sanity check (this prompt)
+# - Check git status
+# - Validate syntax of changed files
+# - Check file references
+
+# If issues found:
+# - Read SANITY_CHECK_REPORT.md
+# - Fix issues in code
+# - Re-run sanity check
+
+# If no issues:
+git add .
+git commit -m "fix: description"
+
+# If critical issues block commit:
+# - Create GitHub issue (manual or via /reportToGitHub)
+# - Track in v1.0.0 or v1.1.0 milestone
+# - Link PR to issue when submitting fix
+```
+
+---
+
+## Quick Summary
+
+After completing the sanity check, provide:
+
+**Quick Check**: [✅ PASS - Ready to commit | ❌ FAIL - X critical issues found, create GitHub issues]
+
+---
+
+## Differences: /sanityCheck vs /healthCheck
+
+| Aspect | /sanityCheck | /healthCheck |
+|--------|--------------|--------------|
+| **Scope** | Recent changes only (staged/unstaged or last commit) | Entire codebase |
+| **Speed** | Seconds | Minutes |
+| **Detail** | Critical issues only | Comprehensive audit |
+| **When to use** | Before every commit | Weekly/monthly reviews |
+| **GitHub Integration** | Create issues if critical | Convert findings to GitHub issues |
+| **Analysis Type** | Quick focused check | Deep audit |
+
