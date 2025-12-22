@@ -6,7 +6,7 @@
 # This script resets the Lumina project to a clean, default state.
 #
 # What it does:
-# 1. Clears all email directories (raw, ai, processed)
+# 1. Clears all email directories (raw, ai, processed, attachments)
 # 2. Resets aiDocs files to template defaults
 # 3. Removes root PROJECT.md and docs/ folder
 # 4. Preserves configuration and scripts
@@ -34,7 +34,7 @@ echo ""
 echo -e "${YELLOW}WARNING: This will reset the project to a clean template state.${NC}"
 echo ""
 echo "This script will:"
-echo "  - Clear all email directories (raw, ai, processed)"
+echo "  - Clear all email directories (raw, ai, processed, attachments)"
 echo "  - Reset aiDocs files to template defaults"
 echo "  - Remove root PROJECT.md and docs/ folder"
 echo "  - Reset .vscode/mcp.json to default state"
@@ -52,7 +52,7 @@ echo -e "${GREEN}Starting clean reset...${NC}"
 echo ""
 
 # Step 1: Clear email directories
-echo -e "${BLUE}[1/4] Clearing email directories...${NC}"
+echo -e "${BLUE}[1/5] Clearing email directories...${NC}"
 
 if [ -d "$PROJECT_ROOT/email/raw" ]; then
     rm -f "$PROJECT_ROOT/email/raw/"*.eml
@@ -69,10 +69,15 @@ if [ -d "$PROJECT_ROOT/email/processed" ]; then
     echo "  ✓ Cleared email/processed/"
 fi
 
+if [ -d "$PROJECT_ROOT/email/attachments" ]; then
+    rm -rf "$PROJECT_ROOT/email/attachments/"*
+    echo "  ✓ Cleared email/attachments/"
+fi
+
 echo ""
 
 # Step 2: Reset aiDocs files from templates
-echo -e "${BLUE}[2/4] Resetting aiDocs files to templates...${NC}"
+echo -e "${BLUE}[2/5] Resetting aiDocs files to templates...${NC}"
 
 if [ -f "$PROJECT_ROOT/.template/templates/SUMMARY.template.md" ]; then
     cp "$PROJECT_ROOT/.template/templates/SUMMARY.template.md" "$PROJECT_ROOT/aiDocs/SUMMARY.md"
