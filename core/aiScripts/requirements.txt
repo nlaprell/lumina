@@ -1,0 +1,4 @@
+# Python dependencies for Lumina AI Scripts
+# Install with: pip install -r core/aiScripts/requirements.txt
+
+html2text==2024.2.26
