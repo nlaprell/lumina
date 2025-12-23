@@ -11,12 +11,22 @@ from pathlib import Path
 import sys
 from email.header import decode_header
 
+# Import logger first
+try:
+    from ..logger import get_logger
+    logger = get_logger('email_converter')
+except ImportError:
+    # Fallback if running as standalone script
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from logger import get_logger
+    logger = get_logger('email_converter')
+
 # Check dependencies
 try:
     import html2text
 except ImportError:
-    print("ERROR: Missing required dependency 'html2text'")
-    print("Install dependencies with: pip install -r core/aiScripts/requirements.txt")
+    logger.error("Missing required dependency 'html2text'")
+    logger.error("Install dependencies with: pip install -r core/aiScripts/requirements.txt")
     sys.exit(1)
 
 def decode_email_header(header):
@@ -307,10 +317,11 @@ def convert_eml_to_md(eml_file_path, output_dir, attachments_dir=None):
         if md_file_path and os.path.exists(md_file_path):
             try:
                 os.remove(md_file_path)
-                print(f"  Rolled back partial file: {md_file_path}")
+                logger.debug(f"Rolled back partial file: {md_file_path}")
             except Exception as cleanup_error:
-                print(f"  Warning: Could not clean up partial file {md_file_path}: {str(cleanup_error)}")
+                logger.warning(f"Could not clean up partial file {md_file_path}: {str(cleanup_error)}")
         
+        logger.error(f"Conversion failed: {str(e)}", exc_info=True)
         return False, None, str(e)
 
 def main():
@@ -331,20 +342,20 @@ def main():
     ai_dir.mkdir(parents=True, exist_ok=True)
     processed_dir.mkdir(parents=True, exist_ok=True)
     attachments_dir.mkdir(parents=True, exist_ok=True)
-    print(f"Directory structure ready:")
-    print(f"  Raw: {raw_dir}")
-    print(f"  AI: {ai_dir}")
-    print(f"  Processed: {processed_dir}")
-    print(f"  Attachments: {attachments_dir}")
+    logger.info("Directory structure ready")
+    logger.debug(f"  Raw: {raw_dir}")
+    logger.debug(f"  AI: {ai_dir}")
+    logger.debug(f"  Processed: {processed_dir}")
+    logger.debug(f"  Attachments: {attachments_dir}")
 
     # Find all .eml files in raw directory
     eml_files = list(raw_dir.glob("*.eml"))
 
     if not eml_files:
-        print(f"No .eml files found in {raw_dir}")
+        logger.info(f"No .eml files found in {raw_dir}")
         return
 
-    print(f"\nFound {len(eml_files)} .eml file(s) to convert")
+    logger.info(f"Found {len(eml_files)} .eml file(s) to convert")
 
     # Track results for summary report
     successful = []
@@ -352,60 +363,60 @@ def main():
     
     # Convert each file with transaction-safe operations
     for eml_file in eml_files:
-        print(f"\nProcessing: {eml_file.name}")
+        logger.info(f"Processing: {eml_file.name}")
         
         # Step 1: Validate email is parseable
-        print(f"  [1/3] Validating...")
+        logger.info("  [1/3] Validating...")
         valid, error_msg = validate_email_file(str(eml_file))
         if not valid:
-            print(f"  ✗ Validation failed: {error_msg}")
+            logger.error(f"  ✗ Validation failed: {error_msg}")
             failed.append((eml_file.name, f"Validation: {error_msg}"))
             continue
-        print(f"  ✓ Valid email")
+        logger.info("  ✓ Valid email")
         
         # Step 2: Convert to Markdown
-        print(f"  [2/3] Converting to Markdown...")
+        logger.info("  [2/3] Converting to Markdown...")
         success, md_file_path, error_msg = convert_eml_to_md(str(eml_file), str(ai_dir), attachments_dir)
         if not success:
-            print(f"  ✗ Conversion failed: {error_msg}")
+            logger.error(f"  ✗ Conversion failed: {error_msg}")
             failed.append((eml_file.name, f"Conversion: {error_msg}"))
             continue
-        print(f"  ✓ Created {Path(md_file_path).name}")
+        logger.info(f"  ✓ Created {Path(md_file_path).name}")
         
         # Step 3: Only now move original (transaction complete)
-        print(f"  [3/3] Moving original to processed...")
+        logger.info("  [3/3] Moving original to processed...")
         processed_path = processed_dir / eml_file.name
         try:
             eml_file.rename(processed_path)
-            print(f"  ✓ Moved to processed")
+            logger.info("  ✓ Moved to processed")
             successful.append(eml_file.name)
         except Exception as e:
-            print(f"  ✗ Error moving file: {str(e)}")
+            logger.error(f"  ✗ Error moving file: {str(e)}")
             # Note: Markdown was created successfully, so this is not a complete failure
             # But we'll still track it
             failed.append((eml_file.name, f"Move operation: {str(e)} (Markdown created successfully)"))
 
     # Print summary report
-    print("\n" + "="*60)
-    print("CONVERSION SUMMARY")
-    print("="*60)
-    print(f"Total files: {len(eml_files)}")
-    print(f"Successful: {len(successful)}")
-    print(f"Failed: {len(failed)}")
+    logger.info("\n" + "="*60)
+    logger.info("CONVERSION SUMMARY")
+    logger.info("="*60)
+    logger.info(f"Total files: {len(eml_files)}")
+    logger.info(f"Successful: {len(successful)}")
+    logger.info(f"Failed: {len(failed)}")
     
     if successful:
-        print(f"\n✓ Successfully processed ({len(successful)}):")
+        logger.info(f"\n✓ Successfully processed ({len(successful)}):")
         for filename in successful:
-            print(f"  - {filename}")
+            logger.info(f"  - {filename}")
     
     if failed:
-        print(f"\n✗ Failed to process ({len(failed)}):")
+        logger.warning(f"\n✗ Failed to process ({len(failed)}):")
         for filename, reason in failed:
-            print(f"  - {filename}")
-            print(f"    Reason: {reason}")
-        print(f"\nNote: Original .eml files for failed conversions remain in {raw_dir}")
+            logger.warning(f"  - {filename}")
+            logger.warning(f"    Reason: {reason}")
+        logger.warning(f"\nNote: Original .eml files for failed conversions remain in {raw_dir}")
     
-    print("="*60)
+    logger.info("="*60)
 
 if __name__ == "__main__":
     main()

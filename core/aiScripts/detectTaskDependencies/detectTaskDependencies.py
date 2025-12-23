@@ -6,10 +6,21 @@ Analyzes task descriptions to automatically detect and suggest dependencies.
 
 import re
 import json
+import sys
 from typing import List, Dict, Set, Tuple, Optional
 from pathlib import Path
 from dataclasses import dataclass, asdict
 from collections import defaultdict
+
+# Import logger
+try:
+    from ..logger import get_logger
+    logger = get_logger('task_dependency_detector')
+except ImportError:
+    # Fallback if running as standalone script
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from logger import get_logger
+    logger = get_logger('task_dependency_detector')
 
 
 @dataclass
@@ -381,22 +392,26 @@ def main():
     import sys
     
     if len(sys.argv) < 2:
-        print("Usage: python detectTaskDependencies.py <path_to_TASKS.md>")
+        logger.error("Usage: python detectTaskDependencies.py <path_to_TASKS.md>")
         sys.exit(1)
     
     tasks_file = Path(sys.argv[1])
+    logger.info(f"Analyzing tasks from: {tasks_file}")
     
     detector = TaskDependencyDetector(tasks_file)
     detector.load_tasks()
+    logger.debug(f"Loaded {len(detector.tasks)} tasks")
     
     # Generate outputs
     output_dir = tasks_file.parent
+    logger.info("Generating dependency report...")
     detector.generate_report(output_dir / "TASK_DEPENDENCY_REPORT.md")
+    logger.info("Generating dependency graph...")
     detector.generate_dependency_graph(output_dir / "TASK_DEPENDENCY_GRAPH.md")
     
-    print(f"✓ Analysis complete!")
-    print(f"  - Report: {output_dir / 'TASK_DEPENDENCY_REPORT.md'}")
-    print(f"  - Graph: {output_dir / 'TASK_DEPENDENCY_GRAPH.md'}")
+    logger.info(f"✓ Analysis complete!")
+    logger.info(f"  - Report: {output_dir / 'TASK_DEPENDENCY_REPORT.md'}")
+    logger.info(f"  - Graph: {output_dir / 'TASK_DEPENDENCY_GRAPH.md'}")
 
 
 if __name__ == "__main__":

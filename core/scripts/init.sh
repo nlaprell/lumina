@@ -44,16 +44,16 @@ cleanup() {
 # Load .env file if it exists
 load_env_file() {
     local env_file="$PROJECT_ROOT/.env"
-    
+
     if [ ! -f "$env_file" ]; then
         echo -e "${YELLOW}NOTE: No .env file found${NC}" >&2
         echo "  Create .env from .env.template to automatically populate credentials" >&2
         echo "  For now, placeholders will be left as-is in mcp.json" >&2
         return 0
     fi
-    
+
     echo -e "${GREEN}✓${NC} Loading credentials from .env"
-    
+
     # Export variables from .env file
     set -a  # Automatically export all variables
     # Source with error handling
@@ -63,14 +63,14 @@ load_env_file() {
         return 1
     fi
     set +a
-    
+
     return 0
 }
 
 # Substitute environment variables in JSON
 substitute_env_vars() {
     local json="$1"
-    
+
     # Replace ${VAR_NAME} with actual environment variable values
     # Use Python for reliable JSON processing
     echo "$json" | python3 -c "
@@ -106,7 +106,7 @@ except Exception as e:
 # Check for unsubstituted placeholders
 check_placeholders() {
     local config="$1"
-    
+
     if echo "$config" | grep -q '\${[A-Z_][A-Z0-9_]*}'; then
         echo -e "${YELLOW}WARNING: Configuration contains unsubstituted placeholders${NC}" >&2
         echo "  Some MCP servers may not work without credentials" >&2
@@ -158,7 +158,7 @@ prompt_project_name() {
     echo ""
     echo "Welcome to Lumina setup!"
     echo ""
-    
+
     # Load environment variables early
     load_env_file
     echo ""
@@ -362,7 +362,7 @@ print(json.dumps(merged, indent=2))
 
     # Apply environment variable substitution
     merged_json=$(substitute_env_vars "$merged_json")
-    
+
     # Check for unsubstituted placeholders
     check_placeholders "$merged_json"
 
