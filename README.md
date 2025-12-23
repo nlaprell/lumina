@@ -64,6 +64,7 @@ This single command will process all your emails and generate complete project d
 ## 📋 Prerequisites
 
 - **Python 3.x** - For email converter script
+- **Python packages** - Install with: `pip install -r core/aiScripts/requirements.txt`
 - **Git** - For version control
 - **GitHub Copilot** - With slash command support in VS Code
 - **VS Code** - Recommended editor (or any editor with Copilot support)

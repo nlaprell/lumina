@@ -7,36 +7,17 @@ import email
 import base64
 import re
 import os
-import subprocess
 from pathlib import Path
 import sys
 from email.header import decode_header
 
-# Check and install dependencies
-def check_dependencies():
-    """Check if required packages are installed and install if missing"""
-    required_packages = ['html2text']
-
-    for package in required_packages:
-        try:
-            __import__(package)
-        except ImportError:
-            print(f"Installing missing dependency: {package}")
-            try:
-                subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--user', package])
-                print(f"Successfully installed {package}")
-                # Reload sys.path to pick up newly installed packages
-                import site
-                import importlib
-                importlib.reload(site)
-            except subprocess.CalledProcessError as e:
-                print(f"Error installing {package}: {str(e)}")
-                sys.exit(1)
-
-# Run dependency check
-check_dependencies()
-
-import html2text
+# Check dependencies
+try:
+    import html2text
+except ImportError:
+    print("ERROR: Missing required dependency 'html2text'")
+    print("Install dependencies with: pip install -r core/aiScripts/requirements.txt")
+    sys.exit(1)
 
 def decode_email_header(header):
     """Decode email headers that might be encoded"""
