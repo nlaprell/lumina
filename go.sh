@@ -80,16 +80,16 @@ tput civis 2>/dev/null || true
 health_check() {
     echo -e "${BLUE}Running health check...${NC}"
     echo ""
-    
+
     local errors=0
     local warnings=0
-    
+
     # Check Python version
     if command -v python3 &> /dev/null; then
         py_version=$(python3 --version 2>&1 | awk '{print $2}')
         py_major=$(echo "$py_version" | cut -d. -f1)
         py_minor=$(echo "$py_version" | cut -d. -f2)
-        
+
         if [ "$py_major" -ge 3 ] && [ "$py_minor" -ge 8 ]; then
             echo -e "${GREEN}✓${NC} Python ${py_version} installed"
         else
@@ -100,7 +100,7 @@ health_check() {
         echo -e "${RED}✗${NC} Python 3 not found"
         ((errors++))
     fi
-    
+
     # Check required packages
     if python3 -c "import html2text" 2>/dev/null; then
         echo -e "${GREEN}✓${NC} html2text package installed"
@@ -108,7 +108,7 @@ health_check() {
         echo -e "${YELLOW}⚠${NC} html2text not installed (run: pip install -r core/aiScripts/requirements.txt)"
         ((warnings++))
     fi
-    
+
     # Check Git
     if command -v git &> /dev/null; then
         git_version=$(git --version 2>&1 | awk '{print $3}')
@@ -117,7 +117,7 @@ health_check() {
         echo -e "${RED}✗${NC} Git not found"
         ((errors++))
     fi
-    
+
     # Check directory structure
     for dir in "core/templates" "email/raw" "email/ai" "email/processed" "aiDocs" "prompts"; do
         if [ -d "$dir" ]; then
@@ -127,7 +127,7 @@ health_check() {
             ((errors++))
         fi
     done
-    
+
     # Check critical files
     for file in ".github/copilot-instructions.md" "aiDocs/SUMMARY.md" "aiDocs/TASKS.md" "aiDocs/DISCOVERY.md" "aiDocs/AI.md"; do
         if [ -f "$file" ]; then
@@ -137,7 +137,7 @@ health_check() {
             ((errors++))
         fi
     done
-    
+
     # Check git hooks
     if [ -L ".git/hooks/pre-commit" ]; then
         echo -e "${GREEN}✓${NC} Pre-commit hook installed"
@@ -145,7 +145,7 @@ health_check() {
         echo -e "${YELLOW}⚠${NC} Pre-commit hook not installed (optional - run core/scripts/install-hooks.sh)"
         ((warnings++))
     fi
-    
+
     # Check if project initialized
     if [ -f ".vscode/mcp.json" ]; then
         echo -e "${GREEN}✓${NC} Project initialized (.vscode/mcp.json exists)"
@@ -153,7 +153,7 @@ health_check() {
         echo -e "${YELLOW}⚠${NC} Project not initialized yet (run 'Initialize Project')"
         ((warnings++))
     fi
-    
+
     # Summary
     echo ""
     echo "───────────────────────────────"
