@@ -228,8 +228,44 @@ def format_attachment_section(attachments):
     return section
 
 
+def validate_email_file(eml_file_path):
+    """Validate that email file is parseable before processing
+    
+    Returns: (valid, error_message)
+    - valid: True if email is parseable, False otherwise
+    - error_message: None if valid, error description if invalid
+    """
+    try:
+        with open(eml_file_path, 'rb') as f:
+            msg = email.message_from_binary_file(f)
+            
+            # Check for required headers
+            if not msg.get('Subject'):
+                return False, "Email missing Subject header"
+            
+            if not msg.get('From'):
+                return False, "Email missing From header"
+            
+            # Validate file is not empty
+            if not msg.get_payload():
+                return False, "Email has no content"
+            
+        return True, None
+        
+    except Exception as e:
+        return False, f"Failed to parse email: {str(e)}"
+
+
 def convert_eml_to_md(eml_file_path, output_dir, attachments_dir=None):
-    """Convert a single .eml file to Markdown"""
+    """Convert a single .eml file to Markdown
+    
+    Returns: (success, md_file_path, error_message)
+    - success: True if conversion succeeded, False otherwise
+    - md_file_path: Path to created Markdown file if successful, None otherwise
+    - error_message: None if successful, error description if failed
+    """
+    md_file_path = None
+    
     try:
         # Read the .eml file
         with open(eml_file_path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -283,12 +319,18 @@ def convert_eml_to_md(eml_file_path, output_dir, attachments_dir=None):
         with open(md_file_path, 'w', encoding='utf-8') as f:
             f.write(md_content)
 
-        print(f"Converted: {eml_file_path} -> {md_file_path}")
-        return True
+        return True, md_file_path, None
 
     except Exception as e:
-        print(f"Error converting {eml_file_path}: {str(e)}")
-        return False
+        # Rollback: delete partial Markdown if created
+        if md_file_path and os.path.exists(md_file_path):
+            try:
+                os.remove(md_file_path)
+                print(f"  Rolled back partial file: {md_file_path}")
+            except Exception as cleanup_error:
+                print(f"  Warning: Could not clean up partial file {md_file_path}: {str(cleanup_error)}")
+        
+        return False, None, str(e)
 
 def main():
     """Main function to convert all .eml files from email/raw to email/ai"""
@@ -323,20 +365,66 @@ def main():
 
     print(f"\nFound {len(eml_files)} .eml file(s) to convert")
 
-    # Convert each file
-    converted_count = 0
+    # Track results for summary report
+    successful = []
+    failed = []
+    
+    # Convert each file with transaction-safe operations
     for eml_file in eml_files:
-        if convert_eml_to_md(str(eml_file), str(ai_dir), attachments_dir):
-            # Move processed .eml file to processed directory
-            processed_path = processed_dir / eml_file.name
-            try:
-                eml_file.rename(processed_path)
-                print(f"Moved to processed: {eml_file.name}")
-                converted_count += 1
-            except Exception as e:
-                print(f"Error moving {eml_file.name} to processed: {str(e)}")
+        print(f"\nProcessing: {eml_file.name}")
+        
+        # Step 1: Validate email is parseable
+        print(f"  [1/3] Validating...")
+        valid, error_msg = validate_email_file(str(eml_file))
+        if not valid:
+            print(f"  ✗ Validation failed: {error_msg}")
+            failed.append((eml_file.name, f"Validation: {error_msg}"))
+            continue
+        print(f"  ✓ Valid email")
+        
+        # Step 2: Convert to Markdown
+        print(f"  [2/3] Converting to Markdown...")
+        success, md_file_path, error_msg = convert_eml_to_md(str(eml_file), str(ai_dir), attachments_dir)
+        if not success:
+            print(f"  ✗ Conversion failed: {error_msg}")
+            failed.append((eml_file.name, f"Conversion: {error_msg}"))
+            continue
+        print(f"  ✓ Created {Path(md_file_path).name}")
+        
+        # Step 3: Only now move original (transaction complete)
+        print(f"  [3/3] Moving original to processed...")
+        processed_path = processed_dir / eml_file.name
+        try:
+            eml_file.rename(processed_path)
+            print(f"  ✓ Moved to processed")
+            successful.append(eml_file.name)
+        except Exception as e:
+            print(f"  ✗ Error moving file: {str(e)}")
+            # Note: Markdown was created successfully, so this is not a complete failure
+            # But we'll still track it
+            failed.append((eml_file.name, f"Move operation: {str(e)} (Markdown created successfully)"))
 
-    print(f"\nConversion completed! {converted_count}/{len(eml_files)} files successfully processed")
+    # Print summary report
+    print("\n" + "="*60)
+    print("CONVERSION SUMMARY")
+    print("="*60)
+    print(f"Total files: {len(eml_files)}")
+    print(f"Successful: {len(successful)}")
+    print(f"Failed: {len(failed)}")
+    
+    if successful:
+        print(f"\n✓ Successfully processed ({len(successful)}):")
+        for filename in successful:
+            print(f"  - {filename}")
+    
+    if failed:
+        print(f"\n✗ Failed to process ({len(failed)}):")
+        for filename, reason in failed:
+            print(f"  - {filename}")
+            print(f"    Reason: {reason}")
+        print(f"\nNote: Original .eml files for failed conversions remain in {raw_dir}")
+    
+    print("="*60)
 
 if __name__ == "__main__":
     main()
