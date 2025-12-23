@@ -145,6 +145,47 @@ display_menu() {
     fi
 }
 
+# Validate MCP configuration file
+validate_mcp_config() {
+    local file="$1"
+    local filename=$(basename "$file")
+    
+    # Check if valid JSON
+    if ! python3 -c "import json; json.load(open('$file'))" 2>/dev/null; then
+        echo -e "${RED}ERROR: Invalid JSON in $filename${NC}" >&2
+        return 1
+    fi
+    
+    # Check for required "servers" key (or legacy "mcpServers")
+    if ! python3 -c "
+import json
+import sys
+with open('$file') as f:
+    config = json.load(f)
+if 'servers' not in config and 'mcpServers' not in config:
+    sys.exit(1)
+" 2>/dev/null; then
+        echo -e "${YELLOW}WARNING: $filename missing 'servers' or 'mcpServers' key - skipping${NC}" >&2
+        return 1
+    fi
+    
+    # Check that servers object is not empty
+    local server_count=$(python3 -c "
+import json
+with open('$file') as f:
+    config = json.load(f)
+servers = config.get('servers', config.get('mcpServers', {}))
+print(len(servers))
+" 2>/dev/null)
+    
+    if [ "$server_count" -eq 0 ]; then
+        echo -e "${YELLOW}WARNING: $filename has empty servers object - skipping${NC}" >&2
+        return 1
+    fi
+    
+    return 0
+}
+
 # Merge MCP configurations
 merge_configs() {
     # Create .vscode directory if it doesn't exist
@@ -154,11 +195,23 @@ merge_configs() {
     local merged_json='{"servers":{}}'
 
     local configured_servers=()
+    local validated_servers=()
+    local skipped_servers=()
 
     for i in "${!MCP_FILES[@]}"; do
         if [ ${MCP_SELECTED[$i]} -eq 1 ]; then
             local file="${MCP_FILES[$i]}"
             local server_name="${MCP_NAMES[$i]}"
+            
+            configured_servers+=("$server_name")
+            
+            # Validate before merging
+            if ! validate_mcp_config "$file"; then
+                skipped_servers+=("$server_name")
+                continue
+            fi
+            
+            validated_servers+=("$server_name")
 
             # Use Python to merge JSON - pass current state via stdin to avoid quoting issues
             merged_json=$(echo "$merged_json" | python3 -c "
@@ -183,8 +236,6 @@ elif 'mcpServers' in new_config:
 # Output merged config
 print(json.dumps(merged, indent=2))
 ")
-
-            configured_servers+=("$server_name")
         fi
     done
 
@@ -198,14 +249,24 @@ print(json.dumps(merged, indent=2))
     echo -e "${GREEN}    Project: $PROJECT_NAME${NC}"
     echo -e "${GREEN}════════════════════════════════════════════════════${NC}"
     echo ""
+    echo -e "${BLUE}Validation Summary:${NC}"
+    echo "  Selected: ${#configured_servers[@]} servers"
+    echo "  Validated: ${#validated_servers[@]} servers"
+    if [ ${#skipped_servers[@]} -gt 0 ]; then
+        echo -e "  ${YELLOW}Skipped: ${#skipped_servers[@]} servers (validation failed)${NC}"
+        for server in "${skipped_servers[@]}"; do
+            echo -e "    ${YELLOW}✗${NC} $server"
+        done
+    fi
+    echo ""
 
-    if [ ${#configured_servers[@]} -eq 0 ]; then
-        echo -e "${YELLOW}No MCP servers were selected.${NC}"
+    if [ ${#validated_servers[@]} -eq 0 ]; then
+        echo -e "${YELLOW}No MCP servers were successfully validated and configured.${NC}"
         echo "The .vscode/mcp.json file has been created with an empty configuration."
     else
         echo "The following MCP servers have been configured in .vscode/mcp.json:"
         echo ""
-        for server in "${configured_servers[@]}"; do
+        for server in "${validated_servers[@]}"; do
             echo -e "  ${GREEN}✓${NC} $server"
         done
     fi
