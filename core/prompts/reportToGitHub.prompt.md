@@ -34,31 +34,60 @@ Open `core/HEALTH_CHECK_REPORT.md` and extract:
 - Acceptance criteria
 - Related issues or dependencies
 
-### 2. Categorize by GitHub Labels
+### 2. Ensure "AI Recommended" Label Exists
+
+**FIRST**: Check if the `AI Recommended` label exists in the repository:
+
+```bash
+gh label list --search "AI Recommended"
+```
+
+**If label doesn't exist, create it:**
+
+```bash
+gh label create "AI Recommended" --description "Issue identified by AI health check analysis" --color "7057ff"
+```
+
+**Label Purpose**: 
+- Identifies issues discovered through automated health checks
+- Distinguishes AI-suggested improvements from user-reported issues
+- Helps track value provided by automated quality analysis
+- Purple color (7057ff) makes them easily recognizable
+
+**Documentation**: This label is now documented in:
+- `.github/copilot-instructions.md` (Labels and Milestones section)
+- `CONTRIBUTING.md` (Category Labels section)
+
+### 3. Categorize by GitHub Labels
 
 Map severity to GitHub labels:
 
 **Critical Issues:**
-- Labels: `bug`, `critical`
+- Labels: `bug`, `critical`, `AI Recommended`
 - Milestone: v1.0.0 (MVP)
 - Priority: Process immediately
 
 **High Priority Issues:**
-- Labels: `bug` or `enhancement` (depending on type)
+- Labels: `bug` or `enhancement` (depending on type), `AI Recommended`
 - Milestone: v1.0.0 (MVP)
 - Priority: Address within 1-2 weeks
 
 **Medium Priority Issues:**
-- Labels: `enhancement`, `quality`
+- Labels: `enhancement`, `quality`, `AI Recommended`
 - Milestone: v1.1.0 (Post-MVP)
 - Priority: Plan for next phase
 
 **Low Priority Issues:**
-- Labels: `enhancement`
+- Labels: `enhancement`, `AI Recommended`
 - Milestone: v1.1.0 (Post-MVP)
 - Priority: Backlog
 
-### 3. Check for Duplicates
+**Recommended Enhancements:**
+- Labels: `enhancement`, `AI Recommended`
+- Milestone: v1.2.0 (Future) or none
+- Priority: Optional improvements
+
+### 4. Check for Duplicates
 
 **CRITICAL**: Before creating any issues, check if they already exist in GitHub:
 
@@ -83,7 +112,7 @@ mcp_github_list_issues(owner=nlaprell, repo=lumina, state=open)
 - Found: Issue #17 "Add requirements.txt for Python dependencies"
 - Action: Skip (don't create duplicate)
 
-### 4. Add Category Labels
+### 5. Add Category Labels
 
 Based on component/type, add additional labels:
 
@@ -96,7 +125,7 @@ Based on component/type, add additional labels:
 | Error handling/robustness | `quality` |
 | MCP configuration | `mcp` |
 
-### 5. Create GitHub Issues
+### 6. Create GitHub Issues
 
 For **EACH issue** in the health check report, create a GitHub issue using:
 
@@ -136,14 +165,14 @@ Milestone: [v1.0.0 or v1.1.0]
      repo: "lumina",
      title: "[Issue title]",
      body: "[Full issue description]",
-     labels: ["bug", "critical", ...],
+     labels: ["bug", "critical", "AI Recommended", ...],
      milestone: [1 for v1.0.0, 2 for v1.1.0]
    )
    ```
 
 4. Document created issue number for cross-reference
 
-### 6. Clean Up Report Files
+### 7. Clean Up Report Files
 
 **After successfully creating all issues**, delete the report files that were processed:
 
@@ -161,28 +190,28 @@ rm -f core/SANITY_CHECK_REPORT.md  # (if created)
 - Avoid duplication and maintenance burden of markdown task files
 - Keep repository clean
 
-### 7. Group Related Issues
+### 8. Group Related Issues
 
 If issues are related (e.g., multiple parts of same feature):
 - Create first issue
 - In subsequent related issues, mention the first issue number
 - Example: "Related to #1 (Fix MCP Configuration Format)"
 
-### 8. Map to Existing Issues (If Any)
+### 9. Map to Existing Issues (If Any)
 
 Compare with existing open issues on GitHub:
 - If health check finds same issue already reported, skip creation
 - Comment on existing issue with updated information instead
 - Link related issues together
 
-### 9. Handle Dependencies
+### 10. Handle Dependencies
 
 If issues have dependencies (one must be fixed before another):
 - Create blocking issue first
 - In dependent issue, mention: "Blocked by #X"
 - Use GitHub's issue linking syntax
 
-### 10. Provide Summary Report
+### 11. Provide Summary Report
 
 After creating all issues, provide summary:
 

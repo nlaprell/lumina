@@ -87,9 +87,34 @@ Before creating the PR, verify that all acceptance criteria from the issue are m
 4. Return to this verification step
 
 **If all criteria met:**
-Proceed to Step 7 (Create Pull Request)
+Proceed to Step 7 (Run Sanity Check)
 
-### 7. Create Pull Request
+### 7. Run Sanity Check Before PR
+
+**MANDATORY**: Before creating the PR, run a sanity check on all changes:
+
+```
+/sanityCheck
+```
+
+This validates:
+- ✅ Bash syntax for all modified .sh files
+- ✅ Python syntax for all modified .py files
+- ✅ File path references are correct
+- ✅ No broken links in modified prompts
+- ✅ No security issues (unquoted variables, credentials)
+
+**If sanity check FAILS:**
+1. Review the SANITY_CHECK_REPORT.md
+2. Fix all critical issues identified
+3. Commit fixes
+4. Re-run `/sanityCheck`
+5. Only proceed when sanity check PASSES
+
+**If sanity check PASSES:**
+Proceed to Step 8 (Create Pull Request)
+
+### 8. Create Pull Request
 
 - Title format: `[Issue #{number}] Brief description`
 - Example: `[Issue #5] Add centralized logging system`
@@ -104,6 +129,8 @@ Proceed to Step 7 (Create Pull Request)
 - Request review if applicable
 
 **STOP HERE** - Do NOT merge the PR automatically. The workflow ends after creating the PR. The user will review and merge manually.
+
+**Note**: The sanity check (Step 7) ensures code quality before PR submission. This catches critical issues early and maintains a clean PR history.
 
 ## Example Flows
 
@@ -148,7 +175,11 @@ Fixes #1
 # - [ ] Line 162 in clean-reset.sh: changed to 'servers'
 # - [ ] Bash syntax checks pass
 
-# 7. Create PR
+# 7. Run sanity check
+/sanityCheck
+# ✅ PASS - All syntax valid, no broken references
+
+# 8. Create PR
 # Title: [Issue #1] Fix MCP Configuration Format
 # Body: Closes #1, fixes critical MCP server loading bug
 ```
@@ -200,7 +231,11 @@ Implements #5
 # - [ ] All tests pass
 # - [ ] Error logs include stack traces
 
-# 7. Create PR
+# 7. Run sanity check
+/sanityCheck
+# ✅ PASS - Python syntax valid, imports correct
+
+# 8. Create PR
 # Title: [Issue #5] Add Centralized Logging System
 # Body: Closes #5, adds comprehensive logging infrastructure
 ```
@@ -212,6 +247,7 @@ Implements #5
 - ✅ **ALWAYS** link commits to the issue (`Fixes #123`, `Implements #123`)
 - ✅ **ALWAYS** run sanity checks before committing
 - ✅ **ALWAYS** verify acceptance criteria are met before creating PR (Step 6)
+- ✅ **ALWAYS** run `/sanityCheck` before creating PR (Step 7)
 - ✅ **ALWAYS** create a PR and STOP (let user review and merge)
 - ✅ **ALWAYS** include acceptance criteria checklist in PR
 - ❌ **NEVER** skip the sanity check step

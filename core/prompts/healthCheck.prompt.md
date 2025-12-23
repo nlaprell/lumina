@@ -408,24 +408,35 @@ Save your complete report to `core/HEALTH_CHECK_REPORT.md` and provide a brief s
 
 ---
 
-## ⭐ Important: Next Step - Use GitHub for Issue Tracking
+## ⭐ Next Step: Convert Findings to GitHub Issues
 
-**Instead, use GitHub for all issue tracking:**
-
-After health check completes, run `/reportToGitHub` to convert findings to GitHub issues:
+After completing the health check and providing the report summary, **ASK THE USER**:
 
 ```
-/reportToGitHub
+Health check complete! Would you like me to convert these findings to GitHub issues?
+
+Running /reportToGitHub will:
+✅ Create GitHub issues with proper labels (including "AI Recommended")
+✅ Assign to correct milestones (v1.0.0 or v1.1.0)
+✅ Add acceptance criteria and location details
+✅ Check for duplicates before creating
+✅ Clean up report files (GitHub becomes authoritative)
+
+Should I run /reportToGitHub now? (yes/no)
 ```
 
-This workflow:
-1. Reads `core/HEALTH_CHECK_REPORT.md`
-2. Creates GitHub issues with proper labels and milestones
-3. Stores all template work in GitHub (single source of truth)
-4. Avoids duplication and maintenance burden of markdown task files
+**If user responds YES:**
+- Immediately run the `/reportToGitHub` workflow
+- No need to ask for confirmation again
+- Proceed with full issue creation process
+
+**If user responds NO:**
+- Inform them they can run `/reportToGitHub` manually later
+- Note: Report file `core/HEALTH_CHECK_REPORT.md` will remain until they do
 
 **Preferred Workflow:**
 1. Run `/healthCheck` → generates HEALTH_CHECK_REPORT.md
-2. Run `/reportToGitHub` → creates GitHub issues
-3. Work from GitHub issues (legacy FIXES/IMPROVEMENTS files removed)
+2. User prompted: "Run /reportToGitHub?" 
+3. If yes → creates GitHub issues automatically
+4. Work from GitHub issues (single source of truth)
 ````

@@ -144,6 +144,9 @@ Add category labels for additional context:
 | `workflow` | GitHub Actions, CI/CD |
 | `dependencies` | Dependency updates |
 | `security` | Security-related issues |
+| `AI Recommended` | Issue identified by AI health check analysis |
+
+**Note**: The `AI Recommended` label is automatically added when issues are created via `/reportToGitHub` after running `/healthCheck`. This label distinguishes AI-discovered improvements from user-reported issues.
 
 ### Priority Labels (Optional - Choose ONE)
 
