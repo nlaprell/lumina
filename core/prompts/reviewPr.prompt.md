@@ -18,7 +18,9 @@ description: Review a pull request for quality, correctness, and readiness to me
 2. Run `/reviewPr` to review the PR
 3. Agent identifies issues and leaves comments
 4. If issues found: agent fixes them and re-reviews
-5. If ready: agent merges to main and closes issue
+5. **If ready: agent AUTOMATICALLY merges to main and closes issue**
+
+**⚠️ IMPORTANT**: Merging is not optional—if PR passes review, it must be merged before the prompt completes. Do not stop at review.
 
 ---
 
@@ -90,6 +92,23 @@ Review each acceptance criterion from the PR description:
 - **All met ✅**: Ready for merge (proceed to Step 4)
 - **Some met ⚠️**: Not ready - needs work (proceed to Step 5)
 - **None met ❌**: Incomplete - needs major work (proceed to Step 5)
+
+### Decision Point After Step 3: Are We Merging Today?
+
+**After acceptance criteria verification, you have two paths:**
+
+**PATH A: All Criteria Met → Ready to Merge ✅**
+- Proceed to Step 4 (leave review comment)
+- Proceed to Step 7 (MERGE to main - this is automatic, not optional)
+- Proceed to Step 8 (close the issue)
+- Proceed to Step 10 (provide summary)
+
+**PATH B: Criteria Not Met → Fix Issues First ⚠️**
+- Proceed to Step 5 (identify and fix issues)
+- Proceed to Step 2 (re-review the changes)
+- Once ready, follow PATH A
+
+**Do not skip Step 7 if PATH A applies. Merging is automatic and required, not optional.**
 
 ### 4. Leave Review Comment on PR
 
@@ -195,9 +214,9 @@ mcp_github_create_pull_request_review(
    - Post updated review comment
    - Repeat until ready to merge
 
-### 7. Merge to Main
+### 7: Merge PR to Main (Automatic if Ready - Do Not Skip)
 
-Once PR is approved and ready:
+**⚠️ CRITICAL: This step is MANDATORY when PATH A applies.** If all acceptance criteria were met at Step 3, you must merge NOW. Do not pause, ask for confirmation, or stop here. Merging is automatic and required, not optional.
 
 **Merge the PR:**
 ```
@@ -215,6 +234,8 @@ mcp_github_merge_pull_request(
 - **Method**: `squash` - keeps main history clean
 - **Commit title**: Match conventional commits format
 - **Commit message**: Include full context and issue reference
+
+**After merging:** Proceed immediately to Step 8 to close the related issue. Do not stop or hand off to user.
 
 ### 8. Update Issue Status
 
@@ -443,7 +464,30 @@ mcp_github_merge_pull_request(owner, repo, pull_number, merge_method, commit_tit
 mcp_github_update_issue(owner, repo, issue_number, state: "closed")
 ```
 
-### Validation Commands
+---
+
+## Mandatory Completion Checklist
+
+**Before concluding PR review, verify ALL of these are complete:**
+
+- [ ] **Step 1**: PR fetched and details reviewed (title, description, labels correct)
+- [ ] **Step 2**: Changed files reviewed (syntax validated, logic checked, no critical issues)
+- [ ] **Step 3**: Acceptance criteria verified (all criteria met = ready to merge; some not met = go to Step 5)
+- [ ] **Step 4**: Review comment posted to GitHub (comprehensive feedback provided)
+- [ ] **Step 5** (if needed): Issues identified and fixes confirmed (only if Step 3 found issues)
+- [ ] **Step 7**: PR merged to main (automatic if Step 3 found criteria met - MANDATORY, do not skip)
+- [ ] **Step 8**: Related issue closed (only after successful merge in Step 7)
+
+**Completion Status:**
+- ✅ All items above checked: Ready to report success
+- ❌ Any item incomplete: Do not conclude - continue to next step
+- ⚠️ Steps 1-5 done but Steps 7-8 incomplete: PR is incomplete - you must merge and close issue
+
+**Critical Rule**: If you've completed Step 3 (criteria met) and Step 4 (review posted), you MUST also complete Steps 7-8 (merge and close). Stopping before Step 7 leaves the PR in an incomplete state.
+
+---
+
+## Validation Commands
 
 **Bash syntax:**
 ```bash
