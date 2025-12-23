@@ -61,7 +61,93 @@ This single command will process all your emails and generate complete project d
 
 ---
 
-## 📋 Prerequisites
+## �️ Which Command Should I Use?
+
+### First Time Setup
+```
+New Project
+    ↓
+Run ./go.sh
+    ↓
+Add emails to email/raw/
+    ↓
+Use /quickStartProject
+    ↓
+✅ Done! Review PROJECT.md
+```
+
+### Adding More Emails
+```
+Have new emails?
+    ↓
+Add to email/raw/
+    ↓
+Use /discoverEmail
+    ↓
+Use /updateSummary
+    ↓
+✅ Done! Review updated PROJECT.md
+```
+
+### Need Status Report
+```
+Want stakeholder update?
+    ↓
+Use /generateReport
+    ↓
+✅ Check reports/ folder
+```
+
+### Lost Context
+```
+AI seems confused?
+    ↓
+Use /projectInit
+    ↓
+✅ AI reloaded with project context
+```
+
+---
+
+## 📝 Quick Reference Card
+
+| I Want To... | Use This Command | What It Does |
+|-------------|------------------|--------------|
+| **Set up new project** | `./go.sh` | Initialize project, select MCP servers |
+| **Process emails for first time** | `/quickStartProject` | Complete workflow: init → process → generate docs |
+| **Add new emails to existing project** | `/discoverEmail` then `/updateSummary` | Process new emails and regenerate summary |
+| **Update documentation after changes** | `/updateSummary` | Regenerate PROJECT.md and docs/ from aiDocs/ |
+| **Generate status report** | `/generateReport` | Create executive summary for stakeholders |
+| **Reload AI context** | `/projectInit` | Re-initialize AI with project knowledge |
+| **Validate task structure** | `/validateTasks` | Check task IDs, dependencies, metadata |
+| **Clean up old tasks** | `/cleanupTasks` | Archive old tasks, optimize organization |
+| **Fix broken documentation** | `/syncFromProject` | Sync user edits from PROJECT.md to aiDocs/ |
+| **Complete GitHub issue** | `/completeIssue <number>` | Automated Issue→Branch→PR workflow |
+
+---
+
+## 🎯 Common Workflows
+
+**Weekly Status Update:**
+1. Add any new emails to `email/raw/`
+2. Run `/discoverEmail` to process them
+3. Run `/generateReport` for stakeholder update
+4. Review `reports/status-YYYY-MM-DD.md`
+
+**Monthly Project Review:**
+1. Run `/cleanupTasks` to archive old tasks
+2. Run `/updateSummary` to refresh documentation
+3. Review PROJECT.md with team
+
+**Handoff to New Team Member:**
+1. Ensure all emails processed (`/discoverEmail`)
+2. Ensure documentation current (`/updateSummary`)
+3. Share PROJECT.md and docs/ folder
+4. New team member runs `/projectInit` to load context
+
+---
+
+## �📋 Prerequisites
 
 - **Python 3.x** - For email converter script
 - **Python packages** - Install with: `pip install -r core/aiScripts/requirements.txt`
