@@ -191,13 +191,13 @@ display_menu() {
 validate_mcp_config() {
     local file="$1"
     local filename=$(basename "$file")
-
+    
     # Check if valid JSON
     if ! python3 -c "import json; json.load(open('$file'))" 2>/dev/null; then
         echo -e "${RED}ERROR: Invalid JSON in $filename${NC}" >&2
         return 1
     fi
-
+    
     # Check for required "servers" key (or legacy "mcpServers")
     if ! python3 -c "
 import json
@@ -210,7 +210,7 @@ if 'servers' not in config and 'mcpServers' not in config:
         echo -e "${YELLOW}WARNING: $filename missing 'servers' or 'mcpServers' key - skipping${NC}" >&2
         return 1
     fi
-
+    
     # Check that servers object is not empty
     local server_count=$(python3 -c "
 import json
@@ -219,12 +219,12 @@ with open('$file') as f:
 servers = config.get('servers', config.get('mcpServers', {}))
 print(len(servers))
 " 2>/dev/null)
-
+    
     if [ "$server_count" -eq 0 ]; then
         echo -e "${YELLOW}WARNING: $filename has empty servers object - skipping${NC}" >&2
         return 1
     fi
-
+    
     return 0
 }
 
@@ -244,15 +244,15 @@ merge_configs() {
         if [ ${MCP_SELECTED[$i]} -eq 1 ]; then
             local file="${MCP_FILES[$i]}"
             local server_name="${MCP_NAMES[$i]}"
-
+            
             configured_servers+=("$server_name")
-
+            
             # Validate before merging
             if ! validate_mcp_config "$file"; then
                 skipped_servers+=("$server_name")
                 continue
             fi
-
+            
             validated_servers+=("$server_name")
 
             # Use Python to merge JSON - pass current state via stdin to avoid quoting issues
