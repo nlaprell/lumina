@@ -5,10 +5,10 @@
       "command": "npx",
       "args": ["-y", "mcp-server-azure"],
       "env": {
-        "AZURE_SUBSCRIPTION_ID": "<your_subscription_id>",
-        "AZURE_TENANT_ID": "<your_tenant_id>",
-        "AZURE_CLIENT_ID": "<your_client_id>",
-        "AZURE_CLIENT_SECRET": "<your_client_secret>"
+        "AZURE_SUBSCRIPTION_ID": "${AZURE_SUBSCRIPTION_ID}",
+        "AZURE_TENANT_ID": "${AZURE_TENANT_ID}",
+        "AZURE_CLIENT_ID": "${AZURE_CLIENT_ID}",
+        "AZURE_CLIENT_SECRET": "${AZURE_CLIENT_SECRET}"
       }
     }
   }

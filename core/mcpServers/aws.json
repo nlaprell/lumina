@@ -5,9 +5,9 @@
       "command": "npx",
       "args": ["-y", "mcp-server-aws"],
       "env": {
-        "AWS_ACCESS_KEY_ID": "<your_aws_access_key>",
-        "AWS_SECRET_ACCESS_KEY": "<your_aws_secret_key>",
-        "AWS_REGION": "us-east-1"
+        "AWS_ACCESS_KEY_ID": "${AWS_ACCESS_KEY_ID}",
+        "AWS_SECRET_ACCESS_KEY": "${AWS_SECRET_ACCESS_KEY}",
+        "AWS_REGION": "${AWS_REGION}"
       }
     }
   }

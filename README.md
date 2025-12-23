@@ -71,6 +71,48 @@ This single command will process all your emails and generate complete project d
 
 ---
 
+## 🔐 Environment Variables (MCP Credentials)
+
+MCP servers often require credentials (API tokens, access keys, etc.). Store these securely in a `.env` file:
+
+### Setup
+
+1. **Copy the template:**
+   ```bash
+   cp .env.template .env
+   ```
+
+2. **Edit `.env` with your credentials:**
+   ```bash
+   # GitHub token from https://github.com/settings/tokens
+   GITHUB_PERSONAL_ACCESS_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
+   
+   # AWS credentials
+   AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+   AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCY
+   AWS_REGION=us-east-1
+   ```
+
+3. **Run `./go.sh` or `init.sh`:**
+   - Credentials will be automatically populated in `.vscode/mcp.json`
+   - If `.env` doesn't exist, placeholders will remain (you'll need to edit mcp.json manually)
+
+### Security
+
+✅ **Safe** - `.env` is gitignored and will never be committed  
+✅ **Safe** - `.vscode/mcp.json` is also gitignored  
+✅ **Safe** - `.env.template` contains placeholders only (safe to commit)  
+❌ **Never** commit `.env` or share it - it contains your real credentials
+
+### Benefits
+
+- **Security**: Credentials in single gitignored file, never accidentally committed
+- **Simplicity**: Edit one `.env` file instead of complex JSON
+- **Documentation**: `.env.template` documents all required variables
+- **Standard**: Industry-standard pattern familiar to developers
+
+---
+
 ## ⚠️ SECURITY WARNING
 
 **IMPORTANT**: The `email/` directory may contain sensitive information from your email communications. Before committing to a public repository:
