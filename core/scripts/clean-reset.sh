@@ -187,11 +187,11 @@ else
     echo -e "  ${RED}✗ Template not found: core/templates/CONTACTS.template.md${NC}"
 fi
 
-if [ -f "$PROJECT_ROOT/core/templates/docs_TASKS.template.md" ]; then
-    cp "$PROJECT_ROOT/core/templates/docs_TASKS.template.md" "$PROJECT_ROOT/docs/TASKS.md"
+if [ -f "$PROJECT_ROOT/core/templates/TASKS_docs.template.md" ]; then
+    cp "$PROJECT_ROOT/core/templates/TASKS_docs.template.md" "$PROJECT_ROOT/docs/TASKS.md"
     echo "  ✓ Reset docs/TASKS.md"
 else
-    echo -e "  ${RED}✗ Template not found: core/templates/docs_TASKS.template.md${NC}"
+    echo -e "  ${RED}✗ Template not found: core/templates/TASKS_docs.template.md${NC}"
 fi
 
 if [ -f "$PROJECT_ROOT/core/templates/DECISIONS.template.md" ]; then
