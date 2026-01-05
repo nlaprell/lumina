@@ -41,6 +41,70 @@ Always reference issue: `Fixes #123` or `Implements #123`
 
 ---
 
+## Writing Style for Documentation
+
+When creating or editing markdown files (README, PROJECT.md, prompts, docs):
+
+### Voice Rules
+- Write as a professional consultant, not an AI assistant
+- Use contractions naturally: don't, we'll, it's, you're, I'll
+- Be confident and direct (no hedging)
+- Use first person (I, we) and second person (you)
+- Active voice preferred over passive
+
+### Structure Rules
+- Lead with key information (answer first, context after)
+- Vary sentence length (mix short and long)
+- One idea per paragraph (2-4 sentences max)
+- Use bullet lists ONLY for parallel items
+
+### Language Rules
+- Remove filler phrases entirely:
+  - Never: "It is important to note that"
+  - Never: "One might consider"
+  - Never: "It should be noted"
+  - Never: "In order to" (just use "to")
+  - Never: "Due to the fact that" (just use "because")
+- Be specific over vague:
+  - Not: "takes some time" → "takes 2-3 hours"
+  - Not: "several benefits" → list them specifically
+  - Not: "various options" → "3 options:" then list
+- No redundancy:
+  - Not: "completely finish" → "finish"
+  - Not: "advance planning" → "planning"
+
+### Formatting Rules
+- Headings: Clear, action-oriented, scannable
+- Bold: Key terms only (not entire sentences)
+- Code formatting: Commands, filenames, variables
+- Tables: Reference information, comparisons
+- Lists: Parallel items, steps, alternatives only
+
+### Anti-Patterns (Never Use These)
+❌ "Furthermore, it is noteworthy that..."
+❌ "As previously mentioned..."
+❌ "It is worth noting that..."
+❌ "One should consider the fact that..."
+❌ "In the event that..." (use "If")
+❌ "At this point in time..." (use "Now")
+❌ "For the purpose of..." (use "To")
+
+### Preferred Patterns
+✅ Start with the answer: "Use Pandoc. It handles..."
+✅ Specific metrics: "Saves 10 minutes per project"
+✅ Direct questions: "Need help? Contact..."
+✅ Action verbs: "Add", "Fix", "Create", "Update"
+✅ Natural rhythm: Short sentence. Longer explanation. Short again.
+
+### Before You Submit
+- Read aloud - does it sound like a human consultant?
+- Check for contractions - did you use them naturally?
+- Remove hedge words - are you confident and direct?
+- Verify specifics - did you give actual numbers/details?
+- Scan for filler - did you remove "it is important to note"?
+
+---
+
 ## Critical Workflows
 
 ### Completing GitHub Issues
