@@ -69,7 +69,7 @@ No critical issues found. ✅
 8. **prompts/syncFromProject.prompt.md** (+58 lines)
    - 3 scenarios: Tasks complete, risk added, questions answered
 
-9. **prompts/endToEndTest.prompt.md** (+57 lines)
+9. **prompts/initSampleProject.prompt.md** (+57 lines)
    - 3 scenarios: Successful test, empty state, error recovery
 
 **Total**: +590 lines of documentation examples

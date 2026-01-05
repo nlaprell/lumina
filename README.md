@@ -127,7 +127,7 @@ Use /projectInit
 | **Generate status report** | `/generateReport` | Create executive summary for stakeholders |
 | **Reload AI context** | `/projectInit` | Re-initialize AI with project knowledge |
 | **Validate task structure** | `/validateTasks` | Check task IDs, dependencies, metadata |
-| **Test complete workflow** | `/endToEndTest` | Validate entire system end-to-end |
+| **Initialize sample project** | `/initSampleProject` | Test complete workflow with sample data |
 | **Clean up old tasks** | `/cleanupTasks` | Archive old tasks, optimize organization |
 | **Fix broken documentation** | `/syncFromProject` | Sync user edits from PROJECT.md to aiDocs/ |
 | **Complete GitHub issue** | `/completeIssue <number>` | Automated Issue→Branch→PR workflow |
