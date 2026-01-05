@@ -210,10 +210,17 @@ check_dependencies() {
             echo ""
             echo -e "${BLUE}Installing Python dependencies...${NC}"
 
-            if pip3 install -r "$PROJECT_ROOT/core/aiScripts/requirements.txt" 2>&1 | tee /tmp/pip_install.log; then
+            if python3 -m pip install -r "$PROJECT_ROOT/core/aiScripts/requirements.txt" 2>&1 | tee /tmp/pip_install.log; then
                 echo ""
                 echo -e "${GREEN}✓${NC} Python dependencies installed successfully"
-                deps_installed=true
+                
+                # Verify installation
+                if python3 -c "import html2text" 2>/dev/null; then
+                    deps_installed=true
+                else
+                    echo -e "${YELLOW}⚠${NC} Package installed but import failed"
+                    deps_installed=false
+                fi
             else
                 echo ""
                 echo -e "${RED}✗${NC} Failed to install Python dependencies"
@@ -221,7 +228,7 @@ check_dependencies() {
                 cat /tmp/pip_install.log
                 echo ""
                 echo -e "${YELLOW}You can install manually with:${NC}"
-                echo -e "  ${GREEN}pip3 install -r core/aiScripts/requirements.txt${NC}"
+                echo -e "  ${GREEN}python3 -m pip install -r core/aiScripts/requirements.txt${NC}"
                 echo ""
                 read -p "Press Enter to continue anyway..."
             fi
@@ -229,7 +236,7 @@ check_dependencies() {
             echo ""
             echo -e "${YELLOW}Skipping dependency installation.${NC}"
             echo -e "${YELLOW}Install manually with:${NC}"
-            echo -e "  ${GREEN}pip3 install -r core/aiScripts/requirements.txt${NC}"
+            echo -e "  ${GREEN}python3 -m pip install -r core/aiScripts/requirements.txt${NC}"
             echo ""
             read -p "Press Enter to continue..."
         fi
@@ -549,8 +556,24 @@ print('✓ State file created')
 
 # Main interactive loop
 interactive_menu() {
-    # First, check dependencies
-    check_dependencies
+    # First, check dependencies (skip if already installed per state file)
+    if [ -f "$PROJECT_ROOT/.lumina.state" ]; then
+        deps_status=$(python3 -c "
+import json
+try:
+    with open('.lumina.state') as f:
+        state = json.load(f)
+    print(state.get('health', {}).get('dependencies_installed', False))
+except:
+    print('False')
+" 2>/dev/null)
+        
+        if [ "$deps_status" != "True" ]; then
+            check_dependencies
+        fi
+    else
+        check_dependencies
+    fi
 
     # Then, prompt for project name
     prompt_project_name
