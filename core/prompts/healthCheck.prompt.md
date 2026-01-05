@@ -80,6 +80,24 @@ Perform a deep, comprehensive analysis of the entire bootstrap system to identif
 - Race conditions or concurrency issues
 - Missing documentation or comments in complex sections
 
+**Run Smoke Tests:**
+
+Execute the complete smoke test suite as part of code quality validation:
+
+```bash
+./core/tests/run_tests.sh
+```
+
+**Verify:**
+- All 35 tests pass (21 shell script + 7 email converter + 7 task detector)
+- Tests complete in < 1 second
+- No test failures or warnings
+
+**If tests fail:**
+- Document which tests failed as 🔴 Critical issues
+- Include test names and failure reasons
+- Recommend fixes based on test failures
+
 ### 3. Prompt Workflow Integrity
 
 **Analyze ALL prompts in `prompts/`:**

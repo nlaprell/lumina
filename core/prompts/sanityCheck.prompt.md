@@ -16,9 +16,10 @@ For comprehensive analysis of the entire codebase including documentation, UX, a
 
 1. **Determine scope** - Check git status for staged/unstaged changes or last commit
 2. **Validate syntax** - Quick syntax check on modified files only
-3. **Check critical references** - Ensure no broken file paths in changes
-4. **Report findings** - Create SANITY_CHECK_REPORT.md
-5. **Create GitHub issues** - Run `/reportToGitHub` if critical issues found
+3. **Run smoke tests** - Execute all 35 tests (< 1 second)
+4. **Check critical references** - Ensure no broken file paths in changes
+5. **Report findings** - Create SANITY_CHECK_REPORT.md
+6. **Create GitHub issues** - Run `/reportToGitHub` if critical issues found
 
 ---
 
@@ -97,7 +98,33 @@ python3 -m py_compile path/to/script.py
 
 ---
 
-## Step 3: Critical References Check
+## Step 3: Run Smoke Tests
+
+Execute the complete smoke test suite to validate critical code paths:
+
+```bash
+./core/tests/run_tests.sh
+```
+
+**What tests cover:**
+- Shell script syntax (21 tests)
+- Email converter functionality (7 tests)
+- Task detector functionality (7 tests)
+- Total: 35 tests in < 1 second
+
+**If tests fail:**
+- Report test failures as 🔴 Critical issues
+- Include which test suite failed
+- Include specific test names that failed
+- Note: All tests must pass before committing
+
+**If tests pass:**
+- Note in report: "✅ All 35 smoke tests passed"
+- Proceed to next step
+
+---
+
+## Step 4: Critical References Check
 
 For each modified file, verify file path references are correct:
 
@@ -118,7 +145,7 @@ For each modified file, verify file path references are correct:
 
 ---
 
-## Step 4: Create Report
+## Step 5: Create Report
 
 Create `core/SANITY_CHECK_REPORT.md`:
 
@@ -151,7 +178,11 @@ Create `core/SANITY_CHECK_REPORT.md`:
 ---
 
 ## Validation Summary
-
+**Smoke Tests:**
+- Shell script tests (21): ✅ PASS
+- Email converter tests (7): ✅ PASS
+- Task detector tests (7): ✅ PASS
+- Total: 35/35 passed
 **Syntax Checks:**
 - [file1.sh]: ✅ PASS
 - [file2.py]: ✅ PASS
@@ -183,7 +214,7 @@ Create `core/SANITY_CHECK_REPORT.md`:
 
 ---
 
-## Step 5: Create GitHub Issues (If Critical Issues Found)
+## Step 6: Create GitHub Issues (If Critical Issues Found)
 
 If critical issues were found in the sanity check:
 
