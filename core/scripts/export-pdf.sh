@@ -35,9 +35,9 @@ trap "rm -rf '$TEMP_DIR'" EXIT
 # Function to check dependencies
 check_dependencies() {
     local missing=0
-    
+
     echo -e "${BLUE}Checking dependencies...${NC}"
-    
+
     # Check for pandoc
     if ! command -v pandoc &> /dev/null; then
         echo -e "${RED}✗ Pandoc not found${NC}"
@@ -45,7 +45,7 @@ check_dependencies() {
     else
         echo -e "${GREEN}✓ Pandoc installed${NC}"
     fi
-    
+
     # Check for xelatex (part of LaTeX distribution)
     if ! command -v xelatex &> /dev/null; then
         echo -e "${RED}✗ XeLaTeX not found${NC}"
@@ -53,7 +53,7 @@ check_dependencies() {
     else
         echo -e "${GREEN}✓ XeLaTeX installed${NC}"
     fi
-    
+
     if [ $missing -eq 1 ]; then
         echo ""
         echo -e "${YELLOW}========================================${NC}"
@@ -62,16 +62,17 @@ check_dependencies() {
         echo ""
         echo "To generate PDFs, you need Pandoc and LaTeX."
         echo ""
-        
+
         if [[ "$OSTYPE" == "darwin"* ]]; then
             echo -e "${BLUE}macOS Installation:${NC}"
             echo "  brew install pandoc"
             echo "  brew install --cask basictex"
             echo ""
             echo "After installing BasicTeX, run:"
+            echo "  export PATH=\"/Library/TeX/texbin:\$PATH\""
             echo "  sudo tlmgr update --self"
-            echo "  sudo tlmgr install collection-fontsrecommended"
-            echo "  sudo tlmgr install collection-xetex"
+            echo "  sudo tlmgr install collection-fontsrecommended collection-xetex"
+            echo "  sudo tlmgr install tocloft titlesec enumitem lastpage"
         elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
             echo -e "${BLUE}Linux Installation:${NC}"
             echo "  sudo apt-get update"
@@ -80,12 +81,12 @@ check_dependencies() {
             echo "Or for Red Hat/Fedora:"
             echo "  sudo dnf install pandoc texlive-xetex texlive-collection-fontsrecommended"
         fi
-        
+
         echo ""
         echo -e "${YELLOW}========================================${NC}"
         return 1
     fi
-    
+
     return 0
 }
 
@@ -93,16 +94,16 @@ check_dependencies() {
 get_project_metadata() {
     local project_name="Project Documentation"
     local customer=""
-    
+
     # Try to extract from PROJECT.md if it exists
     if [ -f "$PROJECT_ROOT/PROJECT.md" ]; then
         # Get first heading as project name
         project_name=$(grep -m 1 "^# " "$PROJECT_ROOT/PROJECT.md" | sed 's/^# //' || echo "Project Documentation")
-        
+
         # Try to extract customer from Quick Context or similar
         customer=$(grep -i "customer\|client" "$PROJECT_ROOT/PROJECT.md" | head -1 | sed 's/.*://;s/\*\*//g;s/^[[:space:]]*//' || echo "")
     fi
-    
+
     # Try aiDocs/SUMMARY.md for better metadata
     if [ -f "$PROJECT_ROOT/aiDocs/SUMMARY.md" ]; then
         # Extract from Quick Context section
@@ -111,26 +112,26 @@ get_project_metadata() {
             customer=$(echo "$who_line" | sed 's/.*://;s/\[//;s/\]//;s/^[[:space:]]*//;s/[[:space:]]*$//')
         fi
     fi
-    
+
     echo "$project_name|$customer"
 }
 
 # Function to collect markdown files
 collect_files() {
-    echo -e "${BLUE}Collecting documentation files...${NC}"
-    
+    echo -e "${BLUE}Collecting documentation files...${NC}" >&2
+
     local combined_file="$TEMP_DIR/combined.md"
-    
+
     # Extract metadata
     local metadata=$(get_project_metadata)
     local project_name=$(echo "$metadata" | cut -d'|' -f1)
     local customer=$(echo "$metadata" | cut -d'|' -f2)
     local date=$(date "+%B %d, %Y")
-    
+
     # Create combined markdown file with sections
     {
         # Don't include title in body (it's in the template cover page)
-        
+
         # Section 1: Executive Summary
         if [ -f "$PROJECT_ROOT/PROJECT.md" ]; then
             echo "# Executive Summary"
@@ -141,11 +142,11 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         # Section 2: Quick Reference
         echo "# Quick Reference"
         echo ""
-        
+
         if [ -f "$PROJECT_ROOT/docs/CONTACTS.md" ]; then
             echo "## Contacts"
             echo ""
@@ -154,7 +155,7 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         if [ -f "$PROJECT_ROOT/docs/TASKS.md" ]; then
             echo "## Tasks"
             echo ""
@@ -163,7 +164,7 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         if [ -f "$PROJECT_ROOT/docs/DECISIONS.md" ]; then
             echo "## Decisions"
             echo ""
@@ -172,7 +173,7 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         if [ -f "$PROJECT_ROOT/docs/QUESTIONS.md" ]; then
             echo "## Outstanding Questions"
             echo ""
@@ -181,11 +182,11 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         # Section 3: Complete Project Context
         echo "# Complete Project Context"
         echo ""
-        
+
         if [ -f "$PROJECT_ROOT/aiDocs/SUMMARY.md" ]; then
             echo "## Project Summary"
             echo ""
@@ -194,7 +195,7 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         if [ -f "$PROJECT_ROOT/aiDocs/TASKS.md" ]; then
             echo "## Detailed Tasks"
             echo ""
@@ -203,7 +204,7 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         if [ -f "$PROJECT_ROOT/aiDocs/DISCOVERY.md" ]; then
             echo "## Discovery Questions"
             echo ""
@@ -212,17 +213,17 @@ collect_files() {
             echo "\\newpage"
             echo ""
         fi
-        
+
         if [ -f "$PROJECT_ROOT/aiDocs/AI.md" ]; then
             echo "## AI Agent Context"
             echo ""
             tail -n +3 "$PROJECT_ROOT/aiDocs/AI.md"
             echo ""
         fi
-        
+
     } > "$combined_file"
-    
-    echo -e "${GREEN}✓ Files collected${NC}"
+
+    echo -e "${GREEN}✓ Files collected${NC}" >&2
     echo "$combined_file|$project_name|$customer|$date"
 }
 
@@ -232,18 +233,18 @@ generate_pdf() {
     local project_name="$2"
     local customer="$3"
     local date="$4"
-    
+
     # Create export directory if it doesn't exist
     mkdir -p "$EXPORT_DIR"
-    
+
     # Generate output filename
     local sanitized_name=$(echo "$project_name" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')
     local date_stamp=$(date "+%Y-%m-%d")
     local output_file="$EXPORT_DIR/${sanitized_name}-${date_stamp}.pdf"
-    
+
     echo -e "${BLUE}Generating PDF...${NC}"
     echo -e "${YELLOW}This may take 30-60 seconds...${NC}"
-    
+
     # Run pandoc with our custom template
     if pandoc "$input_file" \
         --from=markdown \
@@ -255,13 +256,13 @@ generate_pdf() {
         --variable=date:"$date" \
         --variable=title:"$project_name" \
         --variable=subtitle:"Complete Project Documentation" \
+        --variable=tables:true \
         --toc \
         --toc-depth=3 \
-        --number-sections \
-        --highlight-style=tango \
+        --syntax-highlighting=tango \
         --output="$output_file" \
         2>&1; then
-        
+
         echo ""
         echo -e "${GREEN}========================================${NC}"
         echo -e "${GREEN}✓ PDF Generated Successfully${NC}"
@@ -270,7 +271,7 @@ generate_pdf() {
         echo -e "${BLUE}Output:${NC} $output_file"
         echo -e "${BLUE}Size:${NC} $(du -h "$output_file" | cut -f1)"
         echo ""
-        
+
         # Open PDF if on macOS
         if [[ "$OSTYPE" == "darwin"* ]]; then
             echo -e "${YELLOW}Opening PDF...${NC}"
@@ -278,7 +279,7 @@ generate_pdf() {
         else
             echo -e "${YELLOW}Tip: Open with your PDF viewer${NC}"
         fi
-        
+
         return 0
     else
         echo ""
@@ -299,23 +300,23 @@ main() {
     echo -e "${BLUE}Lumina PDF Export${NC}"
     echo -e "${BLUE}========================================${NC}"
     echo ""
-    
+
     # Check dependencies first
     if ! check_dependencies; then
         exit 1
     fi
-    
+
     echo ""
-    
+
     # Collect files and metadata
     local file_info=$(collect_files)
     local combined_file=$(echo "$file_info" | cut -d'|' -f1)
     local project_name=$(echo "$file_info" | cut -d'|' -f2)
     local customer=$(echo "$file_info" | cut -d'|' -f3)
     local date=$(echo "$file_info" | cut -d'|' -f4)
-    
+
     echo ""
-    
+
     # Generate PDF
     if generate_pdf "$combined_file" "$project_name" "$customer" "$date"; then
         exit 0

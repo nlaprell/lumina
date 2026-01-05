@@ -15,8 +15,19 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{calc}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{listings}
 \usepackage{parskip}
+
+% Fix for Pandoc's tightlist command
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Fix for longtable counter issue
+\setcounter{secnumdepth}{0}
+\newcounter{none}
 
 % Professional color scheme (blues/grays)
 \definecolor{titleblue}{RGB}{0,51,102}
@@ -114,27 +125,27 @@ $if(title)$
 \begin{titlepage}
     \centering
     \vspace*{2cm}
-    
+
     {\Huge\sffamily\bfseries\color{titleblue}$title$\par}
     \vspace{1cm}
-    
+
     $if(customer)$
     {\Large\sffamily $customer$\par}
     \vspace{0.5cm}
     $endif$
-    
+
     $if(subtitle)$
     {\large\sffamily $subtitle$\par}
     \vspace{1.5cm}
     $endif$
-    
+
     \vfill
-    
+
     {\large\sffamily Generated: $date$\par}
     \vspace{0.5cm}
     {\normalsize\sffamily\textit{Documentation created by Lumina}\par}
     {\footnotesize\sffamily AI-powered project documentation system\par}
-    
+
 \end{titlepage}
 $endif$
 

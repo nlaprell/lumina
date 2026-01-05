@@ -350,14 +350,15 @@ check_pdf_dependencies() {
                     
                     # Update tlmgr and install required packages
                     if sudo tlmgr update --self && \
-                       sudo tlmgr install collection-fontsrecommended collection-xetex; then
+                       sudo tlmgr install collection-fontsrecommended collection-xetex tocloft titlesec enumitem lastpage; then
                         echo -e "${GREEN}✓${NC} LaTeX packages installed"
                         latex_installed=true
                     else
                         echo -e "${YELLOW}⚠${NC} LaTeX package installation had issues"
                         echo "You may need to run manually:"
+                        echo "  export PATH=\"/Library/TeX/texbin:\$PATH\""
                         echo "  sudo tlmgr update --self"
-                        echo "  sudo tlmgr install collection-fontsrecommended collection-xetex"
+                        echo "  sudo tlmgr install collection-fontsrecommended collection-xetex tocloft titlesec enumitem lastpage"
                     fi
                 else
                     echo -e "${RED}✗${NC} BasicTeX installation failed"
