@@ -36,7 +36,8 @@ PROJECT_ROOT="$SCRIPT_DIR"
 # Menu options
 declare -a MENU_OPTIONS=(
     "Initialize Project"
-    "Health Check"
+    "Process Emails"
+    "Process Notes"
     "Reset Project"
     "Backup Project State"
     "Restore from Backup"
@@ -79,98 +80,93 @@ trap cleanup EXIT
 # Hide cursor
 tput civis 2>/dev/null || true
 
-# Health check function
-health_check() {
-    echo -e "${BLUE}Running health check...${NC}"
+# Process emails function
+process_emails() {
+    echo -e "${BLUE}Processing emails...${NC}"
     echo ""
 
-    local errors=0
-    local warnings=0
-
-    # Check Python version
-    if command -v python3 &> /dev/null; then
-        py_version=$(python3 --version 2>&1 | awk '{print $2}')
-        py_major=$(echo "$py_version" | cut -d. -f1)
-        py_minor=$(echo "$py_version" | cut -d. -f2)
-
-        if [ "$py_major" -ge 3 ] && [ "$py_minor" -ge 8 ]; then
-            echo -e "${GREEN}✓${NC} Python ${py_version} installed"
-        else
-            echo -e "${YELLOW}⚠${NC} Python ${py_version} installed (recommend 3.8+)"
-            ((warnings++))
-        fi
-    else
-        echo -e "${RED}✗${NC} Python 3 not found"
-        ((errors++))
+    # Check if email converter exists
+    if [ ! -f "$PROJECT_ROOT/core/aiScripts/emailToMd/eml_to_md_converter.py" ]; then
+        echo -e "${RED}Error: Email converter not found${NC}"
+        return 1
     fi
 
-    # Check required packages
-    if python3 -c "import html2text" 2>/dev/null; then
-        echo -e "${GREEN}✓${NC} html2text package installed"
-    else
-        echo -e "${YELLOW}⚠${NC} html2text not installed (run: pip install -r core/aiScripts/requirements.txt)"
-        ((warnings++))
+    # Check if email/raw/ has files
+    local email_count=$(find "$PROJECT_ROOT/email/raw" -type f -name "*.eml" 2>/dev/null | wc -l | tr -d ' ')
+    
+    if [ "$email_count" -eq 0 ]; then
+        echo -e "${YELLOW}No .eml files found in email/raw/${NC}"
+        echo ""
+        echo "To process emails:"
+        echo "  1. Export emails from your email client as .eml files"
+        echo "  2. Place them in email/raw/"
+        echo "  3. Run this option again"
+        return 0
     fi
 
-    # Check Git
-    if command -v git &> /dev/null; then
-        git_version=$(git --version 2>&1 | awk '{print $3}')
-        echo -e "${GREEN}✓${NC} Git ${git_version} installed"
-    else
-        echo -e "${RED}✗${NC} Git not found"
-        ((errors++))
-    fi
-
-    # Check directory structure
-    for dir in "core/templates" "email/raw" "email/ai" "email/processed" "aiDocs" "prompts"; do
-        if [ -d "$dir" ]; then
-            echo -e "${GREEN}✓${NC} Directory exists: $dir"
-        else
-            echo -e "${RED}✗${NC} Missing directory: $dir"
-            ((errors++))
-        fi
-    done
-
-    # Check critical files
-    for file in ".github/copilot-instructions.md" "aiDocs/SUMMARY.md" "aiDocs/TASKS.md" "aiDocs/DISCOVERY.md" "aiDocs/AI.md"; do
-        if [ -f "$file" ]; then
-            echo -e "${GREEN}✓${NC} File exists: $file"
-        else
-            echo -e "${RED}✗${NC} Missing file: $file"
-            ((errors++))
-        fi
-    done
-
-    # Check git hooks
-    if [ -L ".git/hooks/pre-commit" ]; then
-        echo -e "${GREEN}✓${NC} Pre-commit hook installed"
-    else
-        echo -e "${YELLOW}⚠${NC} Pre-commit hook not installed (optional - run core/scripts/install-hooks.sh)"
-        ((warnings++))
-    fi
-
-    # Check if project initialized
-    if [ -f ".vscode/mcp.json" ]; then
-        echo -e "${GREEN}✓${NC} Project initialized (.vscode/mcp.json exists)"
-    else
-        echo -e "${YELLOW}⚠${NC} Project not initialized yet (run 'Initialize Project')"
-        ((warnings++))
-    fi
-
-    # Summary
+    echo -e "Found ${GREEN}$email_count${NC} email file(s)"
     echo ""
-    echo "───────────────────────────────"
-    if [ $errors -eq 0 ] && [ $warnings -eq 0 ]; then
-        echo -e "${GREEN}System health: EXCELLENT${NC}"
-        echo "All checks passed! System is ready to use."
-    elif [ $errors -eq 0 ]; then
-        echo -e "${YELLOW}System health: GOOD (${warnings} warning(s))${NC}"
-        echo "System is functional but some optional components are missing."
+
+    # Run the converter
+    python3 "$PROJECT_ROOT/core/aiScripts/emailToMd/eml_to_md_converter.py"
+    local exit_code=$?
+
+    if [ "$exit_code" -eq 0 ]; then
+        echo ""
+        echo -e "${GREEN}✓ Email processing completed${NC}"
+        echo ""
+        echo "Next steps:"
+        echo "  - Converted emails are in email/ai/"
+        echo "  - Original emails moved to email/processed/"
+        echo "  - Use GitHub Copilot: /discoverEmail to extract information"
     else
-        echo -e "${RED}System health: ISSUES FOUND (${errors} error(s), ${warnings} warning(s))${NC}"
-        echo "Please resolve errors before using the system."
+        echo -e "${RED}✗ Email processing failed${NC}"
     fi
+}
+
+# Process notes function
+process_notes() {
+    echo -e "${BLUE}Processing notes...${NC}"
     echo ""
+
+    # Check if notes converter exists
+    if [ ! -f "$PROJECT_ROOT/core/aiScripts/notesToMd/notes_to_md_converter.py" ]; then
+        echo -e "${RED}Error: Notes converter not found${NC}"
+        return 1
+    fi
+
+    # Check if notes/raw/ has files
+    local notes_count=$(find "$PROJECT_ROOT/notes/raw" -type f \( -name "*.txt" -o -name "*.md" \) ! -name ".gitkeep" 2>/dev/null | wc -l | tr -d ' ')
+    
+    if [ "$notes_count" -eq 0 ]; then
+        echo -e "${YELLOW}No .txt or .md files found in notes/raw/${NC}"
+        echo ""
+        echo "To process notes:"
+        echo "  1. Export notes from OneNote, Apple Notes, etc."
+        echo "  2. Save as .txt or .md files"
+        echo "  3. Place them in notes/raw/"
+        echo "  4. Run this option again"
+        return 0
+    fi
+
+    echo -e "Found ${GREEN}$notes_count${NC} note file(s)"
+    echo ""
+
+    # Run the converter
+    python3 "$PROJECT_ROOT/core/aiScripts/notesToMd/notes_to_md_converter.py"
+    local exit_code=$?
+
+    if [ "$exit_code" -eq 0 ]; then
+        echo ""
+        echo -e "${GREEN}✓ Notes processing completed${NC}"
+        echo ""
+        echo "Next steps:"
+        echo "  - Converted notes are in notes/ai/"
+        echo "  - Original notes moved to notes/processed/"
+        echo "  - Use GitHub Copilot: /discoverNotes to extract information"
+    else
+        echo -e "${RED}✗ Notes processing failed${NC}"
+    fi
 }
 
 # Function to display menu
@@ -395,8 +391,13 @@ execute_option() {
             echo ""
             read -p "Press any key to continue..." -n 1 -s
             ;;
-        "Health Check")
-            health_check
+        "Process Emails")
+            process_emails
+            echo ""
+            read -p "Press any key to continue..." -n 1 -s
+            ;;
+        "Process Notes")
+            process_notes
             echo ""
             read -p "Press any key to continue..." -n 1 -s
             ;;

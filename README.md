@@ -118,8 +118,8 @@ Use /projectInit
 | I Want To... | Use This Command | What It Does |
 |-------------|------------------|--------------|
 | **Set up new project** | `./go.sh` | Initialize project, select MCP servers |
-| **Check system health** | `./go.sh` → Health Check | Validate Python, Git, directories, files |
-| **Validate project output** | `./go.sh` → Validate Project | Check documentation structure and content |
+| **Process emails** | `./go.sh` → Process Emails | Convert .eml files to Markdown |
+| **Process notes** | `./go.sh` → Process Notes | Convert .txt/.md notes to Markdown |
 | **Process emails and notes for first time** | `/quickStartProject` | Complete workflow: init → process → generate docs |
 | **Add new emails to existing project** | `/discoverEmail` then `/updateSummary` | Process new emails and regenerate summary |
 | **Add new notes to existing project** | `/discoverNotes` then `/updateSummary` | Process new notes and regenerate summary |
