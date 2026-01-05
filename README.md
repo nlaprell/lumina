@@ -61,6 +61,7 @@ This will:
 | Add more emails | `/discoverEmail` then `/updateSummary` |
 | Add more notes | `/discoverNotes` then `/updateSummary` |
 | Create status report | `/generateReport` |
+| Export docs to PDF | `./go.sh` → Export to PDF |
 | Process emails from menu | `./go.sh` → Process Emails |
 | Process notes from menu | `./go.sh` → Process Notes |
 | Reload AI context | `/projectInit` |
@@ -98,6 +99,7 @@ After running `/quickStartProject` or `/initSampleProject`:
 ✅ Risk analysis      Identified from emails and notes
 ✅ Contact list       Extracted with roles and organizations
 ✅ Decision log       Captured from communications
+✅ PDF export         Professional package for handoffs (optional)
 ```
 
 ---
@@ -120,6 +122,15 @@ After running `/quickStartProject` or `/initSampleProject`:
 /projectInit
 ```
 
+**Export for Consultant Handoff:**
+```bash
+# Package complete project documentation as professional PDF
+./go.sh
+# Choose "Export to PDF"
+# Opens: exports/project-name-YYYY-MM-DD.pdf
+# Includes: PROJECT.md + docs/ + aiDocs/ (all documentation)
+```
+
 ---
 
 ## 📦 Requirements
@@ -127,6 +138,28 @@ After running `/quickStartProject` or `/initSampleProject`:
 - **Python 3.x** + packages: `pip install -r core/aiScripts/requirements.txt`
 - **GitHub Copilot** with slash command support in VS Code
 - **Git** for version control
+
+### PDF Export (Optional)
+
+To export documentation as PDF:
+- **Pandoc**: Document converter
+- **LaTeX**: Professional typesetting engine
+
+**macOS:**
+```bash
+brew install pandoc
+brew install --cask basictex
+# After installing BasicTeX:
+sudo tlmgr update --self
+sudo tlmgr install collection-fontsrecommended collection-xetex
+```
+
+**Linux:**
+```bash
+sudo apt-get install pandoc texlive-xetex texlive-fonts-recommended
+```
+
+The PDF export feature will check for these dependencies and provide install instructions if missing.
 
 ---
 

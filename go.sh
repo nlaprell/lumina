@@ -43,6 +43,7 @@ declare -a MENU_OPTIONS=(
     "Restore from Backup"
     "List Backups"
     "Lumina Prompts"
+    "Export to PDF"
     "Quit"
 )
 
@@ -200,6 +201,21 @@ process_notes() {
     else
         echo -e "${RED}✗ Notes processing failed${NC}"
     fi
+}
+
+# Export to PDF function
+export_pdf() {
+    echo -e "${BLUE}Exporting documentation to PDF...${NC}"
+    echo ""
+
+    # Check if export script exists
+    if [ ! -f "$PROJECT_ROOT/core/scripts/export-pdf.sh" ]; then
+        echo -e "${RED}Error: PDF export script not found${NC}"
+        return 1
+    fi
+
+    # Run the export script
+    "$PROJECT_ROOT/core/scripts/export-pdf.sh"
 }
 
 # Function to display menu
@@ -467,6 +483,11 @@ execute_option() {
             ;;
         "Lumina Prompts")
             show_prompts
+            ;;
+        "Export to PDF")
+            export_pdf
+            echo ""
+            read -p "Press any key to continue..." -n 1 -s
             ;;
         "Quit")
             clear
