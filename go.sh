@@ -42,6 +42,7 @@ declare -a MENU_OPTIONS=(
     "Backup Project State"
     "Restore from Backup"
     "List Backups"
+    "Lumina Prompts"
     "Quit"
 )
 
@@ -122,6 +123,38 @@ process_emails() {
     else
         echo -e "${RED}✗ Email processing failed${NC}"
     fi
+}
+
+# Show available prompts function
+show_prompts() {
+    clear
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${BLUE}                    Available Lumina Prompts${NC}"
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${GREEN}Core Workflow Prompts:${NC}"
+    echo "  /projectInit           Initialize AI with project context"
+    echo "  /quickStartProject     Complete workflow: init → process → generate docs"
+    echo "  /discoverEmail         Process emails and update documentation"
+    echo "  /discoverNotes         Process notes and update documentation"
+    echo "  /updateSummary         Regenerate PROJECT.md and docs/ from aiDocs/"
+    echo ""
+    echo -e "${GREEN}Maintenance & Quality:${NC}"
+    echo "  /validateTasks         Check task structure and dependencies"
+    echo "  /cleanupTasks          Archive old tasks, optimize organization"
+    echo "  /syncFromProject       Sync user edits from PROJECT.md to aiDocs/"
+    echo ""
+    echo -e "${GREEN}Reporting & Analysis:${NC}"
+    echo "  /generateReport        Create executive status report"
+    echo ""
+    echo -e "${GREEN}Testing & Development:${NC}"
+    echo "  /initSampleProject     Test workflow with sample data (4 emails + 3 notes)"
+    echo ""
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${YELLOW}Usage:${NC} In GitHub Copilot chat, type the prompt name (e.g., /quickStartProject)"
+    echo ""
+    read -p "Press Enter to continue..."
 }
 
 # Process notes function
@@ -431,6 +464,9 @@ execute_option() {
             fi
             echo ""
             read -p "Press any key to continue..." -n 1 -s
+            ;;
+        "Lumina Prompts")
+            show_prompts
             ;;
         "Quit")
             clear
