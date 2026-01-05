@@ -6,7 +6,7 @@
 # This script resets the Lumina project to a clean, default state.
 #
 # What it does:
-# 1. Clears all email directories (raw, ai, processed, attachments)
+# 1. Clears all email and notes directories (raw, ai, processed, attachments)
 # 2. Resets aiDocs files to template defaults
 # 3. Removes root PROJECT.md and docs/ folder
 # 4. Preserves configuration and scripts
@@ -62,7 +62,7 @@ echo ""
 echo -e "${YELLOW}WARNING: This will reset the project to a clean template state.${NC}"
 echo ""
 echo "This script will:"
-echo "  - Clear all email directories (raw, ai, processed, attachments)"
+echo "  - Clear all email and notes directories (raw, ai, processed, attachments)"
 echo "  - Reset aiDocs files to template defaults"
 echo "  - Remove root PROJECT.md and docs/ folder"
 echo "  - Reset .vscode/mcp.json to default state"
@@ -79,9 +79,10 @@ echo ""
 echo -e "${GREEN}Starting clean reset...${NC}"
 echo ""
 
-# Step 1: Clear email directories
-echo -e "${BLUE}[1/5] Clearing email directories...${NC}"
+# Step 1: Clear email and notes directories
+echo -e "${BLUE}[1/5] Clearing email and notes directories...${NC}"
 
+# Clear email directories
 if [ -d "$PROJECT_ROOT/email/raw" ]; then
     rm -f "$PROJECT_ROOT/email/raw/"*.eml
     echo "  ✓ Cleared email/raw/"
@@ -100,6 +101,27 @@ fi
 if [ -d "$PROJECT_ROOT/email/attachments" ]; then
     rm -rf "$PROJECT_ROOT/email/attachments/"*
     echo "  ✓ Cleared email/attachments/"
+fi
+
+# Clear notes directories
+if [ -d "$PROJECT_ROOT/notes/raw" ]; then
+    rm -f "$PROJECT_ROOT/notes/raw/"*.txt "$PROJECT_ROOT/notes/raw/"*.md
+    echo "  ✓ Cleared notes/raw/"
+fi
+
+if [ -d "$PROJECT_ROOT/notes/ai" ]; then
+    rm -f "$PROJECT_ROOT/notes/ai/"*.md
+    echo "  ✓ Cleared notes/ai/"
+fi
+
+if [ -d "$PROJECT_ROOT/notes/processed" ]; then
+    rm -f "$PROJECT_ROOT/notes/processed/"*.txt "$PROJECT_ROOT/notes/processed/"*.md
+    echo "  ✓ Cleared notes/processed/"
+fi
+
+if [ -d "$PROJECT_ROOT/notes/attachments" ]; then
+    rm -rf "$PROJECT_ROOT/notes/attachments/"*
+    echo "  ✓ Cleared notes/attachments/"
 fi
 
 echo ""
@@ -259,6 +281,24 @@ if [ "$PROCESSED_FILES" -gt 0 ]; then
     EMAIL_OK=false
 fi
 
+# Check notes directories are empty (excluding .gitkeep)
+NOTES_OK=true
+NOTES_RAW_FILES=$(find "$PROJECT_ROOT/notes/raw" -type f ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')
+if [ "$NOTES_RAW_FILES" -gt 0 ]; then
+    echo -e "  ${RED}✗ notes/raw/ is not empty (found "$NOTES_RAW_FILES" file(s))${NC}"
+    NOTES_OK=false
+fi
+NOTES_AI_FILES=$(find "$PROJECT_ROOT/notes/ai" -type f ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')
+if [ "$NOTES_AI_FILES" -gt 0 ]; then
+    echo -e "  ${RED}✗ notes/ai/ is not empty (found "$NOTES_AI_FILES" file(s))${NC}"
+    NOTES_OK=false
+fi
+NOTES_PROCESSED_FILES=$(find "$PROJECT_ROOT/notes/processed" -type f ! -name '.gitkeep' 2>/dev/null | wc -l | tr -d ' ')
+if [ "$NOTES_PROCESSED_FILES" -gt 0 ]; then
+    echo -e "  ${RED}✗ notes/processed/ is not empty (found "$NOTES_PROCESSED_FILES" file(s))${NC}"
+    NOTES_OK=false
+fi
+
 # Check mcp.json is reset
 MCP_OK=true
 if [ -f "$PROJECT_ROOT/.vscode/mcp.json" ]; then
@@ -269,7 +309,7 @@ if [ -f "$PROJECT_ROOT/.vscode/mcp.json" ]; then
     fi
 fi
 
-if [ "$TEMPLATES_OK" = "true" ] && [ "$AIDOCS_OK" = "true" ] && [ "$EMAIL_OK" = "true" ] && [ "$MCP_OK" = "true" ]; then
+if [ "$TEMPLATES_OK" = "true" ] && [ "$AIDOCS_OK" = "true" ] && [ "$EMAIL_OK" = "true" ] && [ "$NOTES_OK" = "true" ] && [ "$MCP_OK" = "true" ]; then
     echo -e "  ${GREEN}✓ All checks passed${NC}"
 else
     echo -e "  ${YELLOW}⚠ Some issues found (see above)${NC}"
@@ -284,6 +324,6 @@ echo "The project has been reset to a clean template state."
 echo ""
 echo "Next steps:"
 echo "  1. Run ./core/scripts/init.sh to configure your project"
-echo "  2. Add email files to email/raw/ (if needed)"
+echo "  2. Add email files to email/raw/ and/or notes files to notes/raw/ (if needed)"
 echo "  3. Run /quickStartProject in GitHub Copilot"
 echo ""
