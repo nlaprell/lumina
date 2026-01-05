@@ -72,7 +72,7 @@ check_dependencies() {
             echo "  export PATH=\"/Library/TeX/texbin:\$PATH\""
             echo "  sudo tlmgr update --self"
             echo "  sudo tlmgr install collection-fontsrecommended collection-xetex"
-            echo "  sudo tlmgr install tocloft titlesec enumitem lastpage"
+            echo "  sudo tlmgr install tocloft titlesec enumitem lastpage amsfonts amsmath"
         elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
             echo -e "${BLUE}Linux Installation:${NC}"
             echo "  sudo apt-get update"

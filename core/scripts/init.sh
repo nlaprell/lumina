@@ -213,7 +213,7 @@ check_dependencies() {
             if python3 -m pip install -r "$PROJECT_ROOT/core/aiScripts/requirements.txt" 2>&1 | tee /tmp/pip_install.log; then
                 echo ""
                 echo -e "${GREEN}✓${NC} Python dependencies installed successfully"
-                
+
                 # Verify installation
                 if python3 -c "import html2text" 2>/dev/null; then
                     deps_installed=true
@@ -298,7 +298,7 @@ check_pdf_dependencies() {
     echo ""
     echo "Would you like to install them now?"
     echo ""
-    
+
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo -e "${BLUE}macOS Installation:${NC}"
         if [ "$pandoc_installed" = false ]; then
@@ -316,7 +316,7 @@ check_pdf_dependencies() {
     echo ""
     echo -e "${YELLOW}Note: Installation may take 5-10 minutes${NC}"
     echo ""
-    
+
     read -p "Install PDF export dependencies? (y/n): " install_pdf
 
     if [[ "$install_pdf" =~ ^[Yy]$ ]]; then
@@ -344,13 +344,13 @@ check_pdf_dependencies() {
                     echo -e "${GREEN}✓${NC} BasicTeX installed"
                     echo ""
                     echo -e "${YELLOW}Updating LaTeX packages...${NC}"
-                    
+
                     # Add TeX to PATH for this session
                     export PATH="/Library/TeX/texbin:$PATH"
-                    
+
                     # Update tlmgr and install required packages
                     if sudo tlmgr update --self && \
-                       sudo tlmgr install collection-fontsrecommended collection-xetex tocloft titlesec enumitem lastpage; then
+                       sudo tlmgr install collection-fontsrecommended collection-xetex tocloft titlesec enumitem lastpage amsfonts amsmath; then
                         echo -e "${GREEN}✓${NC} LaTeX packages installed"
                         latex_installed=true
                     else
@@ -358,7 +358,7 @@ check_pdf_dependencies() {
                         echo "You may need to run manually:"
                         echo "  export PATH=\"/Library/TeX/texbin:\$PATH\""
                         echo "  sudo tlmgr update --self"
-                        echo "  sudo tlmgr install collection-fontsrecommended collection-xetex tocloft titlesec enumitem lastpage"
+                        echo "  sudo tlmgr install collection-fontsrecommended collection-xetex tocloft titlesec enumitem lastpage amsfonts amsmath"
                     fi
                 else
                     echo -e "${RED}✗${NC} BasicTeX installation failed"
@@ -733,7 +733,7 @@ try:
 except:
     print('False')
 " 2>/dev/null)
-        
+
         if [ "$deps_status" != "True" ]; then
             check_dependencies
         fi
