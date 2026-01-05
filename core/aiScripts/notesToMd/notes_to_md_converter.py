@@ -14,6 +14,7 @@ Supported formats:
 - .md - Markdown notes
 - .docx - Microsoft Word/OneNote exports
 - .textbundle - Bear note bundles
+- .html - Apple Notes HTML exports
 
 Usage:
     python3 core/aiScripts/notesToMd/notes_to_md_converter.py
@@ -34,6 +35,13 @@ try:
     DOCX_AVAILABLE = True
 except ImportError:
     DOCX_AVAILABLE = False
+
+# Import html2text for Apple Notes HTML support
+try:
+    import html2text
+    HTML2TEXT_AVAILABLE = True
+except ImportError:
+    HTML2TEXT_AVAILABLE = False
 
 # Import logger
 try:
@@ -310,6 +318,44 @@ def parse_textbundle(source_path):
     return '\n'.join(content_lines)
 
 
+def parse_html(source_path):
+    """
+    Parse Apple Notes HTML export
+
+    Args:
+        source_path: Path to .html file
+
+    Returns:
+        str: Markdown content converted from HTML
+    """
+    if not HTML2TEXT_AVAILABLE:
+        raise ImportError("html2text is required for HTML support. Install with: pip install html2text")
+
+    # Read HTML content
+    with open(source_path, 'r', encoding='utf-8') as f:
+        html_content = f.read()
+
+    # Configure html2text for clean markdown conversion
+    h = html2text.HTML2Text()
+    h.ignore_links = False
+    h.ignore_images = False
+    h.ignore_emphasis = False
+    h.body_width = 0  # Don't wrap lines
+    h.unicode_snob = True  # Use unicode characters
+    h.skip_internal_links = True
+    h.ignore_mailto_links = False
+    h.protect_links = True
+    h.mark_code = True
+
+    # Convert HTML to markdown
+    markdown_content = h.handle(html_content)
+
+    # Clean up excessive newlines (more than 2 consecutive)
+    markdown_content = re.sub(r'\n{3,}', '\n\n', markdown_content)
+
+    return markdown_content.strip()
+
+
 def detect_format(file_path):
     """
     Detect file format from extension or directory name
@@ -318,24 +364,26 @@ def detect_format(file_path):
         file_path: Path to file or directory
 
     Returns:
-        str: File format ('txt', 'md', 'docx', 'textbundle', 'unknown')
+        str: File format ('txt', 'md', 'docx', 'textbundle', 'html', 'unknown')
     """
     # Check if it's a .textbundle (can be file or directory)
     if file_path.suffix.lower() == '.textbundle':
         return 'textbundle'
-    
+
     # Check if it's a directory with .textbundle extension
     if file_path.is_dir() and file_path.name.endswith('.textbundle'):
         return 'textbundle'
-    
+
     suffix = file_path.suffix.lower()
-    
+
     if suffix == '.txt':
         return 'txt'
     elif suffix == '.md':
         return 'md'
     elif suffix == '.docx':
         return 'docx'
+    elif suffix == '.html':
+        return 'html'
     else:
         return 'unknown'
 
@@ -359,8 +407,13 @@ def process_notes_file(source_path, raw_dir, ai_dir, processed_dir):
 
         # Detect format and read content
         file_format = detect_format(source_path)
-        
-        if file_format == 'textbundle':
+
+        if file_format == 'html':
+            if not HTML2TEXT_AVAILABLE:
+                logger.error(f"Skipping {filename}: html2text not available. Install with: pip install html2text")
+                return False
+            content = parse_html(source_path)
+        elif file_format == 'textbundle':
             content = parse_textbundle(source_path)
         elif file_format == 'docx':
             if not DOCX_AVAILABLE:
@@ -430,17 +483,18 @@ def main():
         directory.mkdir(parents=True, exist_ok=True)
         logger.debug(f"Ensured directory exists: {directory}")
 
-# Find all notes files in raw directory (.txt, .md, .docx, .textbundle)
+# Find all notes files in raw directory (.txt, .md, .docx, .textbundle, .html)
     notes_files = (
         list(raw_dir.glob('*.txt')) +
         list(raw_dir.glob('*.md')) +
         list(raw_dir.glob('*.docx')) +
-        list(raw_dir.glob('*.textbundle'))
+        list(raw_dir.glob('*.textbundle')) +
+        list(raw_dir.glob('*.html'))
     )
 
     if not notes_files:
         logger.info("No notes files found in notes/raw/")
-        logger.info("Place .txt, .md, .docx, or .textbundle files in notes/raw/ to process them")
+        logger.info("Place .txt, .md, .docx, .textbundle, or .html files in notes/raw/ to process them")
         return 0
 
     logger.info(f"Found {len(notes_files)} notes file(s) to process")
