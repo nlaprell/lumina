@@ -38,6 +38,9 @@ declare -a MENU_OPTIONS=(
     "Initialize Project"
     "Health Check"
     "Reset Project"
+    "Backup Project State"
+    "Restore from Backup"
+    "List Backups"
     "Quit"
 )
 
@@ -205,6 +208,166 @@ display_state() {
     }
 }
 
+# Backup function
+backup_project() {
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local backup_dir="$PROJECT_ROOT/backups/backup_${timestamp}"
+    
+    echo -e "${BLUE}Creating backup...${NC}"
+    echo ""
+    
+    # Create backup directory
+    mkdir -p "$backup_dir"
+    
+    # Backup aiDocs/
+    if [ -d "$PROJECT_ROOT/aiDocs" ]; then
+        cp -r "$PROJECT_ROOT/aiDocs" "$backup_dir/"
+        echo -e "${GREEN}✓${NC} Backed up aiDocs/"
+    else
+        echo -e "${YELLOW}⚠${NC} aiDocs/ not found (skipped)"
+    fi
+    
+    # Backup PROJECT.md
+    if [ -f "$PROJECT_ROOT/PROJECT.md" ]; then
+        cp "$PROJECT_ROOT/PROJECT.md" "$backup_dir/"
+        echo -e "${GREEN}✓${NC} Backed up PROJECT.md"
+    else
+        echo -e "${YELLOW}⚠${NC} PROJECT.md not found (skipped)"
+    fi
+    
+    # Backup .lumina.state
+    if [ -f "$PROJECT_ROOT/.lumina.state" ]; then
+        cp "$PROJECT_ROOT/.lumina.state" "$backup_dir/"
+        echo -e "${GREEN}✓${NC} Backed up .lumina.state"
+    else
+        echo -e "${YELLOW}⚠${NC} .lumina.state not found (skipped)"
+    fi
+    
+    # Backup docs/
+    if [ -d "$PROJECT_ROOT/docs" ]; then
+        cp -r "$PROJECT_ROOT/docs" "$backup_dir/"
+        echo -e "${GREEN}✓${NC} Backed up docs/"
+    else
+        echo -e "${YELLOW}⚠${NC} docs/ not found (skipped)"
+    fi
+    
+    echo ""
+    echo -e "${GREEN}✓ Backup created: backups/backup_${timestamp}${NC}"
+}
+
+# List backups function
+list_backups() {
+    local backups_dir="$PROJECT_ROOT/backups"
+    
+    if [ ! -d "$backups_dir" ] || [ -z "$(ls -A "$backups_dir" 2>/dev/null)" ]; then
+        echo -e "${YELLOW}No backups found${NC}"
+        return 1
+    fi
+    
+    echo -e "${BLUE}Available backups:${NC}"
+    echo ""
+    
+    local index=1
+    for backup in "$backups_dir"/backup_*; do
+        if [ -d "$backup" ]; then
+            local backup_name=$(basename "$backup")
+            local backup_date=${backup_name#backup_}
+            # Format: YYYYMMDD_HHMMSS -> YYYY-MM-DD HH:MM:SS
+            local formatted_date=$(echo "$backup_date" | sed 's/\([0-9]\{4\}\)\([0-9]\{2\}\)\([0-9]\{2\}\)_\([0-9]\{2\}\)\([0-9]\{2\}\)\([0-9]\{2\}\)/\1-\2-\3 \4:\5:\6/')
+            echo -e "  ${GREEN}$index.${NC} $formatted_date  (${backup_name})"
+            ((index++))
+        fi
+    done
+    
+    return 0
+}
+
+# Restore function
+restore_project() {
+    local backups_dir="$PROJECT_ROOT/backups"
+    
+    if ! list_backups; then
+        return 1
+    fi
+    
+    echo ""
+    read -p "Enter backup number to restore (or 'c' to cancel): " choice
+    
+    if [[ "$choice" == "c" ]] || [[ "$choice" == "C" ]]; then
+        echo -e "${YELLOW}Restore cancelled${NC}"
+        return 0
+    fi
+    
+    # Validate choice is a number
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
+        echo -e "${RED}Invalid choice${NC}"
+        return 1
+    fi
+    
+    # Get selected backup
+    local index=1
+    local selected_backup=""
+    for backup in "$backups_dir"/backup_*; do
+        if [ -d "$backup" ]; then
+            if [ "$index" -eq "$choice" ]; then
+                selected_backup="$backup"
+                break
+            fi
+            ((index++))
+        fi
+    done
+    
+    if [ -z "$selected_backup" ]; then
+        echo -e "${RED}Invalid backup number${NC}"
+        return 1
+    fi
+    
+    local backup_name=$(basename "$selected_backup")
+    echo ""
+    echo -e "${YELLOW}WARNING: This will overwrite your current project state!${NC}"
+    echo -e "Restoring from: ${backup_name}"
+    echo ""
+    read -p "Are you sure? (yes/no): " confirm
+    
+    if [[ "$confirm" != "yes" ]]; then
+        echo -e "${YELLOW}Restore cancelled${NC}"
+        return 0
+    fi
+    
+    echo ""
+    echo -e "${BLUE}Restoring from backup...${NC}"
+    echo ""
+    
+    # Restore aiDocs/
+    if [ -d "$selected_backup/aiDocs" ]; then
+        rm -rf "$PROJECT_ROOT/aiDocs"
+        cp -r "$selected_backup/aiDocs" "$PROJECT_ROOT/"
+        echo -e "${GREEN}✓${NC} Restored aiDocs/"
+    fi
+    
+    # Restore PROJECT.md
+    if [ -f "$selected_backup/PROJECT.md" ]; then
+        cp "$selected_backup/PROJECT.md" "$PROJECT_ROOT/"
+        echo -e "${GREEN}✓${NC} Restored PROJECT.md"
+    fi
+    
+    # Restore .lumina.state
+    if [ -f "$selected_backup/.lumina.state" ]; then
+        cp "$selected_backup/.lumina.state" "$PROJECT_ROOT/"
+        echo -e "${GREEN}✓${NC} Restored .lumina.state"
+    fi
+    
+    # Restore docs/
+    if [ -d "$selected_backup/docs" ]; then
+        rm -rf "$PROJECT_ROOT/docs"
+        cp -r "$selected_backup/docs" "$PROJECT_ROOT/"
+        echo -e "${GREEN}✓${NC} Restored docs/"
+    fi
+    
+    echo ""
+    echo -e "${GREEN}✓ Restore completed successfully${NC}"
+}
+
 # Function to execute selected option
 execute_option() {
     local option="${MENU_OPTIONS[$CURRENT_INDEX]}"
@@ -237,7 +400,22 @@ execute_option() {
             echo ""
             read -p "Press any key to continue..." -n 1 -s
             ;;
-        "Validate Project")
+        "Backup Project State")
+            backup_project
+            echo ""
+            read -p "Press any key to continue..." -n 1 -s
+            ;;
+        "Restore from Backup")
+            restore_project
+            echo ""
+            read -p "Press any key to continue..." -n 1 -s
+            ;;
+        "List Backups")
+            list_backups
+            echo ""
+            read -p "Press any key to continue..." -n 1 -s
+            ;;
+        "Reset Project")
             if [ -f "$PROJECT_ROOT/core/scripts/clean-reset.sh" ]; then
                 "$PROJECT_ROOT/core/scripts/clean-reset.sh"
                 local exit_code=$?

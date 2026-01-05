@@ -46,3 +46,6 @@ temp/
 *.tmp
 
 core/testData/*
+
+# Backups (local project state snapshots)
+backups/
