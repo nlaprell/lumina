@@ -1,8 +1,8 @@
 # Pre-Commit Sanity Check Report
 
 **Date**: January 5, 2026
-**Scope**: All branch changes since main (feature/35-backup-restore)
-**Files Analyzed**: 2
+**Scope**: All branch changes since main (feature/31-usage-examples)
+**Files Analyzed**: 9
 
 ## Status: ✅ PASS
 
@@ -25,33 +25,54 @@ No critical issues found. ✅
 - Total: 35/35 passed
 
 **Syntax Checks:**
-- go.sh: ✅ PASS
-- .gitignore: ✅ PASS (no syntax validation needed)
+- All 9 .prompt.md files: ✅ PASS (Markdown format valid)
 
 **Reference Checks:**
-- File paths: ✅ PASS
-  - `$PROJECT_ROOT/backups/` - correct
-  - `$PROJECT_ROOT/aiDocs` - correct
-  - `$PROJECT_ROOT/PROJECT.md` - correct
-  - `$PROJECT_ROOT/.lumina.state` - correct
-  - `$PROJECT_ROOT/docs` - correct
-  - `$PROJECT_ROOT/core/aiScripts/state_manager.py` - correct
-  - `$PROJECT_ROOT/core/scripts/clean-reset.sh` - correct
-- Script invocations: ✅ PASS
-- Import statements: ✅ N/A (no Python changes)
+- Task ID examples: ✅ PASS (TASK-001 format consistent across all prompts)
+- File paths: ✅ PASS (aiDocs/, email/, docs/ references correct)
+- Script references: ✅ PASS (core/scripts/, core/aiScripts/ paths valid)
+- Cross-prompt references: ✅ PASS (no broken links)
 
-**Security Checks:**
-- Credentials: ✅ No hardcoded secrets
-- File operations: ✅ Properly quoted variables
-- rm operations: ✅ Safe (used with -rf on user-confirmed restore only)
+**Content Quality Checks:**
+- All 9 prompts have Common Scenarios section: ✅ PASS
+- Each prompt has 2-3 concrete examples: ✅ PASS
+- Examples show realistic consultant situations: ✅ PASS
+- Examples include input, steps, and expected results: ✅ PASS
+- Scenarios positioned at end of prompts: ✅ PASS
+- Formatting consistent across all prompts: ✅ PASS
 
-**Functionality Checks:**
-- Backup function creates timestamped backups: ✅ PASS
-- Backup includes all required files: ✅ PASS (aiDocs/, PROJECT.md, .lumina.state, docs/)
-- Restore lists backups correctly: ✅ PASS
-- Restore confirms before overwriting: ✅ PASS
-- List backups formats timestamps: ✅ PASS
-- backups/ in .gitignore: ✅ PASS
+---
+
+## Files Modified
+
+1. **prompts/ProjectInit.prompt.md** (+57 lines)
+   - 3 scenarios: New project, returning to project, team handoff
+   
+2. **prompts/discoverEmail.prompt.md** (+77 lines)
+   - 3 scenarios: First import, weekly update, large thread
+
+3. **prompts/updateSummary.prompt.md** (+76 lines)
+   - 3 scenarios: After emails, user edits, quarterly refresh
+
+4. **prompts/quickStartProject.prompt.md** (+69 lines)
+   - 3 scenarios: New setup, existing project, no emails
+
+5. **prompts/validateTasks.prompt.md** (+66 lines)
+   - 3 scenarios: Manual edits, planning prep, large import
+
+6. **prompts/cleanupTasks.prompt.md** (+67 lines)
+   - 3 scenarios: Quarterly cleanup, sprint prep, email import
+
+7. **prompts/generateReport.prompt.md** (+63 lines)
+   - 3 scenarios: Weekly report, monthly review, client update
+
+8. **prompts/syncFromProject.prompt.md** (+58 lines)
+   - 3 scenarios: Tasks complete, risk added, questions answered
+
+9. **prompts/endToEndTest.prompt.md** (+57 lines)
+   - 3 scenarios: Successful test, empty state, error recovery
+
+**Total**: +590 lines of documentation examples
 
 ---
 
@@ -59,8 +80,15 @@ No critical issues found. ✅
 
 ✅ PASS - Safe to commit
 
+All acceptance criteria met:
+- ✅ "Common Scenarios" section added to all 9 prompts
+- ✅ Each prompt has 2-3 concrete examples
+- ✅ Examples show realistic situations consultants encounter
+- ✅ Examples include input, process, and expected output
+- ✅ Examples cover both typical and edge cases
+
 ---
 
 ## Next Steps
 
-Proceed with PR creation for issue #35.
+Proceed with PR creation for issue #31.
