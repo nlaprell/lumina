@@ -1,307 +1,175 @@
 # Lumina
 
-**Bootstrap system for MarkLogic consultants** to initialize projects with AI-driven documentation workflows.
+**Turn notes and email threads into structured project documentation automatically.**
 
-Turn email threads into structured project documentation automatically. Perfect for complex consulting projects with heavy email communication.
+AI-powered bootstrap system for MarkLogic consultants. Export emails and notes → generate comprehensive project docs in minutes.
 
 ---
 
-## ⚡ Quick Start (30 seconds)
+## 🚀 Quick Start (3 Steps)
 
+### 1. Export Your Data
+- **Emails**: Export `.eml` files → place in `email/raw/`
+- **Notes**: Export `.txt` or `.md` files → place in `notes/raw/`
+
+### 2. Initialize Project
 ```bash
-# Clone the repository
-git clone <your-repo-url>
-cd lumina
-
-# Run the interactive setup
 ./go.sh
 ```
+Choose **"Initialize Project"** and enter:
+- Your name
+- Project name  
+- Customer name
+- Select MCP servers (optional)
 
-**That's it!** The interactive menu will guide you through:
-1. Project configuration (name, customer, MCP servers)
-2. Git hooks installation (optional but recommended)
-3. Email and notes processing setup
-
-Then in GitHub Copilot chat:
+### 3. Generate Documentation
+In GitHub Copilot chat:
 ```
 /quickStartProject
 ```
 
-This single command will process all your emails and notes, then generate complete project documentation.
+**Done!** Check `PROJECT.md` for your complete project summary.
 
 ---
 
-## 🎯 What This Does
+## 🧪 Try It With Sample Data
+
+Want to see it work before adding your own data?
 
 ```
-┌─────────────────────────────────┐
-│  Export emails & notes          │ → Place in email/raw/ and notes/raw/
-│  from email client, OneNote,    │
-│  Apple Notes, etc.              │
-└─────────────────────────────────┘
-          ↓
-┌─────────────────────────────────┐
-│  ./go.sh                        │ → Initialize: project name, customer, MCP servers
-└─────────────────────────────────┘
-          ↓
-┌─────────────────────────────────┐
-│ /quickStartProject              │ → AI processes everything automatically
-└─────────────────────────────────┘
-          ↓
-┌─────────────────────────────────────────────┐
-│ ✅ PROJECT.md     Complete project summary  │
-│ ✅ aiDocs/        AI-readable context       │
-│ ✅ docs/          Quick reference files     │
-│ ✅ Task tracking  With dependencies         │
-│ ✅ Risk analysis  Automatically identified  │
-│ ✅ Contact list   Extracted from emails     │
-│ ✅ Decisions log  From emails and notes     │
-└─────────────────────────────────────────────┘
+/initSampleProject
 ```
 
-**Result:** Comprehensive project documentation ready for stakeholder handoff.
+This will:
+- ✅ Load 4 sample emails + 3 sample notes
+- ✅ Process everything automatically  
+- ✅ Generate complete documentation
+- ✅ Show you what Lumina produces
+- ✅ Reset to clean state when done
+
+**Perfect for:** Testing the workflow, demos, understanding output format.
 
 ---
 
-## �️ Which Command Should I Use?
+## 📝 Command Reference
 
-### First Time Setup
-```
-New Project
-    ↓
-Run ./go.sh
-    ↓
-Add emails to email/raw/
-Add notes to notes/raw/ (optional)
-    ↓
-Use /quickStartProject
-    ↓
-✅ Done! Review PROJECT.md
-```
+| **I Want To...** | **Use This** |
+|------------------|--------------|
+| Set up new project | `./go.sh` → Initialize Project |
+| Generate docs from emails/notes | `/quickStartProject` |
+| Try with sample data | `/initSampleProject` |
+| Add more emails | `/discoverEmail` then `/updateSummary` |
+| Add more notes | `/discoverNotes` then `/updateSummary` |
+| Create status report | `/generateReport` |
+| Process emails from menu | `./go.sh` → Process Emails |
+| Process notes from menu | `./go.sh` → Process Notes |
+| Reload AI context | `/projectInit` |
 
-### Adding More Emails or Notes
-```
-Have new emails or notes?
-    ↓
-Add emails to email/raw/
-Add notes to notes/raw/
-    ↓
-Use /discoverEmail and/or /discoverNotes
-    ↓
-Use /updateSummary
-    ↓
-✅ Done! Review updated PROJECT.md
-```
+<details>
+<summary><strong>📋 All Commands (click to expand)</strong></summary>
 
-### Need Status Report
-```
-Want stakeholder update?
-    ↓
-Use /generateReport
-    ↓
-✅ Check reports/ folder
-```
+| Command | Purpose |
+|---------|---------|
+| `/quickStartProject` | Complete workflow: init → process → generate docs |
+| `/initSampleProject` | Test with bundled sample data (4 emails + 3 notes) |
+| `/discoverEmail` | Process emails and update aiDocs/ |
+| `/discoverNotes` | Process notes and update aiDocs/ |
+| `/updateSummary` | Regenerate PROJECT.md and docs/ from aiDocs/ |
+| `/generateReport` | Create executive status report |
+| `/projectInit` | Re-initialize AI with project knowledge |
+| `/validateTasks` | Check task IDs, dependencies, metadata |
+| `/cleanupTasks` | Archive old tasks, optimize organization |
+| `/syncFromProject` | Sync user edits from PROJECT.md to aiDocs/ |
+| `/completeIssue <number>` | Automated Issue→Branch→PR workflow (template maintenance) |
 
-### Lost Context
-```
-AI seems confused?
-    ↓
-Use /projectInit
-    ↓
-✅ AI reloaded with project context
-```
+</details>
 
 ---
 
-## 📝 Quick Reference Card
+## 📊 What You Get
 
-| I Want To... | Use This Command | What It Does |
-|-------------|------------------|--------------|
-| **Set up new project** | `./go.sh` | Initialize project, select MCP servers |
-| **Process emails** | `./go.sh` → Process Emails | Convert .eml files to Markdown |
-| **Process notes** | `./go.sh` → Process Notes | Convert .txt/.md notes to Markdown |
-| **Process emails and notes for first time** | `/quickStartProject` | Complete workflow: init → process → generate docs |
-| **Add new emails to existing project** | `/discoverEmail` then `/updateSummary` | Process new emails and regenerate summary |
-| **Add new notes to existing project** | `/discoverNotes` then `/updateSummary` | Process new notes and regenerate summary |
-| **Update documentation after changes** | `/updateSummary` | Regenerate PROJECT.md and docs/ from aiDocs/ |
-| **Generate status report** | `/generateReport` | Create executive summary for stakeholders |
-| **Reload AI context** | `/projectInit` | Re-initialize AI with project knowledge |
-| **Validate task structure** | `/validateTasks` | Check task IDs, dependencies, metadata |
-| **Initialize sample project** | `/initSampleProject` | Test complete workflow with sample data |
-| **Clean up old tasks** | `/cleanupTasks` | Archive old tasks, optimize organization |
-| **Fix broken documentation** | `/syncFromProject` | Sync user edits from PROJECT.md to aiDocs/ |
-| **Complete GitHub issue** | `/completeIssue <number>` | Automated Issue→Branch→PR workflow |
+After running `/quickStartProject` or `/initSampleProject`:
+
+```
+✅ PROJECT.md         Executive summary for stakeholders
+✅ docs/              Quick reference (contacts, tasks, decisions, questions)
+✅ aiDocs/            Complete project context for AI agents
+✅ Task tracking      With dependencies automatically detected
+✅ Risk analysis      Identified from emails and notes
+✅ Contact list       Extracted with roles and organizations
+✅ Decision log       Captured from communications
+```
 
 ---
 
 ## 🎯 Common Workflows
 
 **Weekly Status Update:**
-1. Add any new emails to `email/raw/` and/or notes to `notes/raw/`
-2. Run `/discoverEmail` and/or `/discoverNotes` to process them
-3. Run `/generateReport` for stakeholder update
-4. Review `reports/status-YYYY-MM-DD.md`
-
-**Monthly Project Review:**
-1. Run `/cleanupTasks` to archive old tasks
-2. Run `/updateSummary` to refresh documentation
-3. Review PROJECT.md with team
-
-**Handoff to New Team Member:**
-1. Ensure all emails and notes processed (`/discoverEmail`, `/discoverNotes`)
-2. Ensure documentation current (`/updateSummary`)
-3. Share PROJECT.md and docs/ folder
-4. New team member runs `/projectInit` to load context
-
----
-
-## �📋 Prerequisites
-
-- **Python 3.x** - For email converter script
-- **Python packages** - Install with: `pip install -r core/aiScripts/requirements.txt`
-- **Git** - For version control
-- **GitHub Copilot** - With slash command support in VS Code
-- **VS Code** - Recommended editor (or any editor with Copilot support)
-
----
-
-## 🔐 Environment Variables (MCP Credentials)
-
-MCP servers often require credentials (API tokens, access keys, etc.). Store these securely in a `.env` file:
-
-### Setup
-
-1. **Copy the template:**
-   ```bash
-   cp .env.template .env
-   ```
-
-2. **Edit `.env` with your credentials:**
-   ```bash
-   # GitHub token from https://github.com/settings/tokens
-   GITHUB_PERSONAL_ACCESS_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
-   
-   # AWS credentials
-   AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-   AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCY
-   AWS_REGION=us-east-1
-   ```
-
-3. **Run `./go.sh` or `init.sh`:**
-   - Credentials will be automatically populated in `.vscode/mcp.json`
-   - If `.env` doesn't exist, placeholders will remain (you'll need to edit mcp.json manually)
-
-### Security
-
-✅ **Safe** - `.env` is gitignored and will never be committed  
-✅ **Safe** - `.vscode/mcp.json` is also gitignored  
-✅ **Safe** - `.env.template` contains placeholders only (safe to commit)  
-❌ **Never** commit `.env` or share it - it contains your real credentials
-
-### Benefits
-
-- **Security**: Credentials in single gitignored file, never accidentally committed
-- **Simplicity**: Edit one `.env` file instead of complex JSON
-- **Documentation**: `.env.template` documents all required variables
-- **Standard**: Industry-standard pattern familiar to developers
-
----
-
-## ⚠️ SECURITY WARNING
-
-**IMPORTANT**: The `email/` directory may contain sensitive information from your email communications. Before committing to a public repository:
-
-- ✓ Verify `.gitignore` is properly configured to exclude email files
-- ✓ Review `PROJECT.md` for any sensitive customer or business information
-- ✓ Never commit `.eml` files or converted Markdown emails containing confidential data
-- ✓ Consider using a private repository for projects with sensitive context
-
-**The `.gitignore` file is configured to exclude email files by default, but always verify before pushing to remote repositories.**
-
----
-
-## � Available Commands
-
-### Setup Commands
 ```bash
-./go.sh                                    # Interactive project menu (recommended entry point)
-./core/scripts/install-hooks.sh       # Install git hooks for pre-commit validation
+# 1. Add new emails to email/raw/ and/or notes to notes/raw/
+# 2. In Copilot chat:
+/discoverEmail       # (if emails added)
+/discoverNotes       # (if notes added)
+/generateReport      # Creates reports/status-YYYY-MM-DD.md
 ```
 
-### AI Workflows (use in Copilot chat)
-
-**Primary Workflows:**
-- `/quickStartProject` - Complete setup: init + emails + summary (recommended)
-- `/projectInit` - Initialize AI context only (read-only)
-- `/discoverEmail` - Process emails and update aiDocs/
-- `/updateSummary` - Generate PROJECT.md and docs/ from aiDocs/
-
-**Maintenance:**
-- `/completeIssue` - Automate GitHub Issue→PR workflow
-- `/validateTasks` - Check task structure and dependencies
-- `/cleanupTasks` - Archive old tasks, optimize organization
-- `/syncFromProject` - Sync user edits from PROJECT.md back to aiDocs/
-- `/generateReport` - Create executive status report
-
-**See [Prompt Reference Guide](#prompt-reference-guide) below for detailed usage.**
+**New Team Member Handoff:**
+```bash
+# Ensure docs are current, then share PROJECT.md and docs/ folder
+# New team member runs:
+/projectInit
+```
 
 ---
 
-## �🚀 Quick Start (3 Steps)
+## 📦 Requirements
 
-### Step 1: Run Project Manager
-```bash
-./go.sh
-```
-**Select "Initialize Project"** to configure:
-- Your name (for task tracking)
-- Project name
-- Customer/client name  
-- MCP servers to enable (GitHub, AWS, etc.)
-
-**Optional but recommended:** Install git hooks for pre-commit validation
-```bash
-./core/scripts/install-hooks.sh
-```
-
-This enables automatic syntax checking before commits.
-
-### Step 2: Add Email Context
-Export project-related emails to `.eml` format and place them in:
-```
-./email/raw/
-```
-
-### Step 3: Initialize Project
-In GitHub Copilot chat, run:
-```
-/quickStartProject
-```
-
-**That's it!** The workflow will automatically:
-- ✓ Process all emails and extract project information (including attachments)
-- ✓ Update AI documentation with contacts, tasks, and technical details
-- ✓ Generate a comprehensive project summary
-- ✓ Create human-readable documentation in `docs/` folder
-
-📄 **Check `PROJECT.md` at the project root for your complete project status**
-
-📁 **Check `docs/` folder for quick reference (contacts, tasks, decisions, questions)**
+- **Python 3.x** + packages: `pip install -r core/aiScripts/requirements.txt`
+- **GitHub Copilot** with slash command support in VS Code
+- **Git** for version control
 
 ---
 
-## 📖 How It Works
+<details>
+<summary><strong>🔐 Security & Environment Setup (click to expand)</strong></summary>
 
-### 1. Email → Markdown Conversion
-- Export email threads to `.eml` format
-- Place in `email/raw/`
+## MCP Credentials
+
+MCP servers require credentials (API tokens, access keys). Store in `.env`:
+
+1. **Copy template:** `cp .env.template .env`
+2. **Edit `.env`** with your credentials
+3. **Run `./go.sh`** - credentials auto-populate `.vscode/mcp.json`
+
+✅ `.env` is gitignored (safe)  
+❌ Never commit `.env` or share credentials
+
+## Security Warning
+
+The `email/` and `notes/` directories contain sensitive information.
+
+- ✓ `.gitignore` excludes email/notes files by default
+- ✓ Review `PROJECT.md` before committing
+- ✓ Never commit `.eml` or `.md` files with confidential data
+- ✓ Use private repository for sensitive projects
+
+</details>
+
+---
+
+<details>
+<summary><strong>📖 How It Works (click to expand)</strong></summary>
+
+### 1. Data Conversion
+- Export emails to `.eml`, notes to `.txt`/`.md`
+- Place in `email/raw/` and `notes/raw/`
 - AI converts to structured Markdown
 - Extracts: contacts, decisions, tasks, risks, technical details
 
-### 2. AI Documentation Generation
-- Analyzes all emails for project context
+### 2. AI Documentation
+- Analyzes all content for project context
 - Creates structured documentation in `aiDocs/`:
-  - `SUMMARY.md` - Single source of truth (contacts, background, risks, decisions)
+  - `SUMMARY.md` - Contacts, background, risks, decisions
   - `TASKS.md` - Task tracking with dependencies
   - `DISCOVERY.md` - Questions and information gaps
   - `AI.md` - Project-specific AI agent notes
@@ -309,653 +177,137 @@ In GitHub Copilot chat, run:
 ### 3. Human-Readable Output
 - Generates `PROJECT.md` at root (executive summary)
 - Creates `docs/` folder with quick reference:
-  - `CONTACTS.md` - Key stakeholders
-  - `TASKS.md` - High-priority work and blockers
-  - `DECISIONS.md` - Decision log
-  - `QUESTIONS.md` - Outstanding questions
+  - `CONTACTS.md`, `TASKS.md`, `DECISIONS.md`, `QUESTIONS.md`
 
 ### 4. Continuous Updates
-- Add new emails → Run `/discoverEmail` → Run `/updateSummary`
-- Documentation stays current throughout project lifecycle
-- Task dependencies automatically detected
-- Risks identified and tracked
+- Add new content → Process → Regenerate
+- Documentation stays current throughout project
+- Dependencies automatically detected
+
+</details>
 
 ---
 
-## Basic Workflow
-
- - Export any new/updated emails to `email/raw`
- - Send `/discoverEmail` to the AI chat to convert .eml files into .md files in `email/ai`.
- - Send `/updateSummary` to the AI chat to update the AI documentation and the root `PROJECT.md` and `docs/` files based on the full context of all processed emails.
-
-**Result:** `PROJECT.md` at the project root contains a human-readable summary of the project. The `docs/` folder contains quick reference extracts (contacts, tasks, decisions, questions). Documentation in `aiDocs/` is updated based on the full context of the emails as well.
-
----
-
-## 🏗️ Project Structure
+<details>
+<summary><strong>🏗️ Project Structure (click to expand)</strong></summary>
 
 ```
 lumina/
-│
-├── 📄 README.md                 ← You are here
-├── 📄 CONTRIBUTING.md           ← Developer guidelines (git workflow, labels, PRs)
-├── 🔧 go.sh                     ← Interactive project menu (main entry point)
-│
-├── 📁 .github/
-│   ├── copilot-instructions.md  ← Universal AI agent instructions
-│   └── workflows/
-│       └── pr-validation.yml    ← Automated PR validation
-│
-├── 📁 .githooks/
-│   └── pre-commit               ← Local pre-commit validation
-│
-├── 📁 prompts/                  ← AI workflow prompts (slash commands)
-│   ├── ProjectInit.prompt.md
-│   ├── discoverEmail.prompt.md
-│   ├── updateSummary.prompt.md
-│   ├── quickStartProject.prompt.md
-│   ├── completeIssue.prompt.md (for Lumina maintenance)
-│   └── [and more...]
-│
-├── 📁 aiDocs/                   ← AI documentation (source of truth)
-│   ├── SUMMARY.md              ← Project state, contacts, risks, decisions
-│   ├── TASKS.md                ← Task tracking with dependencies
-│   ├── DISCOVERY.md            ← Questions and information gaps
-│   └── AI.md                   ← Project-specific AI agent notes
-│
-├── 📁 docs/                     ← Human-readable quick reference
-│   ├── CONTACTS.md
-│   ├── TASKS.md
-│   ├── DECISIONS.md
-│   └── QUESTIONS.md
-│
-├── 📁 email/                    ← Email processing
-│   ├── raw/                    ← Place .eml files here
-│   ├── ai/                     ← Converted Markdown emails
-│   └── processed/              ← Archived .eml files
-│
-├── 📁 core/                ← Template infrastructure
-│   ├── scripts/                ← Setup and maintenance scripts
-│   ├── aiScripts/              ← Utility scripts (email converter, etc.)
-│   ├── prompts/                ← Bootstrap maintenance prompts
-│   ├── mcpServers/             ← MCP server configurations
-│   └── templates/              ← Template files for aiDocs
-│
-└── 📄 PROJECT.md                ← Generated: Human-readable project summary
+├── 📄 PROJECT.md              ← Generated project summary
+├── 📁 aiDocs/                 ← AI documentation (source of truth)
+├── 📁 docs/                   ← Human-readable quick reference
+├── 📁 email/raw/              ← Place .eml files here
+├── 📁 notes/raw/              ← Place .txt/.md files here
+├── 📁 prompts/                ← AI workflow prompts (/quickStartProject, etc.)
+├── 🔧 go.sh                   ← Interactive menu (main entry point)
+└── 📁 core/                   ← Template infrastructure
 ```
 
 **Key Files:**
-- **`PROJECT.md`** (root) - Executive summary for stakeholders (generated)
-- **`aiDocs/SUMMARY.md`** - Complete project context for AI agents (maintained)
-- **`docs/`** - Quick reference extracts (generated)
-- **`CONTRIBUTING.md`** - Developer workflow guide (git, commits, PRs, labels)
+- `PROJECT.md` - Executive summary (generated)
+- `aiDocs/` - Complete AI context (maintained)
+- `docs/` - Quick reference (generated)
+
+</details>
 
 ---
 
-## Detailed Setup Guide
+<details>
+<summary><strong>📚 Detailed Prompt Reference (click to expand)</strong></summary>
 
-For complete details on the automated `/quickStartProject` workflow and individual manual steps, see sections below.
+## Primary Workflows
 
-### 1. Copy This Repository
-
-```bash
-git clone <your-repo-url>
-cd lumina
-```
-
-Or simply copy/fork this repository to start your new project.
-
-### 2. Run Initial Setup
-
-Execute the project manager to configure your project:
-
-```bash
-./go.sh
-```
-
-Select "Initialize Project" from the menu. This will:
-- Prompt you to enter your name (for task tracking)
-- Prompt you to enter your project name
-- Prompt you to enter your customer/client name
-- Display available MCP server configurations from `core/mcpServers/`
-- Let you select which servers to enable using arrow keys and spacebar
-- Generate `.vscode/mcp.json` with your selected configurations
-
-### 3. Quick Start (Recommended)
-
-The fastest way to get started is to use the `/quickStartProject` prompt in Copilot chat:
-
-```
-/quickStartProject
-```
-
-This will automatically:
-- Initialize the AI agent with project context
-- Check for email files in `email/raw/` and prompt you to add them if missing
-- Process any emails found and update documentation
-- Generate a comprehensive project summary at `PROJECT.md`
-- Create human-readable extracts in `docs/` folder
-
-**After completion, check `PROJECT.md` for your project status overview**
-
-**Also check `docs/` folder for quick reference materials**
-
-**OR** follow the individual steps below for more control:
-
-### 3a. Initialize AI Agent Context (Manual)
-
-In GitHub Copilot chat, enter:
-
-```
-/projectInit
-```
-
-This prompt will guide the AI agent to:
-- Read AI agent instructions from `aiDocs/AI.md`
-- Understand the project structure and email processing workflow
-- Review project documentation in `aiDocs/`
-- Get familiar with available tools and scripts
-
-### 3b. Process Email Context (Manual, Optional)
-
-If you have project-related emails:
-
-1. **Export emails** to `.eml` format from your email client
-2. **Place them** in the `email/raw/` directory
-3. **Run the discovery prompt** in Copilot chat:
-
-```
-/discoverEmail
-```
-
-This will:
-- Convert `.eml` files to Markdown using `core/aiScripts/emailToMd/eml_to_md_converter.py`
-- Save converted emails to `email/ai/`
-- Update all documentation in `aiDocs/` based on email content
-- Extract contacts, tasks, technical details, and discovery questions
-
-### 3c. Generate Project Summary (Manual)
-
-After setting up documentation, generate a human-readable summary in Copilot chat:
-
-```
-/updateSummary
-```
-
-This will:
-- Review all `aiDocs/` files for consistency and accuracy
-- Cross-reference with email content
-- Create/update `PROJECT.md` at the project root with:
-  - Current project status
-  - Completed and outstanding tasks
-  - Blockers and risks
-  - Key contacts and next steps
-- Generate human-readable extracts in `docs/` folder:
-  - `docs/CONTACTS.md` - Key stakeholder contact information
-  - `docs/TASKS.md` - High-priority tasks and blockers
-  - `docs/DECISIONS.md` - Decision log table
-  - `docs/QUESTIONS.md` - Outstanding discovery questions
-
----
-
-## Key Files Explained
-
-### AI Documentation (`aiDocs/`)
-
-- **Template files**: Template files stored in `core/templates/`
-  - `SUMMARY.template.md`: Template for project summary
-  - `TASKS.template.md`: Template for task tracking
-  - `DISCOVERY.template.md`: Template for discovery questions
-  - `AI.template.md`: Template for AI agent instructions
-  - Use `./go.sh` and select "Reset Project" to reset all aiDocs files to templates
-
-- **`AI.md`**: Master instructions for AI agents working on the project
-  - Project structure and organization
-  - Email processing workflow
-  - Documentation maintenance guidelines
-
-- **`DISCOVERY.md`**: Discovery questions and information gaps
-  - Customer setup and environment questions
-  - Outstanding information needs
-  - Clarifications required
-
-- **`SUMMARY.md`**: Detailed project context for AI agents
-  - Background and history
-  - Key contacts and stakeholders
-  - Technical details and current situation
-  - Risks and planning options
-
-- **`TASKS.md`**: Task tracking
-  - High priority outstanding tasks
-  - Planning and documentation tasks
-  - Completed tasks with dates
-
-### Prompts (`prompts/`)
-
-Copilot prompts to invoke with `/promptName` in chat:
-
-- **`/quickStartProject`**: Complete workflow - initialize, process emails, and generate summary in one command
-- **`/projectInit`**: Initialize AI agent with full project context
-- **`/discoverEmail`**: Process raw emails and update documentation
-- **`/updateSummary`**: Review docs for consistency and generate summary
-- **`/validateTasks`**: Validate task structure and dependencies
-- **`/syncFromProject`**: Sync user edits from PROJECT.md back to aiDocs/
-- **`/cleanupTasks`**: Archive old tasks and optimize organization
-- **`/generateReport`**: Create executive status report
-
----
-
-## Prompt Reference Guide
-
-Complete guide to all available prompts and when to use them.
-
-### Primary Workflows
-
-#### `/quickStartProject` - Complete Project Initialization
+### `/quickStartProject` - Complete Project Initialization
 **Use for:** First-time setup, complete workflow from start to finish
 
 **What it does:**
 - Initializes AI agent context
-- Processes all emails in `email/raw/`
+- Processes all emails and notes in raw/ directories
 - Updates `aiDocs/` with extracted information
 - Generates `PROJECT.md` and `docs/` folder
-- Provides comprehensive initialization report
 
-**When to run:**
-- Setting up a new project for the first time
-- After cloning template for a new project
-- Want complete end-to-end processing
-
-**Time:** 2-5 minutes (depending on email volume)
+**When to run:** Setting up new project, want end-to-end processing
 
 ---
 
-#### `/projectInit` - Context Initialization (Read-Only)
-**Use for:** Refreshing AI agent understanding without making changes
+### `/initSampleProject` - Test With Sample Data
+**Use for:** Testing workflow, demos, understanding output
 
 **What it does:**
-- Reads all `aiDocs/` files
-- Loads universal instructions from `.github/copilot-instructions.md`
-- Establishes working context
-- **Does NOT modify any files**
+- Copies 4 sample emails + 3 sample notes to raw/ directories
+- Runs complete initialization workflow
+- Generates all documentation from sample data
+- Resets environment when done
 
-**When to run:**
-- Starting a new Copilot chat session
-- AI seems to have lost project context
-- Before asking questions about project
-- Periodically to refresh understanding
-
-**Time:** 30 seconds
+**When to run:** Before using with real data, giving demos, verifying setup
 
 ---
 
-#### `/discoverEmail` - Email Processing
-**Use for:** Processing new email files and updating documentation
+### `/projectInit` - Context Initialization
+**Use for:** Refreshing AI agent understanding (read-only)
 
-**What it does:**
-- Converts `.eml` files to Markdown
-- Reads and analyzes ALL emails
-- Updates `aiDocs/SUMMARY.md` with contacts, background, decisions, risks
-- Updates `aiDocs/TASKS.md` with extracted tasks
-- Updates `aiDocs/DISCOVERY.md` with questions
-- Updates `aiDocs/AI.md` with project-specific notes
-- **Does NOT generate PROJECT.md or docs/** (use `/updateSummary` after)
-
-**When to run:**
-- New emails added to `email/raw/`
-- Batch processing multiple email threads
-- Want to update aiDocs/ before generating summary
-
-**Time:** 2-10 minutes (depending on email volume)
-
-**Follow with:** `/updateSummary` to generate PROJECT.md and docs/
+**When to run:** Starting new Copilot session, AI lost context
 
 ---
 
-#### `/updateSummary` - Documentation Review & Generation
-**Use for:** Generating PROJECT.md and docs/ from current aiDocs/
+### `/discoverEmail` - Email Processing
+**Use for:** Processing new email files
 
-**What it does:**
-- Reviews all `aiDocs/` files for consistency
-- Checks if user edited `PROJECT.md` and syncs changes back to `aiDocs/`
-- Cross-references with email content
-- Identifies and resolves inconsistencies
-- Generates/updates `PROJECT.md` with human-readable summary
-- Generates/updates `docs/` folder (CONTACTS, TASKS, DECISIONS, QUESTIONS)
-- Validates documentation health
-
-**When to run:**
-- After `/discoverEmail` to generate human-readable docs
-- User has edited PROJECT.md directly
-- Regular status updates (weekly/bi-weekly)
-- Preparing for stakeholder review
-- After manual edits to aiDocs/
-
-**Time:** 1-3 minutes
+**When to run:** New emails added to `email/raw/`
+**Follow with:** `/updateSummary`
 
 ---
 
-### Maintenance & Utilities
+### `/discoverNotes` - Notes Processing
+**Use for:** Processing new notes files
 
-#### `/validateTasks` - Task Integrity Check
-**Use for:** Quick validation of task structure without full documentation review
-
-**What it does:**
-- Validates task ID sequencing
-- Checks metadata completeness (Owner, Status, Source)
-- Verifies cross-references (Blocks, Related)
-- Detects circular dependencies
-- Runs dependency detection tool
-- Identifies orphaned tasks
-- **Does NOT modify files** (validation only)
-
-**When to run:**
-- After manually editing `aiDocs/TASKS.md`
-- Before major planning sessions
-- Suspecting task structure issues
-- Quarterly maintenance
-
-**Time:** 1-2 minutes
+**When to run:** New notes added to `notes/raw/`
+**Follow with:** `/updateSummary`
 
 ---
 
-#### `/syncFromProject` - Reverse Sync
-**Use for:** Syncing user edits from PROJECT.md back to aiDocs/
+### `/updateSummary` - Documentation Generation
+**Use for:** Generating PROJECT.md and docs/ from aiDocs/
 
-**What it does:**
-- Reads `PROJECT.md` for user changes
-- Extracts task completions, new tasks, updates
-- Extracts answered questions, new questions
-- Extracts risk updates, contact changes, decisions
-- Updates appropriate `aiDocs/` files
-- **Does NOT regenerate PROJECT.md or docs/** (use `/updateSummary` after)
-
-**When to run:**
-- User has edited PROJECT.md directly
-- Want to preserve user changes before processing new emails
-- Need to capture manual status updates
-
-**Time:** 30-60 seconds
-
-**Follow with:** `/updateSummary` to regenerate docs with synced changes
+**When to run:** After processing emails/notes, after manual aiDocs/ edits
 
 ---
 
-#### `/cleanupTasks` - Task Maintenance
-**Use for:** Organizing and optimizing task list as project matures
+## Maintenance
 
-**What it does:**
-- Archives completed tasks >30 days old
-- Runs dependency detection and applies suggestions
-- Groups related tasks
-- Optimizes priority categories
-- Improves task metadata quality
-- Identifies orphaned tasks
-- Resolves circular dependencies
-- Updates `aiDocs/TASKS.md` with improvements
+### `/validateTasks` - Task Integrity Check
+**Use for:** Quick validation without full documentation review
 
-**When to run:**
-- Task list has grown large (>20 tasks)
-- Many old completed tasks cluttering list
-- Quarterly maintenance
-- Before major project phase
-- Task dependencies unclear
-
-**Time:** 2-5 minutes
+**When to run:** After editing TASKS.md, before planning sessions
 
 ---
 
-#### `/generateReport` - Executive Status Report
-**Use for:** Creating concise status reports for stakeholders
+### `/cleanupTasks` - Task Maintenance
+**Use for:** Organizing and optimizing task list
 
-**What it does:**
-- Gathers current state from `aiDocs/` and `PROJECT.md`
-- Analyzes recent progress (last 7-14 days)
-- Identifies blockers and risks
-- Highlights decisions needed
-- Generates executive summary (2-3 sentences)
-- Creates formatted report in `reports/status-YYYY-MM-DD.md`
-- Appropriate detail level for management
-
-**When to run:**
-- Weekly status updates
-- Monthly reporting
-- Management reviews
-- Client briefings
-- Milestone reports
-
-**Time:** 1-2 minutes
+**When to run:** Task list large (>20 tasks), quarterly maintenance
 
 ---
 
-### When to Use What?
+### `/syncFromProject` - Reverse Sync
+**Use for:** Syncing user edits from PROJECT.md to aiDocs/
 
-**New project?**
-→ `/quickStartProject` (complete initialization)
-
-**New Copilot session?**
-→ `/projectInit` (load context)
-
-**New emails arrived?**
-→ `/discoverEmail` then `/updateSummary`
-
-**User edited PROJECT.md?**
-→ `/syncFromProject` then `/updateSummary`
-
-**Need status update?**
-→ `/generateReport`
-
-**Task list messy?**
-→ `/cleanupTasks` then `/validateTasks`
-
-**Just want to verify tasks?**
-→ `/validateTasks`
-
-**Weekly routine?**
-→ `/discoverEmail` (if emails) → `/updateSummary` → `/generateReport`
+**When to run:** User edited PROJECT.md directly
+**Follow with:** `/updateSummary`
 
 ---
 
-### Bootstrap Maintenance (Template Only)
+### `/generateReport` - Executive Status Report
+**Use for:** Creating status reports for stakeholders
 
-These prompts are in `core/prompts/` and are **only for maintaining the template itself**, not for projects using the template:
+**When to run:** Weekly updates, monthly reporting, management reviews
 
-- **`/sanityCheck`**: Fast pre-commit validation (critical issues only)
-- **`/healthCheck`**: Comprehensive template analysis
-- **`/reportToGitHub`**: Automated GitHub issue creation from findings
-
-**When to run:** Before committing changes to the template repository
+</details>
 
 ---
 
-## Using Email-Based Context
+## 🔧 Maintenance
 
-### Scripts (`core/aiScripts/`)
+For developers maintaining Lumina itself, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-- **`emailToMd/`**: Email to Markdown converter
-  - Converts `.eml` files to readable Markdown
-  - Automatically organizes files in `email/` directories
-  - See `core/aiScripts/emailToMd/README.md` for details
-
-### Utility Scripts (`core/scripts/`)
-
-- **`clean-reset.sh`**: Reset project to clean template state
-  - Clears all email directories (raw, ai, processed)
-  - Resets all `aiDocs/` files to template defaults
-  - Removes project-specific data from root `SUMMARY.md`
-  - Preserves configuration files and scripts
-  - Run with: `./core/scripts/clean-reset.sh`
-
-## Workflow
-
-### Typical Project Flow
-
-1. **Start new project**: Copy this template
-2. **Configure MCP servers**: Run `./go.sh` and select "Initialize Project"
-3. **Initialize AI agent**: Use `/projectInit` in Copilot
-4. **Add email context**: Export emails to `email/raw/`
-5. **Process emails**: Use `/discoverEmail` in Copilot
-6. **Generate summary**: Use `/updateSummary` in Copilot
-7. **Iterate**: Update `aiDocs/` as project evolves
-
-### Maintaining Documentation
-
-The AI agent is responsible for keeping documentation current:
-
-- **`aiDocs/DISCOVERY.md`**: Updated as new questions arise
-- **`aiDocs/SUMMARY.md`**: Maintained with current project state
-- **`aiDocs/TASKS.md`**: Updated as tasks are added/completed
-- **`PROJECT.md`** (root): Generated periodically for human stakeholders
-- **`docs/`** (folder): Human-readable extracts for quick reference
-
-## Email Processing
-
-### Why Process Emails?
-
-Email threads often contain crucial project context:
-- Technical discussions and decisions
-- Customer requirements and questions
-- Project history and timeline
-- Key stakeholder communications
-
-### How Email Processing Works
-
-1. Export email threads as `.eml` files from your email client
-2. Place them in `email/raw/`
-3. Run `/discoverEmail` in Copilot chat
-4. The converter script extracts:
-   - Subject, sender, recipients, date
-   - Email body (converted from HTML to Markdown)
-5. Converted emails saved to `email/ai/` as `.md` files
-6. Original `.eml` files archived to `email/processed/`
-7. AI agent reads Markdown emails and updates all `aiDocs/` files
-
-## MCP Server Configuration
-
-The template includes configurations for several MCP servers in `core/mcpServers/`:
-
-- **github.json**: GitHub API integration
-- **awsCore.json**: AWS Labs core MCP server
-- **context7.json**: Context7 MCP server
-
-Run `./go.sh` and select "Initialize Project" to choose which servers to enable in your workspace.
-
-### Adding New MCP Servers
-
-1. Create a new `.json` file in `core/mcpServers/`
-2. Follow the MCP server configuration format
-3. Run `./go.sh` and select "Initialize Project" to regenerate `.vscode/mcp.json`
-
-## Customizing for Your Project
-
-### Starting from Template
-
-When using this template for a new project, you have two options:
-
-**Option 1: Clean Reset (Recommended)**
-```bash
-./core/scripts/clean-reset.sh
-```
-This will reset all `aiDocs/` files to template defaults and clear email directories, giving you a fresh start.
-
-**Option 2: Manual Customization**
-
-1. Update `aiDocs/SUMMARY.md` with your project details:
-   - Replace `[CUSTOMER NAME]` with actual customer
-   - Fill in background information
-   - Add key contacts
-
-2. Update `aiDocs/TASKS.md` with initial tasks
-
-3. Add discovery questions to `aiDocs/DISCOVERY.md`
-
-### Ongoing Maintenance
-
-Let the AI agent maintain documentation by:
-- Using the `/discoverEmail` prompt when new emails arrive
-- Using the `/updateSummary` prompt to generate status reports
-- Manually updating `aiDocs/` files as needed
-- Keeping the AI informed of project changes
-
-### Resetting to Clean State
-
-If you want to reuse the template for another project or clear out all project-specific data:
-
-```bash
-./core/scripts/clean-reset.sh
-```
-
-This will:
-- ✓ Clear all email directories
-- ✓ Reset `aiDocs/` files to templates
-- ✓ Remove root `PROJECT.md` and `docs/` folder
-- ✓ Preserve all configuration and scripts
-
-## Tips for Best Results
-
-1. **Email Quality**: Export complete email threads, not individual messages
-2. **Regular Updates**: Run `/updateSummary` regularly to track progress
-3. **Discovery Questions**: Keep `DISCOVERY.md` updated with unknowns
-4. **Task Tracking**: Update `TASKS.md` as work progresses
-5. **AI Context**: Re-run `/projectInit` if AI seems to lose context
-
-## Requirements
-
-- **Python 3.x** - For email converter script
-- **Git** - For version control
-- **GitHub Copilot** - With prompt support
-- **VS Code** - Recommended editor
-
-The email converter automatically installs required Python packages (`html2text`).
-
----
-
-## 🤝 Contributing
-
-This project follows standardized contribution workflows. See [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Git branching strategy (`defect/` vs `feature/` prefixes)
-- Commit conventions (conventional commits format)
-- Label and milestone guidelines
-- Pull request process
-- Code quality standards
-
-**Quick reference:**
-```bash
-# Install git hooks for local validation
-./core/scripts/install-hooks.sh
-
-# Use /completeIssue in Copilot to automate Issue→PR workflow
-```
-
----
-
-## 🔗 Related Documentation
-
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Complete developer guidelines
-- **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - AI agent instructions
-- **[core/README.md](core/README.md)** - Template infrastructure docs
-- **Email Converter**: [core/aiScripts/emailToMd/README.md](core/aiScripts/emailToMd/README.md)
-- **Task Dependency Detector**: [core/aiScripts/detectTaskDependencies/README.md](core/aiScripts/detectTaskDependencies/README.md)
-
----
-
-## 💡 Tips for Best Results
-
-1. **Email Quality**: Export complete email threads, not individual messages
-2. **Regular Updates**: Run `/updateSummary` regularly to track progress
-3. **Discovery Questions**: Keep `aiDocs/DISCOVERY.md` updated with unknowns
-4. **Task Tracking**: Update `aiDocs/TASKS.md` as work progresses
-5. **AI Context**: Re-run `/projectInit` if AI seems to lose context
-6. **Use Git Hooks**: Install pre-commit hooks to catch errors early
-7. **Follow Conventions**: Read CONTRIBUTING.md for workflow standards
-
----
-
-## 📄 License
-
-[Your License Here]
-
----
-
-**Created for MarkLogic consultants to streamline project documentation and knowledge transfer.**
 
