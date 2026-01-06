@@ -61,6 +61,7 @@ This will:
 | Add more emails | `/discoverEmail` then `/updateSummary` |
 | Add more notes | `/discoverNotes` then `/updateSummary` |
 | Create status report | `/generateReport` |
+| Check/install dependencies | `./go.sh` → Manage Dependencies |
 | Export docs to PDF | `./go.sh` → Export to PDF |
 | Process emails from menu | `./go.sh` → Process Emails |
 | Process notes from menu | `./go.sh` → Process Notes |
@@ -160,6 +161,47 @@ sudo apt-get install pandoc texlive-xetex texlive-fonts-recommended
 ```
 
 The PDF export feature will check for these dependencies and provide install instructions if missing.
+
+---
+
+## 🛠️ Dependency Management
+
+Lumina supports multiple note formats, but some formats require optional dependencies:
+
+| Format | Status | Dependency | Use Command |
+|--------|--------|-----------|-----------|
+| `.txt`, `.md` | Always available | None | Just place files |
+| `.docx` (OneNote) | Requires install | `python-docx` | `./go.sh` → Manage Dependencies |
+| `.textbundle` (Bear) | Always available | None | Just place files |
+| `.html` (Apple Notes) | Requires install | `html2text` | `./go.sh` → Manage Dependencies |
+
+### Installing Optional Dependencies
+
+**Automated (Recommended):**
+```bash
+./go.sh
+# Select "Manage Dependencies"
+# Follow prompts to install missing packages
+```
+
+**Manual:**
+```bash
+pip install -r core/aiScripts/requirements.txt
+```
+
+**Check what's installed:**
+```bash
+python3 core/aiScripts/checkDependencies.py --check
+```
+
+### What Happens Without Optional Dependencies?
+
+- ✅ Your `.txt` and `.md` files process normally
+- ✅ Your `.textbundle` (Bear) files process normally  
+- ⚠️ Your `.docx` (OneNote) files are **skipped** with helpful error message
+- ⚠️ Your `.html` (Apple Notes) files are **skipped** with helpful error message
+
+The converter shows a startup report listing which formats are available, so you know exactly what will work before processing.
 
 ---
 

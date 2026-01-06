@@ -39,6 +39,7 @@ declare -a MENU_OPTIONS=(
     "Lumina Prompts"
     "Process Emails"
     "Process Notes"
+    "Manage Dependencies"
     "Backup Project State"
     "Restore from Backup"
     "List Backups"
@@ -200,6 +201,29 @@ process_notes() {
         echo "  - Use GitHub Copilot: /discoverNotes to extract information"
     else
         echo -e "${RED}✗ Notes processing failed${NC}"
+    fi
+}
+
+# Manage dependencies function
+manage_dependencies() {
+    echo -e "${BLUE}Checking project dependencies...${NC}"
+    echo ""
+
+    # Check if dependency checker exists
+    if [ ! -f "$PROJECT_ROOT/core/aiScripts/checkDependencies.py" ]; then
+        echo -e "${RED}Error: Dependency checker not found${NC}"
+        return 1
+    fi
+
+    # Run the dependency checker with interactive installation
+    python3 "$PROJECT_ROOT/core/aiScripts/checkDependencies.py" --install
+    local exit_code=$?
+
+    if [ "$exit_code" -eq 0 ]; then
+        echo ""
+        echo -e "${GREEN}✓ Dependency check completed${NC}"
+    else
+        echo -e "${YELLOW}⚠ Dependency check completed with warnings${NC}"
     fi
 }
 
@@ -447,6 +471,11 @@ execute_option() {
             ;;
         "Process Notes")
             process_notes
+            echo ""
+            read -p "Press any key to continue..." -n 1 -s
+            ;;
+        "Manage Dependencies")
+            manage_dependencies
             echo ""
             read -p "Press any key to continue..." -n 1 -s
             ;;

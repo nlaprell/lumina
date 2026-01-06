@@ -54,6 +54,54 @@ except ImportError:
     logger = get_logger('notes_converter')
 
 
+def print_format_support():
+    """Print format support status with nice formatting"""
+    print()
+    print("=" * 70)
+    print("NOTES CONVERTER - FORMAT SUPPORT STATUS")
+    print("=" * 70)
+    print()
+
+    # Always available
+    print("✅ AVAILABLE (Ready to use):")
+    print("   • Plain text (.txt)")
+    print("   • Markdown (.md)")
+    print("   • Bear notes (.textbundle)")
+    print()
+
+    # Conditionally available
+    if DOCX_AVAILABLE:
+        print("✅ OneNote (.docx) - python-docx installed")
+    else:
+        print("❌ OneNote (.docx) - Requires: pip install python-docx")
+
+    if HTML2TEXT_AVAILABLE:
+        print("✅ Apple Notes (.html) - html2text installed")
+    else:
+        print("❌ Apple Notes (.html) - Requires: pip install html2text")
+
+    print()
+
+    # Show summary
+    disabled_count = (0 if DOCX_AVAILABLE else 1) + (0 if HTML2TEXT_AVAILABLE else 1)
+    if disabled_count == 0:
+        print("✓ All formats available - Full feature support enabled")
+    else:
+        print(f"⚠️  {disabled_count} format(s) disabled - Some files will be skipped")
+        print()
+        print("To enable all formats:")
+        cmds = []
+        if not DOCX_AVAILABLE:
+            cmds.append("python-docx==1.1.0")
+        if not HTML2TEXT_AVAILABLE:
+            cmds.append("html2text==2024.2.26")
+        print(f"   pip install {' '.join(cmds)}")
+
+    print()
+    print("=" * 70)
+    print()
+
+
 def sanitize_filename(filename):
     """Sanitize filename to be safe for filesystem"""
     if not filename:
@@ -472,6 +520,9 @@ def process_notes_file(source_path, raw_dir, ai_dir, processed_dir):
 def main():
     """Main conversion workflow"""
     logger.info("Starting notes to Markdown conversion")
+
+    # Show format support
+    print_format_support()
 
     # Define directory paths
     raw_dir = Path('notes/raw')
